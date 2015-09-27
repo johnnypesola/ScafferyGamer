@@ -16,77 +16,61 @@ if (!(OKSaveVehicles)) exitWith {};
 if (isNull _object OR !alive _object OR (damage _object) > .97) exitWith {};
 
 //Get a random fuel count to set
+_ranFuel = random 1;
+if (_ranFuel < .1) then {_ranFuel = .1;};
+
 if (OKEpoch) then {
 
 	//The server is running DayZ Epoch, so we use the Epoch method.
-	_uid = _worldspace call dayz_objectUID2;
+	_uid = _worldspace call dayz_objectUID3;
 
-	diag_log format["CHILD:308:%1:%2:%3:%4:%5:%6:%7:%8:%9:",dayZ_instance, _class, 0, 0, _worldspace, [], [], 1, _uid];
-	PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor, _object];
-
-	// Switched to spawn so we can wait a bit for the ID
-	[_object,_uid, 1, 0, [], 0, _class] spawn {
-		private["_object","_uid","_fuel","_damage","_array","_characterID","_done","_retry","_key","_result","_outcome","_oid","_selection","_dam","_class"];
-
-		_object = _this select 0;
-		_uid = _this select 1;
-		_fuel = _this select 2;
-		_damage = _this select 3;
-		_array = _this select 4;
-		_characterID = _this select 5;
-		_class = _this select 6;
-
-		_done = false;
-
-		_ranFuel = random 1;
-		if (_ranFuel < .1) then {_ranFuel = .1;};
-
-		_key = format["\cache\objects\%1.sqf", _uid];
-		diag_log ("LOAD OBJECT ID: "+_key);
-		_res = preprocessFile _key;
-		diag_log ("OBJECT ID CACHE: "+_res);
-
-		if ((_res == "") or (isNil "_res")) then {
-			diag_log ("OBJECT ID NOT FOUND");
+	_key = format["CHILD:308:%1:%2:%3:%4:%5:%6:%7:%8:%9:", dayZ_instance, _class, 0, 0, _worldspace, [], [], 1, _uid];
+	diag_log ("HIVE: WRITE: "+ str(_key));	// TODO: Only for Linux
+	_key call server_hiveWrite;
+	
+	//If the server is busy, it might not write on the first try
+	//Because of this, we loop it until it works
+	_done = false;
+	_retry = 0;
+	while {_retry < 10} do
+	{
+		sleep 0.3;
+		_key = format["CHILD:388:%1:", _uid];
+		_result = _key call server_hiveReadWrite;
+		_outcome = _result select 0;
+		if (_outcome == "PASS") then {
+			_oid = _result select 1;
+			_object setVariable ["ObjectID", _oid, true];
+			_done = true;
+			_retry = 11;
 		} else {
-			_result  = call compile _res;
-			_outcome = _result select 0;
-			if (_outcome == "PASS") then {
-				_oid = _result select 1;
-				_object setVariable ["ObjectID", _oid, true];
-				diag_log("CUSTOM: Selected " + str(_oid));
-				_done = true;       
-			};
+			_done = false;
+			_retry = _retry + 1;
 		};
-		_res = nil;
-
-		if(!_done) exitWith { deleteVehicle _object; diag_log("CUSTOM: failed to get id for : " + str(_uid)); };
-
-		//Lets get it ready for the user
-		_object setvelocity [0,0,1];
-		_object setFuel _ranFuel;
-		_object setVehicleLock "UNLOCKED";
-		
-		clearWeaponCargoGlobal  _object;
-		clearMagazineCargoGlobal  _object;
-		
-		_object allowDamage false;
-		_object setVariable ["lastUpdate", time];
-		_object setVariable ["CharacterID", "0", true];
-		
-		sleep 1;
-		_object call fnc_veh_ResetEH;
-		PVDZE_veh_Init = _object;
-		publicVariable "PVDZE_veh_Init";
-		[_object,"all"] spawn server_updateObject;
-		_object allowDamage true;
 	};
-		
+	
+	//Lets get it ready for the user
+	_object setvelocity [0,0,1];
+	_object setFuel _ranFuel;
+	_object setVehicleLock "UNLOCKED";
+	
+	clearWeaponCargoGlobal  _object;
+	clearMagazineCargoGlobal  _object;
+	
+	_object allowDamage false;
+	_object setVariable ["lastUpdate", time];
+	_object setVariable ["CharacterID", "0", true];
+	PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor, _object];
+	
+	sleep 1;
+	_object call fnc_veh_ResetEH;
+	PVDZE_veh_Init = _object;
+	publicVariable "PVDZE_veh_Init";
+	[_object,"all"] spawn server_updateObject;
+	_object allowDamage true;
+	
 } else {
-
-	_ranFuel = random 1;
-	if (_ranFuel < .1) then {_ranFuel = .1;};
-
+	
 	//They are running a different DayZ Varient
 	clearWeaponCargoGlobal _object;
 	clearMagazineCargoGlobal _object;
