@@ -1,9 +1,7 @@
-private ["_nul","_result","_pos","_wsDone","_dir","_isOK","_countr","_objWpnTypes","_objWpnQty","_dam","_selection","_totalvehicles","_object","_idKey","_type","_ownerID","_worldspace","_intentory","_hitPoints","_fuel","_damage","_key","_vehLimit","_hiveResponse","_objectCount","_codeCount","_data","_status","_val","_traderid","_retrader","_traderData","_id","_lockable","_debugMarkerPosition","_vehicle_0","_bQty","_vQty","_BuildingQueue","_objectQueue","_superkey","_shutdown","_res","_hiveLoaded"];
+private ["_nul","_result","_pos","_wsDone","_dir","_isOK","_countr","_objWpnTypes","_objWpnQty","_dam","_selection","_totalvehicles","_object","_idKey","_type","_ownerID","_worldspace","_intentory","_hitPoints","_fuel","_damage","_key","_vehLimit","_hiveResponse","_objectCount","_codeCount","_data","_status","_val","_traderid","_retrader","_traderData","_id","_lockable","_debugMarkerPosition","_vehicle_0","_bQty","_vQty","_BuildingQueue","_objectQueue","_res","_outcome"];
 
 dayz_versionNo = 		getText(configFile >> "CfgMods" >> "DayZ" >> "version");
 dayz_hiveVersionNo = 	getNumber(configFile >> "CfgMods" >> "DayZ" >> "hiveVersion");
-
-_hiveLoaded = false;
 
 waitUntil{initialized}; //means all the functions are now defined
 
@@ -12,11 +10,7 @@ diag_log "HIVE: Starting";
 waituntil{isNil "sm_done"}; // prevent server_monitor be called twice (bug during login of the first player)
 
 auth_clients_idx = 0;
-auth_clients = [];
 auth_enabled = false;
-//time_hour_offset = floor (random 24);
-//time_minute_offset = floor (random 60);
-time_skipped = 0;
 
 // Authorized clients
 //if (isDedicated) then {
@@ -47,6 +41,24 @@ time_skipped = 0;
 //	};
 //};
 
+// Time sync
+if (isDedicated) then {
+    _result = ["PASS",[2012,6,6,10,10]];
+    _res    = preprocessFile "\cache\set_time.sqf";
+    if ((_res != "") and !(isNil "_res")) then {
+        _result = call compile _res;
+    };
+    _outcome = _result select 0;
+
+    if (_outcome == "PASS") then {
+        _date = _result select 1;
+        setDate _date;
+	PVDZE_plr_SetDate = _date;
+	publicVariable "PVDZE_plr_SetDate";
+        diag_log ("HIVE: Local Time set to " + str(_date));
+    };
+};
+	
 // Custom Configs
 if(isnil "MaxVehicleLimit") then {
 	MaxVehicleLimit = 50;
@@ -66,59 +78,19 @@ if(isnil "MaxMineVeins") then {
 if (isServer && isNil "sm_done") then {
 
 	serverVehicleCounter = [];
-	_hiveResponse = [];
+        diag_log ("LOAD OBJECTS");
 
-	for "_i" from 1 to 5 do {
-		diag_log "HIVE: trying to get objects";
-		_key = format["CHILD:302:%1:", dayZ_instance];
-		_hiveResponse = _key call server_hiveReadWrite;  
-		if ((((isnil "_hiveResponse") || {(typeName _hiveResponse != "ARRAY")}) || {((typeName (_hiveResponse select 1)) != "SCALAR")})) then {
-			if ((_hiveResponse select 1) == "Instance already initialized") then {
-				_superkey = profileNamespace getVariable "SUPERKEY";
-				_shutdown = format["CHILD:400:%1:", _superkey];
-				_res = _shutdown call server_hiveReadWrite;
-				diag_log ("HIVE: attempt to kill.. HiveExt response:"+str(_res));
-			} else {
-				diag_log ("HIVE: connection problem... HiveExt response:"+str(_hiveResponse));
-			
-			};
-			_hiveResponse = ["",0];
-		} 
-		else {
-			diag_log ("HIVE: found "+str(_hiveResponse select 1)+" objects" );
-			_i = 99; // break
-		};
-	};
+        _objectArray = [];
 	
-	_BuildingQueue = [];
-	_objectQueue = [];
-	
-	if ((_hiveResponse select 0) == "ObjectStreamStart") then {
-	
-		// save superkey
-		profileNamespace setVariable ["SUPERKEY",(_hiveResponse select 2)];
+        _res = preprocessFile "\cache\objects.sqf";
+        if ((_res == "") or (isNil "_res")) then {
+            diag_log ("OBJECTS NOT FOUND!");
+        } else {
+            _objectArray = call compile _res;
+        };
+        _res = nil;
+        diag_log format["FOUND %1 OBJECTS", str(count _objectArray)];
 		
-		_hiveLoaded = true;
-	
-		diag_log ("HIVE: Commence Object Streaming...");
-		_key = format["CHILD:302:%1:", dayZ_instance];
-		_objectCount = _hiveResponse select 1;
-		_bQty = 0;
-		_vQty = 0;
-		for "_i" from 1 to _objectCount do {
-			_hiveResponse = _key call server_hiveReadWriteLarge;
-			//diag_log (format["HIVE dbg %1 %2", typeName _hiveResponse, _hiveResponse]);
-			if ((_hiveResponse select 2) isKindOf "ModularItems") then {
-				_BuildingQueue set [_bQty,_hiveResponse];
-				_bQty = _bQty + 1;
-			} else {
-				_objectQueue set [_vQty,_hiveResponse];
-				_vQty = _vQty + 1;
-			};
-		};
-		diag_log ("HIVE: got " + str(_bQty) + " Epoch Objects and " + str(_vQty) + " Vehicles");
-	};
-	
 	// # NOW SPAWN OBJECTS #
 	_totalvehicles = 0;
 	{
@@ -135,20 +107,13 @@ if (isServer && isNil "sm_done") then {
 		_dir = 0;
 		_pos = [0,0,0];
 		_wsDone = false;
-
-		//diag_log format ["OBJ DB Worldspace received: %1", _worldspace];
-
 		if (count _worldspace >= 2) then
 		{
 			_dir = _worldspace select 0;
 			if (count (_worldspace select 1) == 3) then {
 				_pos = _worldspace select 1;
 				_wsDone = true;
-			} else {
-				diag_log ("OBJ: " + str(_idKey) + " has not exactly 3 spatial coordinates!");
-			};
-		} else {
-			diag_log ("OBJ: " + str(_idKey) + " has only one element! Should have two: [dir, [x, z, y]] !");
+			}
 		};			
 		
 		if (!_wsDone) then {
@@ -172,7 +137,6 @@ if (isServer && isNil "sm_done") then {
 				_lockable = getNumber(configFile >> "CfgVehicles" >> _type >> "lockable");
 			};
 
-			// All these are Super Hero/Bandit vehicles, ammo is always present after restart.
 			switch (_type) do {
 				case "M113_TK_EP1": {
 					//_object removeMagazinesTurret ["100Rnd_127x99_M2", [0]];
@@ -338,7 +302,7 @@ if (isServer && isNil "sm_done") then {
 			//Monitor the object
 			PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_object];
 		};
-	} count (_BuildingQueue + _objectQueue);
+	} forEach _objectArray;
 	// # END SPAWN OBJECTS #
 
 	// preload server traders menu data into cache
@@ -347,50 +311,44 @@ if (isServer && isNil "sm_done") then {
 			// get tids
 			_traderData = call compile format["menu_%1;",_x];
 			if(!isNil "_traderData") then {
-				{
-					_traderid = _x select 1;
+			    {
+			        _traderid = _x select 1;
+				//_key = format["CHILD:399:%1:",_traderid];
+				_key = format["\cache\traders\%1.sqf", _traderid];
+                                diag_log ("LOAD TRADER: "+_key);
+                                _res = preprocessFile _key;
 
-					_retrader = [];
+                                if ((_res == "") or (isNil "_res")) then {
+                                    diag_log ("TRADER NOT FOUND");
+                                } else {
+                                    call compile format["ServerTcache_%1 = [];", _traderid];
+					
+                                    _retrader = call compile _res;
+                                     diag_log format["Count: %1", str(count _retrader)];
+            
+                                    {
+                                        call compile format["ServerTcache_%1 set [count ServerTcache_%1,%2]", _traderid, _x];
+                                    } forEach _retrader;
 
-					_key = format["CHILD:399:%1:",_traderid];
-					_data = "HiveEXT" callExtension _key;
-
-					//diag_log "HIVE: Request sent";
-			
-					//Process result
-					_result = call compile format ["%1",_data];
-					_status = _result select 0;
-			
-					if (_status == "ObjectStreamStart") then {
-						_val = _result select 1;
-						//Stream Objects
-						//diag_log ("HIVE: Commence Menu Streaming...");
-						call compile format["ServerTcache_%1 = [];",_traderid];
-						for "_i" from 1 to _val do {
-							_data = "HiveEXT" callExtension _key;
-							_result = call compile format ["%1",_data];
-							call compile format["ServerTcache_%1 set [count ServerTcache_%1,%2]",_traderid,_result];
-							_retrader set [count _retrader,_result];
-						};
-						//diag_log ("HIVE: Streamed " + str(_val) + " objects");
-					};
+                                    _retrader = nil;
+                                };
+                                _res = nil;
 
 				} forEach (_traderData select 0);
 			};
 		} forEach serverTraders;
 	};
 
-	if (_hiveLoaded) then {
-		//  spawn_vehicles
-		_vehLimit = MaxVehicleLimit - _totalvehicles;
-		if(_vehLimit > 0) then {
-			diag_log ("HIVE: Spawning # of Vehicles: " + str(_vehLimit));
-			for "_x" from 1 to _vehLimit do {
-				[] spawn spawn_vehicles;
-			};
-		} else {
-			diag_log "HIVE: Vehicle Spawn limit reached!";
+	//  spawn_vehicles
+	_vehLimit = MaxVehicleLimit - _totalvehicles;
+	if(_vehLimit > 0) then {
+		diag_log ("HIVE: Spawning # of Vehicles: " + str(_vehLimit));
+		for "_x" from 1 to _vehLimit do {
+			//[] spawn spawn_vehicles;
+			[] call spawn_vehicles;	// Better not run in parallel to avoid race conditions
 		};
+	} else {
+		diag_log "HIVE: Vehicle Spawn limit reached!";
 	};
 	
 	//  spawn_roadblocks
@@ -422,9 +380,10 @@ if (isServer && isNil "sm_done") then {
         // WAI missions
         [] ExecVM "\z\addons\dayz_server\WAI\init.sqf";
 
-        // OK missions
-        [] ExecVM "\z\addons\dayz_server\OK\OKInit.sqf";
+	// OK Missions framework
+	[] ExecVM "\z\addons\dayz_server\OK\OKInit.sqf";
 
+	allowConnection = true;
 
 	// [_guaranteedLoot, _randomizedLoot, _frequency, _variance, _spawnChance, _spawnMarker, _spawnRadius, _spawnFire, _fadeFire]
 	if(OldHeliCrash) then {

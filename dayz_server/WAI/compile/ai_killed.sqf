@@ -25,6 +25,17 @@ if (isPlayer _player) then {
 		{_unit removeMagazine _x;} forEach (magazines _unit);
 		{_unit removeWeapon _x;} forEach (weapons _unit);
 	};
+	{
+		if (_x == "MAAWS_HEAT") then {
+			_unit removeMagazine _x;
+		};
+	} forEach (magazines _unit);
+	{
+		if (_x == "MAAWS") then {
+			_unit removeWeapon _x;
+		};
+	} forEach (weapons _unit);
+
 	if (ai_ahare_info) then {
 		{if (((position _x) distance (position _unit)) <= ai_share_distance) then {_x reveal [_player, 4.0];}} forEach allUnits;
 	};

@@ -242,6 +242,10 @@ WEST setFriend [EAST,0];
 //RESISTANCE setFriend [EAST,0];
 //RESISTANCE setFriend [WEST,1];
 
+// Make AI Hostile to Zeds
+EAST setFriend [CIVILIAN,0];
+CIVILIAN setFriend [EAST,0];
+
 WAIconfigloaded = False;
 WAImissionconfig = False;
 
