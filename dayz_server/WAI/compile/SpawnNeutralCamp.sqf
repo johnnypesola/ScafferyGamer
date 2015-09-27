@@ -14,6 +14,10 @@ _Y = _position select 2;
 // Spawn campfire so it is visible from distance
 _campfire = createVehicle ["Land_Campfire_burning", 	[_X, _Z, _Y], 			[], 0, "CAN_COLLIDE"],	//1
 
+ai_active_survivorcamps = ai_active_survivorcamps + 1;
+
+diag_log format ["WAI: Created camp %1 at %2", _campNumber, _position];
+
 waitUntil
 {
 	sleep 5;
@@ -210,15 +214,13 @@ clearMagazineCargoGlobal _veh;
 _veh setVariable ["ObjectID","1",true];
 PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_veh];
 
-diag_log format["WAI: Spawned a %1 at camp", _vehclass];
-diag_log format ["WAI: Spawned a camp of %1 Neutrals at %2", _numUnits, _position];
-
 _createdTime = floor(time);
 _notTimedOut = true;
 _playerPresent = false;
 _cleanCamp = false;
 
-ai_active_survivorcamps = ai_active_survivorcamps + 1;
+diag_log format ["WAI: Spawned a camp of %1 Neutrals at %2", _numUnits, _position];
+diag_log format["WAI: Spawned a %1 at camp", _vehclass];
 
 while { _notTimedOut } do {
 	sleep 5;

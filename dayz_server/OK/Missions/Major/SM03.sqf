@@ -11,7 +11,7 @@ private ["_missName","_coords","_survivor","_blackhawk","_patrol","_patrol2"];
 
 OKRideList = ["ArmoredSUV_PMC_DZE","HMMWV_M998A2_SOV_DES_EP1_DZE","HMMWV_M1151_M2_CZ_DES_EP1_DZE"];
 OKGunsList =[];
-OKSARList = ["UH1H_TK_GUE_EP1","UH1Y","Mi17_CDF","MH60S","CH_47F_EP1","Mi17_Ins","Mi24_P","Mi171Sh_CZ_EP1","Mi17_TK_EP1","UH1H_TK_EP1","UH60M_EP1","KA60_GL_PMC"];
+OKSARList = ["Mi17_DZ", "UH1H_DZ", "UH60M_EP1_DZ", "UH1Y_DZ", "CH_47F_EP1_DZ"]; //["UH1H_TK_GUE_EP1","UH1Y","Mi17_CDF","MH60S","CH_47F_EP1","Mi17_Ins","Mi24_P","Mi171Sh_CZ_EP1","Mi17_TK_EP1","UH1H_TK_EP1","UH60M_EP1","KA60_GL_PMC"];
 OKCoords=[[4600,10300,0],[4500,10200,0]];
 
 //Name of the Mission
@@ -21,7 +21,7 @@ _missName = "OK Blackhawk down";
 //_coords = OKCoords call BIS_fnc_selectRandom;
 _coords = call OKFindPos;
 
-[nil,nil,rTitleText,"OK Blackop evac was downed while trying to left Chernarus airspace. SAR is on the way. Don't let any survivors get away with Chernarusian gold and secret documents.", "PLAIN",10] call RE;
+[nil,nil,rTitleText,"OK Blackop evac was downed while trying to left Napf airspace. SAR is on the way. Don't let any survivors get away with swiss gold and secret documents.", "PLAIN",10] call RE;
 
 //OKAddMajMarker is a simple script that adds a marker to the location
 [_coords,_missname] ExecVM OKAddMajMarker;
