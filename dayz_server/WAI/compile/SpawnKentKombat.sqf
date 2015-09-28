@@ -3,7 +3,7 @@ private ["_position", "_unit", "_healthmultiplier", "_group", "_moveToX", "_move
 // Function that spawns explosion
 explodeKent = {
 
-	private ["_theObject", "_bombLoc", "_bombLocX", "_bombLocY", "_bombLocZ", "_ammoType", "_theObject"];
+	private ["_theObject", "_bombLoc", "_bombLocX", "_bombLocY", "_bombLocZ", "_ammoType", "_theExplosion"];
 
 	_theObject = _this select 0;
 
@@ -14,9 +14,10 @@ explodeKent = {
 	_bombLocY = _bombLoc select 1;
 	_bombLocZ = _bombLoc select 2;
 
-	_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ];
-	_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+	_theExplosion = _ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ];
+	_theExplosion setVectorDirAndUp [[0,0,1],[0,1,0]];
 };
+
 
 // Define variables
 _position = _this select 0;
@@ -43,10 +44,12 @@ for "_i" from 1 to 12 do {
 };
 
 // Give unit more health
-_unit addEventHandler ["HandleDamage",{if (_this select 1=="") then {damage (_this select 0)+((_this select 2)/100)}}];
+_unit addEventHandler ["HandleDamage",{if (_this select 1=="") then {damage (_this select 0)+((_this select 2)/300)}}];
 
 // Explode kent on kill
 _unit addEventHandler ["Killed",{
+
+	[GetPos (_this select 0), [["ItemComboLock", 100]]] call fn_generateCrashLoot;
 	[_this select 0] call explodeKent;
 }];
 
