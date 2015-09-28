@@ -1,109 +1,65 @@
-private ["_mission","_aipack","_aicskill","_position","_unitnumber","_skill","_gun","_mags","_backpack","_skin","_gear","_aiweapon","_aigear","_aiskin","_skillarray","_unitGroup","_weapon","_magazine","_weaponandmag","_gearmagazines","_geartools","_unit","_dyn_id"];
+private ["_position", "_unit", "_healthmultiplier", "_group", "_moveToX", "_moveToY", "_moveToZ"];
+
 _position = _this select 0;
-_unitnumber = _this select 1;
-_skill = _this select 2;
-_gun = _this select 3;
-_mags = _this select 4;
-_backpack = _this select 5;
-_skin = _this select 6;
-_gear = _this select 7;
-if (count _this == 9) then {
-	_mission = _this select 8;
-} else {
-	_mission = False;
+
+_healthmultiplier = 20;
+
+//_skillarray = ["aimingAccuracy","aimingShake","aimingSpeed","endurance","spotDistance","spotTime","courage","reloadSpeed","commanding","general"];
+
+_group = createGroup east;
+
+_unit = "UN_CDF_Soldier_Crew_EP1" createUnit [_group, _position, [], 0.3, "CORPORAL"];
+
+// What the unit is allowed to do
+_unit enableAI "TARGET";
+_unit enableAI "AUTOTARGET";
+_unit enableAI "MOVE";
+_unit enableAI "ANIM";
+_unit enableAI "FSM";
+
+// Give weapon to unit
+_unit addweapon "MP5SD";
+
+// Give ammo to unit
+for "_i" from 0 to 11 do {
+   _unit addMagazine "30Rnd_9x19_MP5SD";
 };
-if (count _this == 10) then {
-	_dyn_id = _this select 9;
-} else {
-	_dyn_id = -1;
+
+// Give unit more health
+_unit addEventHandler ["HandleDamage",{if (_this select 1=="") then {damage (_this select 0)+((_this select 2)/_healthmultiplier)}}];
+
+// Explode kent on kill
+_unit addEventHandler ["Killed",{
+	[_unit] call explodeKent
+}];
+
+// Get positions to move to
+_moveToX = _position select 0;
+_moveToY = _position select 1;
+_moveToZ = _position select 2;
+
+// Run 50 units east
+_moveToX = _moveToX + 50;
+
+// Move group
+_group move [_moveToX, _moveToY, _moveToZ];
+
+// Function that spawns explosion
+explodeKent = {
+
+	_theObject = _this select 0
+
+	_bombLoc = GetPos _theObject
+	_bombLocX = _bombLoc select 0
+	_bombLocY = _bombLoc select 1
+	_bombLocZ = _bombLoc select 2
+
+	_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+	_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+	_theObject setdammage 1
+	deleteVehicle _theObject;
 };
 
-_aiweapon = [];
-_aigear = [];
-_aiskin = "";
-_aicskill = [];
-_aipack = "";
-_skillarray = ["aimingAccuracy","aimingShake","aimingSpeed","endurance","spotDistance","spotTime","courage","reloadSpeed","commanding","general"];
-_unitGroup = createGroup east;
+[nil,nil,rTitleText,"Warning: Special military unit deployed. Kent Kombat has arrived at the northern base!", "PLAIN",5] call RE;
 
-if (!isServer) exitWith {};
 
-for "_x" from 1 to _unitnumber do {
-	switch (_gun) do {
-		case 0 : {_aiweapon = ai_wep0;};
-		case 1 : {_aiweapon = ai_wep1;};
-		case 2 : {_aiweapon = ai_wep2;};
-		case 3 : {_aiweapon = ai_wep3;};
-		case 4 : {_aiweapon = ai_wep4;};
-		case 5 : {_aiweapon = ai_wep5;};
-		case 6 : {_aiweapon = ai_wep6;};
-		case "Random" : {_aiweapon = ai_wep_random call BIS_fnc_selectRandom;};
-	};
-	_weaponandmag = _aiweapon call BIS_fnc_selectRandom;
-	_weapon = _weaponandmag select 0;
-	_magazine = _weaponandmag select 1;
-		switch (_gear) do {
-		case 0 : {_aigear = ai_gear0;};
-		case 1 : {_aigear = ai_gear1;};
-		case 2 : {_aigear = ai_gear2;};
-		case 3 : {_aigear = ai_gear3;};
-		case 4 : {_aigear = ai_gear4;};
-		case 5 : {_aigear = call generateItems;};
-		case "Random" : {_aigear = ai_gear_random call BIS_fnc_selectRandom;};
-	};
-	_gearmagazines = _aigear select 0;
-	_geartools = _aigear select 1;
-	if (_skin == "") then {
-		_aiskin = ai_skin call BIS_fnc_selectRandom;
-	} else {
-		_aiskin = _skin;
-	};
-	_unit = _unitGroup createUnit [_aiskin, [(_position select 0),(_position select 1),(_position select 2)], [], 10, "PRIVATE"];
-	[_unit] joinSilent _unitGroup;
-	if (_backpack == "") then {
-		_aipack = ai_packs call BIS_fnc_selectRandom;
-	} else {
-		_aipack = _backpack
-	};
-	_unit enableAI "TARGET";
-	_unit enableAI "AUTOTARGET";
-	_unit enableAI "MOVE";
-	_unit enableAI "ANIM";
-	_unit enableAI "FSM";
-	_unit setCombatMode ai_combatmode;
-	_unit setBehaviour ai_behaviour;
-	removeAllWeapons _unit;
-	removeAllItems _unit;
-	_unit addweapon _weapon;
-	for "_i" from 1 to _mags do {_unit addMagazine _magazine;};
-	_unit addBackpack _aipack;
-	{_unit addMagazine _x} forEach _gearmagazines;
-	{_unit addweapon _x} forEach _geartools;
-	if (ai_custom_skills) then {
-		switch (_skill) do {
-		case 0 : {_aicskill = ai_custom_array1;};
-		case 1 : {_aicskill = ai_custom_array2;};
-		case 2 : {_aicskill= ai_custom_array3;};
-		case "Random" : {_aicskill = ai_skill_random call BIS_fnc_selectRandom;};
-	};
-		{_unit setSkill [(_x select 0),(_x select 1)]} forEach _aicskill;
-	} else {
-		{_unit setSkill [_x,_skill]} forEach _skillarray;
-	};
-	ai_ground_units = (ai_ground_units + 1);
-	_unit addEventHandler ["Killed",{[_this select 0, _this select 1, "ground"] call on_kill_neutral;}];
-	if (_mission) then {
-		_unit setVariable ["missionclean", "ground"];
-	};
-	if (_dyn_id >=10000) then {
-		_unit setVariable ["camp_id", _dyn_id];
-	} else {
-		if (_dyn_id >= 0) then {
-			_unit setVariable ["dynamic_id", _dyn_id];
-		};
-	};
-};
-_unitGroup selectLeader ((units _unitGroup) select 0);
-[_unitGroup, _position, _mission] call group_waypoints;
-
-diag_log format ["WAI: Spawned a group of %1 Neutrals at %2",_unitnumber,_position];

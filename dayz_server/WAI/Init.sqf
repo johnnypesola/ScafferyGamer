@@ -13,6 +13,7 @@ vehicle_patrol = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\
 vehicle_patrol_neutral = 	compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\vehicle_patrol_neutral.sqf";
 friendly_transport =	 	compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\transport_friendly.sqf";
 survivor_camp = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\SpawnNeutralCamp.sqf";
+kent_combat =			compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\SpawnKentKombat.sqf";
 
 // Function that generates the loot when a heli has crashed (crew members can still be alive though)
 fn_generateCrashLoot = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\gen_crash_loot.sqf";

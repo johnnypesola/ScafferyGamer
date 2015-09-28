@@ -488,8 +488,23 @@ publicVariable "activeTier";
 	1                           //Skill level of units 
 	] spawn heli_patrol;
 
+
+
+	while {!_proceed} do {
+		// When player loots the box the second time
+		if (count ((getMagazineCargo _thebox) select 0) == 0) then { 
+			if (count ((getWeaponCargo _thebox) select 0) == 0) then {
+				_proceed = true;
+			};
+		};
+		sleep 5;
+	};
+
+	[[16624.502, 19091.775, 0.01]] spawn kent_kombat
 };
 
+
+	
 
 // ---- Napf military base #1 AI groups end ----
 // ---- Napf military base #1 AI groups end ----
