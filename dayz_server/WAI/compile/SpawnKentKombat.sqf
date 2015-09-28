@@ -30,7 +30,7 @@ _unit addEventHandler ["HandleDamage",{if (_this select 1=="") then {damage (_th
 
 // Explode kent on kill
 _unit addEventHandler ["Killed",{
-	[_unit] call explodeKent
+	[_unit] call explodeKent;
 }];
 
 // Get positions to move to
@@ -47,16 +47,16 @@ _group move [_moveToX, _moveToY, _moveToZ];
 // Function that spawns explosion
 explodeKent = {
 
-	_theObject = _this select 0
+	_theObject = _this select 0;
 
-	_bombLoc = GetPos _theObject
-	_bombLocX = _bombLoc select 0
-	_bombLocY = _bombLoc select 1
-	_bombLocZ = _bombLoc select 2
+	_bombLoc = GetPos _theObject;
+	_bombLocX = _bombLoc select 0;
+	_bombLocY = _bombLoc select 1;
+	_bombLocZ = _bombLoc select 2;
 
-	_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+	_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ];
 	_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
-	_theObject setdammage 1
+	_theObject setdammage 1;
 	deleteVehicle _theObject;
 };
 
