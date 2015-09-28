@@ -488,7 +488,8 @@ publicVariable "activeTier";
 	1                           //Skill level of units 
 	] spawn heli_patrol;
 
-
+	
+	_proceed = false;
 
 	while {!_proceed} do {
 		// When player loots the box the second time

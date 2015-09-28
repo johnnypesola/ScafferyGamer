@@ -8,7 +8,7 @@ _healthmultiplier = 20;
 
 _group = createGroup east;
 
-_unit = "UN_CDF_Soldier_Crew_EP1" createUnit [_group, _position, [], 0.3, "CORPORAL"];
+_unit = "INS_Bardak_DZ" createUnit [_group, _position, [], 0.3, "CORPORAL"];
 
 // What the unit is allowed to do
 _unit enableAI "TARGET";
