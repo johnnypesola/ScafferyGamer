@@ -26,7 +26,7 @@ _position = _this select 0;
 
 _group = createGroup east;
 
-_unit = _group createUnit ["INS_Bardak_DZ", _position, [], 0.3, "CORPORAL"];
+_unit = _group createUnit ["Soldier_Bodyguard_AA12_PMC_DZ", _position, [], 0.4, "CORPORAL"];
 
 // What the unit is allowed to do
 _unit enableAI "TARGET";
@@ -49,7 +49,8 @@ _unit addEventHandler ["HandleDamage",{if (_this select 1=="") then {damage (_th
 // Explode kent on kill
 _unit addEventHandler ["Killed",{
 
-	[GetPos (_this select 0), [["ItemComboLock", 100]]] call fn_generateCrashLoot;
+	[GetPos (_this select 0), [["ItemComboLock", "magazine"]]] call fn_generateCrashLoot;
+
 	[_this select 0] call explodeKent;
 }];
 
