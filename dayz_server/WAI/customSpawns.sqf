@@ -25,6 +25,9 @@ Place your custom group spawns below
 // ---- Napf military base #1 AI groups follow ----
 
 
+[[17845.1,19458.2,0.00160302]] spawn kent_kombat; //<-------------------------------- REMOVE 
+
+
 _radius = ai_patrol_radius;
 _wp = ai_patrol_radius_wp;
 ai_patrol_radius = 25;
@@ -488,7 +491,7 @@ publicVariable "activeTier";
 	1                           //Skill level of units 
 	] spawn heli_patrol;
 
-	
+
 	_proceed = false;
 
 	while {!_proceed} do {
@@ -501,7 +504,10 @@ publicVariable "activeTier";
 		sleep 5;
 	};
 
-	[[16624.502, 19091.775, 0.01]] spawn kent_kombat;
+	[[17845.1,19458.2,0.00160302]] spawn kent_kombat;
+
+	// [17845.1,19458.2,0.00160302] <- Temporary position
+	// [16624.502, 19091.775, 0.01] <- Original position
 };
 
 
