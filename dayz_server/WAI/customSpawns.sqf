@@ -25,9 +25,6 @@ Place your custom group spawns below
 // ---- Napf military base #1 AI groups follow ----
 
 
-[[17845.1,19458.2,0.00160302]] spawn kent_kombat; //<-------------------------------- REMOVE 
-
-
 _radius = ai_patrol_radius;
 _wp = ai_patrol_radius_wp;
 ai_patrol_radius = 25;
@@ -272,7 +269,7 @@ publicVariable "activeTier";
 	};
 
 	// Announce respawn!
-	[nil,nil,rTitleText,"Reinforcements approaching Northern Military Base! ETA: 5 min", "PLAIN",5] call RE;
+	[nil,nil,rTitleText,"Reinforcements approaching Northern Military Base! ETA: 3 min", "PLAIN",3] call RE;
 	sleep 300;
 
 	// Delete old guns and search lights
@@ -504,10 +501,10 @@ publicVariable "activeTier";
 		sleep 5;
 	};
 
-	[[16624.502, 19091.775, 0.01]] spawn kent_kombat;
+	[[16686.3,19090.7,0.0014099]] spawn kent_kombat;
 
 	// [17845.1,19458.2,0.00160302] <- Temporary position
-	// [16624.502, 19091.775, 0.01] <- Original position
+	// [16686.3,19090.7,0.0014099] <- Original position
 };
 
 
