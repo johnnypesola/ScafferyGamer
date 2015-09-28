@@ -4,16 +4,21 @@ _centralPos = _this select 0;
 _randomizedLoot = 8;
 _guaranteedLoot = 6;
 
-_num = round(random _randomizedLoot) + _guaranteedLoot;
-_lootTable = "HeliCrash";
-
-if (DZE_MissionLootTable) then {
-	_itemTypes = [] + getArray (missionConfigFile >> "CfgBuildingLoot" >> _lootTable >> "lootType");
+if (count _this == 2) then {
+	_weights = _this select 1;	// Two-dimensional array of: [["item-type", (Number {0-99} (chance))], ...] 
 } else {
-	_itemTypes = [] + getArray (configFile >> "CfgBuildingLoot" >> _lootTable >> "lootType");
+	_num = round(random _randomizedLoot) + _guaranteedLoot;
+	_lootTable = "HeliCrash";
+
+	if (DZE_MissionLootTable) then {
+		_itemTypes = [] + getArray (missionConfigFile >> "CfgBuildingLoot" >> _lootTable >> "lootType");
+	} else {
+		_itemTypes = [] + getArray (configFile >> "CfgBuildingLoot" >> _lootTable >> "lootType");
+	};
+	_CBLBase = dayz_CBLBase find (toLower(_lootTable));
+	_weights = dayz_CBLChances select _CBLBase;
 };
-_CBLBase = dayz_CBLBase find (toLower(_lootTable));
-_weights = dayz_CBLChances select _CBLBase;
+
 _cntWeights = count _weights;
 
 for "_x" from 1 to _num do {
