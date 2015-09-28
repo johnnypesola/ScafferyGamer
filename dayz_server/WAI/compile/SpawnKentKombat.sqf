@@ -30,7 +30,7 @@ _unit addEventHandler ["HandleDamage",{if (_this select 1=="") then {damage (_th
 
 // Explode kent on kill
 _unit addEventHandler ["Killed",{
-	[_unit] call explodeKent;
+	[_this select 0] call explodeKent;
 }];
 
 // Get positions to move to
