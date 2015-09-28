@@ -500,7 +500,7 @@ publicVariable "activeTier";
 		sleep 5;
 	};
 
-	[[16624.502, 19091.775, 0.01]] spawn kent_kombat
+	[[16624.502, 19091.775, 0.01]] spawn kent_kombat;
 };
 
 
