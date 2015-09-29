@@ -65,6 +65,18 @@ _moveToX = _moveToX + 50;
 // Move group
 _group move [_moveToX, _moveToY, _moveToZ];
 
+// Add waypoints
+_group addWaypoint [[16741.7,19031.7,0.0013069], 0];
+_group addWaypoint [[16715.8,19027.7,0.00157854], 0];
+_group addWaypoint [[16713.6,18986.2,0.0947464], 0];
+_group addWaypoint [[16745.4,19014.9,0.0013117], 0];
+_group addWaypoint [[16717,19022.4,0.00156709], 0];
+_group addWaypoint [[16718,19055.2,0.00131504], 0];
+_group addWaypoint [[16698.2,19017.9,0.00145858], 0];
+_group addWaypoint [[16666.1,19023.4,0.00151472], 0];
+_group addWaypoint [[16663,19057.9,0.00134756], 0];
+_group addWaypoint [[16741.7,19031.7,0.0013069], 0];
+
 [nil,nil,rTitleText,"Warning: Special military unit deployed. Kent Kombat has arrived at the northern base!", "PLAIN",5] call RE;
 
 
