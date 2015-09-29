@@ -13,6 +13,7 @@ vehicle_patrol = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\
 vehicle_patrol_neutral = 	compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\vehicle_patrol_neutral.sqf";
 friendly_transport =	 	compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\transport_friendly.sqf";
 survivor_camp = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\SpawnNeutralCamp.sqf";
+kent_kombat =			compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\SpawnKentKombat.sqf";
 
 // Function that generates the loot when a heli has crashed (crew members can still be alive though)
 fn_generateCrashLoot = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\gen_crash_loot.sqf";
@@ -241,6 +242,10 @@ WEST setFriend [EAST,0];
 // Soldiers
 //RESISTANCE setFriend [EAST,0];
 //RESISTANCE setFriend [WEST,1];
+
+// Make AI Hostile to Zeds
+EAST setFriend [CIVILIAN,0];
+CIVILIAN setFriend [EAST,0];
 
 WAIconfigloaded = False;
 WAImissionconfig = False;

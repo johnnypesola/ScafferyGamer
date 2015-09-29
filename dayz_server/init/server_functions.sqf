@@ -144,13 +144,14 @@ check_publishobject = {
 	
 
 	if ((typeOf _object) in dayz_allowedObjects) then {
-			//diag_log format ["DEBUG: Object: %1 published by %2 is Safe",_object, _playername];
+			diag_log format ["DEBUG: Object: %1 published by %2 is Safe",_object, _playername];
 			_allowed = true;
 	};
 	
 	// Don't allow building near military bases
 	{
 		if ((_position distance (_x select 0)) < (_x select 1)) then {
+			diag_log format ["DEBUG: Object: %1 published by %2 is too close to one of the missions",_object, _playername];
 			_allowed = false;
 		};
 	} forEach _forbiddenPos;
@@ -159,6 +160,7 @@ check_publishobject = {
 		_allowed = false;
 		diag_log format ["WARNING: Non-whitelisted player %1 tried to build object: %2", _playername, _object];
 	};
+	diag_log format ["Object %1 built by player %2 was checked!", typeOf (_object), _playername];
     _allowed
 };
 
@@ -195,22 +197,25 @@ eh_localCleanup = {
 
 server_hiveWrite = {
 	private["_data"];
-	_data = "HiveExt" callExtension _this;
+        diag_log ("ATTEMPT WRITE: " + _this);
+	//_data = "HiveExt" callExtension _this;
 };
 
 server_hiveReadWrite = {
 	private["_key","_resultArray","_data"];
 	_key = _this;
-	_data = "HiveExt" callExtension _key;
-	_resultArray = call compile format ["%1",_data];
+        diag_log ("ATTEMPT READ/WRITE: " + _key);
+	//_data = "HiveExt" callExtension _key;
+	_resultArray = nil; //call compile format ["%1",_data];
 	_resultArray
 };
 
 server_hiveReadWriteLarge = {
 	private["_key","_resultArray","_data"];
 	_key = _this;
-	_data = "HiveExt" callExtension _key;
-	_resultArray = call compile _data;
+        diag_log ("ATTEMPT READ/WRITE LARGE: " + _key);
+	//_data = "HiveExt" callExtension _key;
+	_resultArray = nil; //call compile _data;
 	_resultArray
 };
 
@@ -239,8 +244,7 @@ server_characterSync = {
 	_currentState =	_this select 5;
 	_currentModel = _this select 6;
 	
-	_key = format["CHILD:201:%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14:%15:%16:",_characterID,_playerPos,_playerGear,_playerBackp,_medical,false,false,0,0,0,0,_currentState,0,0,_currentModel,0];
-	_key call server_hiveWrite;
+	diag_log format["CHILD:201:%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14:%15:%16:",_characterID,_playerPos,_playerGear,_playerBackp,_medical,false,false,0,0,0,0,_currentState,0,0,_currentModel,0];
 };
 
 if(isnil "dayz_MapArea") then {
@@ -276,11 +280,12 @@ spawn_vehicles = {
 	private ["_random","_lastIndex","_weights","_index","_vehicle","_velimit","_qty","_isAir","_isShip","_position","_dir","_istoomany","_veh","_objPosition","_marker","_iClass","_itemTypes","_cntWeights","_itemType","_num","_allCfgLoots"];
 	
 	if (!isDedicated) exitWith { }; //Be sure the run this
-
-	while {count AllowedVehiclesList > 0} do {
+	_allowedVehiclesCount = count AllowedVehiclesList;
+	while {_allowedVehiclesCount > 0} do {
 		// BIS_fnc_selectRandom replaced because the index may be needed to remove the element
 		_index = floor random count AllowedVehiclesList;
 		_random = AllowedVehiclesList select _index;
+		diag_log(format["DEBUG: _index is : %1, _random is : %2, size is : %3",_index,_random,(count AllowedVehiclesList)]);
 
 		_vehicle = _random select 0;
 		_velimit = _random select 1;
@@ -288,11 +293,12 @@ spawn_vehicles = {
 		_qty = {_x == _vehicle} count serverVehicleCounter;
 
 		// If under limit allow to proceed
-		if (_qty <= _velimit) exitWith {};
+		if (_qty <= _velimit) exitWith { };
 
 		// vehicle limit reached, remove vehicle from list
 		// since elements cannot be removed from an array, overwrite it with the last element && cut the last element of (as long as order is not important)
 		_lastIndex = (count AllowedVehiclesList) - 1;
+		_allowedVehiclesCount = _allowedVehiclesCount - 1;
 		if (_lastIndex != _index) then {
 			AllowedVehiclesList set [_index, AllowedVehiclesList select _lastIndex];
 		};
@@ -656,14 +662,14 @@ dayz_objectUID3 = {
 
 dayz_recordLogin = {
 	private["_key"];
-	_key = format["CHILD:103:%1:%2:%3:",_this select 0,_this select 1,_this select 2];
-	_key call server_hiveWrite;
+	diag_log format["CHILD:103:%1:%2:%3:",_this select 0,_this select 1,_this select 2];
 };
 
 
 //DZGM
 currentInvites = [];
 publicVariable "currentInvites";
+
 
 dayz_perform_purge = {
 	if(!isNull(_this)) then {
@@ -774,12 +780,13 @@ dayz_removePlayerOnDisconnect = {
 
 server_timeSync = {
 	//Send request
-	private ["_hour","_minute","_date","_key","_result","_outcome"];
-	_key = "CHILD:307:";
-	_result = _key call server_hiveReadWrite;
-	_outcome = _result select 0;
-	if(_outcome == "PASS") then {
-		_date = _result select 1;
+	private ["_hour","_minute","_date","_key","_result","_outcome","_acc_day","_acc_dusk","_acc_night","_acc_dawn","_acc_morning","_acc_diff","_time_mod"];
+        //diag_log ("server_timeSync(): " + str(date));
+        //_key = "CHILD:307:";
+	//_result = _key call server_hiveReadWrite;
+	//_outcome = _result select 0;
+	//if(_outcome == "PASS") then {
+		_date = date; //_result select 1;
 
 		_hour = _date select 3;
 		_minute = _date select 4;
@@ -798,8 +805,8 @@ server_timeSync = {
 		setDate _date;
 		PVDZE_plr_SetDate = _date;
 		publicVariable "PVDZE_plr_SetDate";
-		diag_log ("TIME SYNC: Local Time set to " + str(_date));	
-	};
+		//diag_log ("TIME SYNC: Local Time set to " + str(_date));
+	//};
 };
 
 // must spawn these 

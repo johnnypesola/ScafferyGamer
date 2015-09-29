@@ -269,7 +269,7 @@ publicVariable "activeTier";
 	};
 
 	// Announce respawn!
-	[nil,nil,rTitleText,"Reinforcements approaching Northern Military Base! ETA: 5 min", "PLAIN",5] call RE;
+	[nil,nil,rTitleText,"Reinforcements approaching Northern Military Base! ETA: 3 min", "PLAIN",3] call RE;
 	sleep 300;
 
 	// Delete old guns and search lights
@@ -488,8 +488,27 @@ publicVariable "activeTier";
 	1                           //Skill level of units 
 	] spawn heli_patrol;
 
+
+	_proceed = false;
+
+	while {!_proceed} do {
+		// When player loots the box the second time
+		if (count ((getMagazineCargo _thebox) select 0) == 0) then { 
+			if (count ((getWeaponCargo _thebox) select 0) == 0) then {
+				_proceed = true;
+			};
+		};
+		sleep 5;
+	};
+
+	[[16686.3,19090.7,0.0014099]] spawn kent_kombat;
+
+	// [17845.1,19458.2,0.00160302] <- Temporary position
+	// [16686.3,19090.7,0.0014099] <- Original position
 };
 
+
+	
 
 // ---- Napf military base #1 AI groups end ----
 // ---- Napf military base #1 AI groups end ----

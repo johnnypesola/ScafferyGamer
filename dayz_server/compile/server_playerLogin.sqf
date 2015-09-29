@@ -45,7 +45,34 @@ diag_log ("LOGIN ATTEMPT: " + str(_playerID) + " " + _playerName);
 _doLoop = 0;
 while {_doLoop < 5} do {
 	_key = format["CHILD:101:%1:%2:%3:",_playerID,dayZ_instance,_playerName];
-	_primary = _key call server_hiveReadWrite;
+	diag_log (_key);
+        _key = format["\cache\players\%1\%2.sqf", MyPlayerCounter, _playerID];
+        diag_log ("LOAD PLAYER: "+_key);
+        _res = preprocessFile _key;
+        diag_log ("PLAYER CACHE: "+_res);
+
+        if ((_res == "") or (isNil "_res")) then {
+            _key = format["\cache\players\%1\%2.sqf", (MyPlayerCounter - 1), _playerID];
+            diag_log ("BACKLOAD PLAYER: "+_key);
+            _res = preprocessFile _key;
+            diag_log ("PLAYER CACHE: "+_res);
+        };
+        if ((_res == "") or (isNil "_res")) then {
+            _res = preprocessFile "\cache\players\default.sqf";
+            diag_log ("PLAYER DEFAULT CACHE: "+_res);
+            if ((_res == "") or (isNil "_res")) then {            
+	        _primary = ["PASS",false,"1",[],[["ItemFlashlight","ItemMap","ItemGPS"],["ItemBandage"]],["DZ_Patrol_Pack_EP1",[],[]],[0,0,0],"Survivor2_DZ",0.96];
+            } else {  
+                _primary = call compile _res;
+            };
+        } else {
+            _primary = call compile _res;
+        };
+        _res = nil;
+    
+        MyPlayerCounter = MyPlayerCounter + 1;
+        diag_log format["CHILD:11:%1:", MyPlayerCounter];
+
 	if (count _primary > 0) then {
 		if ((_primary select 0) != "ERROR") then {
 			_doLoop = 9;
@@ -127,8 +154,7 @@ if (!_isNew) then {
 		//_randomSpot = true;
 	
 		//Wait for HIVE to be free
-		_key = format["CHILD:203:%1:%2:%3:",_charID,[_wpns,_mags],[_bcpk,[],[]]];
-		_key call server_hiveWrite;
+		diag_log format["CHILD:203:%1:%2:%3:",_charID,[_wpns,_mags],[_bcpk,[],[]]];
 	};
 };
 

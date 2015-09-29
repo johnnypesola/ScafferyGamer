@@ -9,33 +9,30 @@ _clientID = owner _character;
 // add cacheing
 _retrader = call compile format["ServerTcache_%1;",_traderid];
 
-if(isNil "_retrader") then {
-	
-	_retrader = [];
+if (isNil "_retrader") then {	
+    _retrader = [];
+    
+    _key = format["\cache\traders\%1.sqf", _traderid];
+    diag_log ("LOAD TRADER: "+_key);
+    _res = preprocessFile _key;
+    diag_log ("TRADER CACHE: "+_res);
+        
+    if ((_res == "") or (isNil "_res")) then {
+        diag_log ("TRADER NOT FOUND");
+    } else {
+        call compile format["ServerTcache_%1 = [];", _traderid];
+        
+        _myArr = call compile _res;
+        diag_log format["Count: %1", str(count _myArr)];
+            
+        {
+            call compile format["ServerTcache_%1 set [count ServerTcache_%1,%2]", _traderid, _x];
+            _retrader set [count _retrader, _x];
+        } forEach _myArr;
 
-	_key = format["CHILD:399:%1:",_traderid];
-	_data = "HiveEXT" callExtension _key;
-
-	//diag_log "HIVE: Request sent";
-		
-	//Process result
-	_result = call compile format ["%1",_data];
-	_status = _result select 0;
-		
-	if (_status == "ObjectStreamStart") then {
-		_val = _result select 1;
-		//Stream Objects
-		//diag_log ("HIVE: Commence Menu Streaming...");
-		call compile format["ServerTcache_%1 = [];",_traderid];
-		for "_i" from 1 to _val do {
-			_data = "HiveEXT" callExtension _key;
-			_result = call compile format ["%1",_data];
-			call compile format["ServerTcache_%1 set [count ServerTcache_%1,%2]",_traderid,_result];
-			_retrader set [count _retrader,_result];
-		};
-		//diag_log ("HIVE: Streamed " + str(_val) + " objects");
-		
-	};
+        _myArr = nil;
+    };
+    _res = nil;	
 };
 
 // diag_log(_retrader);

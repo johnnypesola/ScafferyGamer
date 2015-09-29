@@ -34,28 +34,28 @@ epoch_eventIsAny = {
 while {1 == 1} do {
 	
 	// Find current time from server
-	_key = "CHILD:307:";
-	_result = _key call server_hiveReadWrite;
-	_outcome = _result select 0;
-	if(_outcome == "PASS") then {
-		_date = _result select 1;
-		_datestr  = str(_date);
-		if (EventSchedulerLastTime != _datestr) then {
-			
-			// internal timestamp
-			ServerCurrentTime = [(_date select 3), (_date select 4)];
+//	_key = "CHILD:307:";
+//	_result = _key call server_hiveReadWrite;
+//	_outcome = _result select 0;
+//	if(_outcome == "PASS") then {
+	_date = date; //_result select 1;
+	_datestr  = str(_date);
+	if (EventSchedulerLastTime != _datestr) then {
+		
+		// internal timestamp
+		ServerCurrentTime = [(_date select 3), (_date select 4)];
 
-			// Once a minute.
-			EventSchedulerLastTime = _datestr;
+		// Once a minute.
+		EventSchedulerLastTime = _datestr;
 
-			//diag_log ("EVENTS: Local Time is: " + _datestr);
-			{
-				if([[(_x select 0),(_x select 1),(_x select 2),(_x select 3),(_x select 4)],_date] call epoch_eventIsAny) then {
-					diag_log ("RUNNING EVENT: " + (_x select 5) + " on " + _datestr);
-					_handle = [] execVM "\z\addons\dayz_server\modules\" + (_x select 5) + ".sqf";
-				};
-			} count EpochEvents;
-		};
+		//diag_log ("EVENTS: Local Time is: " + _datestr);
+		{
+			if([[(_x select 0),(_x select 1),(_x select 2),(_x select 3),(_x select 4)],_date] call epoch_eventIsAny) then {
+				diag_log ("RUNNING EVENT: " + (_x select 5) + " on " + _datestr);
+				_handle = [] execVM "\z\addons\dayz_server\modules\" + (_x select 5) + ".sqf";
+			};
+		} count EpochEvents;
 	};
+//	};
 	sleep 10;
 };

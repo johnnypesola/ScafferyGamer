@@ -31,9 +31,7 @@ _uid = _worldspace call dayz_objectUID3;
 // TODO: check if uid already exists && if so increment by 1 && check again as soon as we find nothing continue.
 
 //Send request
-_key = format["CHILD:308:%1:%2:%3:%4:%5:%6:%7:%8:%9:",dayZ_instance, _class, 0 , _characterID, _worldspace, [], [], 1,_uid];
-diag_log ("HIVE: WRITE: "+ str(_key)); 
-_key call server_hiveWrite;
+diag_log format["CHILD:308:%1:%2:%3:%4:%5:%6:%7:%8:%9:",dayZ_instance, _class, 0 , _characterID, _worldspace, [], [], 1,_uid];
 
 // Switched to spawn so we can wait a bit for the ID
 [_object,_uid,_characterID,_class,_dir,_location,_donotusekey,_activatingPlayer] spawn {
@@ -49,32 +47,28 @@ _key call server_hiveWrite;
    _activatingPlayer = _this select 7;
 
    _done = false;
-	_retry = 0;
-	// TODO: Needs major overhaul for 1.1
-	while {_retry < 10} do {
-		
-		sleep 1;
-		// GET DB ID
-		_key = format["CHILD:388:%1:",_uid];
-		diag_log ("HIVE: WRITE: "+ str(_key));
-		_result = _key call server_hiveReadWrite;
-		_outcome = _result select 0;
-		if (_outcome == "PASS") then {
-			_oid = _result select 1;
-			//_object setVariable ["ObjectID", _oid, true];
-			diag_log("CUSTOM: Selected " + str(_oid));
-			_done = true;
-			_retry = 100;
 
-		} else {
-			diag_log("CUSTOM: trying again to get id for: " + str(_uid));
-			_done = false;
-			_retry = _retry + 1;
-		};
-	};
+   _key = format["\cache\objects\%1.sqf", _uid];
+   diag_log ("LOAD OBJECT ID: "+_key);
+   _res = preprocessFile _key;
+   diag_log ("OBJECT ID CACHE: "+_res);
 
-	// Remove marker
-	deleteVehicle _object;
+   if ((_res == "") or (isNil "_res")) then {
+       diag_log ("OBJECT ID NOT FOUND");
+   } else {
+       _result  = call compile _res;
+       _outcome = _result select 0;
+       if (_outcome == "PASS") then {
+	   _oid = _result select 1;
+	   //_object setVariable ["ObjectID", _oid, true];
+	   diag_log("CUSTOM: Selected " + str(_oid));
+	   _done = true;       
+       };
+   };
+   _res = nil;	
+
+   // Remove marker
+   deleteVehicle _object;
 
 	if(!_done) exitWith { diag_log("CUSTOM: failed to get id for : " + str(_uid)); };
 
