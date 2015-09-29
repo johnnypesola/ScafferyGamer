@@ -3,7 +3,7 @@
 	Based on New Mission Format by Vampire
 */																					//
 
-private ["_missName","_coords","_survivor","_blackhawk","_patrol","_patrol2"];
+private ["_missName","_coords","_survivor","_blackhawk","_patrol","_patrol2", "_patrolPos1", "_patrolPos2"];
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,10 +48,14 @@ _coords = call OKFindPos;
 _blackhawk = createVehicle ["UH60_wreck_EP1",_coords,[], 0, "CAN_COLLIDE"];
 [_blackhawk] call OKSetupVehicle;
 
+
+
+
 //Spawn patrol
+_patrolPos1 = [100, (_coords select 1), 300];
 _patrol = OKSARList select floor (random (count OKSARList));
 [_coords,   //Position to patrol
-_coords, // Position to spawn
+_patrolPos1, // Position to spawn
 200, //Radius of patrol
 10,                     //Number of waypoints to give
 _patrol, //Classname of vehicle (make sure it has driver and gunner)
@@ -60,9 +64,10 @@ _patrol, //Classname of vehicle (make sure it has driver and gunner)
 
 sleep 30;
 
+_patrolPos2 = [(_coords select 0), 100, 290];
 _patrol2 = OKSARList select floor (random (count OKSARList));
 [_coords,   //Position to patrol
-_coords, // Position to spawn
+_patrolPos2, // Position to spawn
 200, //Radius of patrol
 10,                     //Number of waypoints to give
 _patrol2, //Classname of vehicle (make sure it has driver and gunner)
