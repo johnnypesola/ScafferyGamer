@@ -2,9 +2,6 @@ private ["_invehicle","_isplayernearby","_playerObj","_myGroup","_id","_playerUI
 _playerUID = _this select 0;
 _playerName = _this select 1;
 _playerObj = nil;
-
-diag_log format["CHILD:204:%1:", _playerUID];
-
 _playerPos = [];
 {
 	if ((getPlayerUID _x) == _playerUID) exitWith {_playerObj = _x;};

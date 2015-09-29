@@ -187,28 +187,11 @@ if (_characterID != "0") then {
 		};
 		if (!isNull _character) then {
 			if (alive _character) then {
-
-			    // If unauthorized, then don't save any gear, may be too evil
-			    //if (auth_enabled && (!(_name in auth_clients))) then {	
-			    //    _playerGear = [["ItemFlashlight","ItemTooxbox"],["ItemBandage"]];
-			    //    _playerBackp = [];
-			    //};
-			    //Wait for HIVE to be free
-			    //Send request
-			    _key = format["CHILD:201:%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14:%15:%16:",_characterID,_playerPos,_playerGear,_playerBackp,_medical,false,false,_kills,_headShots,_distanceFoot,_timeSince,_currentState,_killsH,_killsB,_currentModel,_humanity];
-			    // Prevent diag_log limit
-                            if ( count(toArray(_key)) > 1020 ) then {
-                                diag_log ("Prevent diag_log limit...");
-                                _key = format["CHILD:201:%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14:%15:%16:",_characterID,_playerPos,[],[],_medical,false,false,_kills,_headShots,_distanceFoot,_timeSince,_currentState,_killsH,_killsB,_currentModel,_humanity];                                                 
-                                if ( count(_playerGear) > 1 ) then {
-                                    diag_log format["CHILD:21:%1:0:%2:", _characterID, _playerGear select 0]; // weapons
-                                    diag_log format["CHILD:21:%1:1:%2:", _characterID, _playerGear select 1]; // magazines
-                                };
-                                if ( count(_playerBackp) > 0 ) then {
-                                    diag_log format["CHILD:22:%1:%2:", _characterID, _playerBackp]; // backpack
-                                };
-			    };
-			    diag_log (_key);
+				//Wait for HIVE to be free
+				//Send request
+				_key = format["CHILD:201:%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14:%15:%16:",_characterID,_playerPos,_playerGear,_playerBackp,_medical,false,false,_kills,_headShots,_distanceFoot,_timeSince,_currentState,_killsH,_killsB,_currentModel,_humanity];
+				//diag_log ("HIVE: WRITE: "+ str(_key) + " / " + _characterID);
+				_key call server_hiveWrite;
 			};
 		};
 
@@ -222,10 +205,11 @@ if (_characterID != "0") then {
 		};
 		
 		// Force gear updates for nearby vehicles/tents
-		_pos = _this select 0;
+		//_pos = _this select 0;
 		{
 			[_x, "gear"] call server_updateObject;
-		} count nearestObjects [_pos, dayz_updateObjects, 10];
+		} count nearestObjects [_charPos, dayz_updateObjects, 10];
+		//} count nearestObjects [_pos, dayz_updateObjects, 10];
 		//[_charPos] call server_updateNearbyObjects;
 
 		//Reset timer

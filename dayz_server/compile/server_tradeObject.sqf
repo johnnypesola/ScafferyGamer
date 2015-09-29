@@ -21,15 +21,15 @@ if (DZE_ConfigTrader) then {
 	_outcome = "PASS";
 } else {
 	//Send request
-	diag_log format["CHILD:398:%1:%2:",_traderID,_buyorsell];
+	_key = format["CHILD:398:%1:%2:",_traderID,_buyorsell];
 
-	//_data = "HiveEXT" callExtension _key;
-	//_result = call compile format ["%1",_data];
+	_data = "HiveEXT" callExtension _key;
+	_result = call compile format ["%1",_data];
 	// diag_log ("TRADE: RES: "+ str(_result));
-	//_outcome = _result select 0;
+	_outcome = _result select 0;
 };
 
-dayzTradeResult = "PASS"; //_outcome;
+dayzTradeResult = _outcome;
 if(!isNull _player) then {
 	_clientID publicVariableClient "dayzTradeResult";
 };

@@ -12,9 +12,10 @@ if (((count _this) >= 6) && {(typeName (_this select 5)) == "STRING"} && {(_this
 };
 _victim = _newObject;
 _newObject setVariable ["bodyName", _victimName, true];
+
+// DZGM
 _newObject setVariable ["bodyUID", _playerID, true];
 _newObject setVariable ["bodyGroup", (group _newObject), true];
-
 
 _killer = _victim getVariable["AttackedBy", "nil"];
 _killerName = _victim getVariable["AttackedByName", "nil"];
@@ -91,9 +92,13 @@ diag_log ("PDEATH: Player Died " + _playerID);
 
 if (_characterID != "0") then
 {
-	diag_log format["CHILD:202:%1:%2:%3:%4:",_characterID,_minutes,_playerID,_infected];
-} 
-else 
+	_key = format["CHILD:202:%1:%2:%3:",_characterID,_minutes,_infected];
+	#ifdef DZE_SERVER_DEBUG_HIVE
+	diag_log ("HIVE: WRITE: "+ str(_key));
+	#endif
+	_key call server_hiveWrite;
+}
+else
 {
 	deleteVehicle _newObject;
 };
