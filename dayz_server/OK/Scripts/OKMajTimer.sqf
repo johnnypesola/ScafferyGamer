@@ -17,7 +17,7 @@ OKMajDone = false;
 while {_run} do
 {
 	//Lets wait the random time
-	_wait  = round(random _timeVar);
+	_wait  = round(random _timeDiff) + OKMajorMin;
 	sleep _wait;
 	
 	//Let's check that there are missions in the array.
