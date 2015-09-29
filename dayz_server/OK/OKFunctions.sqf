@@ -57,7 +57,7 @@ OKFindPos = {
 			for [{_i=1}, {_i<4}, {_i=_i+1}] do {
 
 				// Is the height difference too big?
-				if (abs ((_list select 0) - (_list select _i)) > 1) then {
+				if (abs ((_list select 0) - (_list select _i)) > 3) then {
 
 					// Yes, keep looking 
 					_findRun = true;

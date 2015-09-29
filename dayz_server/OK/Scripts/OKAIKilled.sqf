@@ -18,6 +18,7 @@ if (isPlayer _player) then {
     //removing MAAWS
     _unit removeWeapon "MAAWS";
     _unit removeWeapon "Stinger";
+    _unit removeMagazines "MAAWS_HEAT";
     
     diag_log format ["[OK]: Debug: Launchers removed from posession"];
 	

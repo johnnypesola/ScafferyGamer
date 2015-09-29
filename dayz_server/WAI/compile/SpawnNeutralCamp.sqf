@@ -1,4 +1,4 @@
-private ["_campNumber","_position","_dir","_vehclass","_numUnits","_timeoutSeconds","_x","_y","_z","_objectList","_veh","_radius","_wpnumber","_notTimedOut","_createdTime","_currentTime","_playerPresent","_cleanCamp","_campId","_grp","_weapCrate","_itemCrate","_numberofguns","_numberoftools","_numberofitems","_weapon", "_mags", "_tool", "_item", "_extraStuff"];
+private ["_campNumber","_position","_dir","_vehclass","_numUnits","_timeoutSeconds","_X","_Y","_Z","_objectList","_veh","_radius","_wpnumber","_notTimedOut","_createdTime","_currentTime","_playerPresent","_cleanCamp","_campId","_grp","_weapCrate","_itemCrate","_numberofguns","_numberoftools","_numberofitems","_weapon", "_mags", "_tool", "_item", "_extraStuff", "_campfire"];
 
 _campNumber = _this select 0;
 _position = _this select 1;
@@ -7,21 +7,36 @@ _vehclass = _this select 3;
 _numUnits = _this select 4;
 _timeoutSeconds = _this select 5;
 
-_x = _position select 0;
-_z = _position select 1;
-_y = _position select 2;
+_X = _position select 0;
+_Z = _position select 1;
+_Y = _position select 2;
+
+// Spawn campfire so it is visible from distance
+_campfire = createVehicle ["Land_Campfire_burning", 	[_X, _Z, _Y], 			[], 0, "CAN_COLLIDE"],	//1
+
+ai_active_survivorcamps = ai_active_survivorcamps + 1;
+
+diag_log format ["WAI: Created camp %1 at %2", _campNumber, _position];
+
+waitUntil
+{
+	sleep 5;
+	_playerPresent = false;
+	{ if ((isPlayer _x) AND (_x distance _position <= 1000)) then {_playerPresent = true}; } forEach playableUnits;
+	(_playerPresent)
+};
 
 _objectList = [
-	createVehicle ["MAP_Misc_WoodPile", 		[_x-3.104, _z+0.8384, _y], 	[], 0, "CAN_COLLIDE"],	//0
-	createVehicle ["Land_Campfire_burning", 	[_x, _z, _y], 			[], 0, "CAN_COLLIDE"],	//1
-	createVehicle ["ACamp_EP1", 			[_x+1.3032, _z+4.1563, _y], 	[], 0, "CAN_COLLIDE"],	//2
-	createVehicle ["Land_A_tent", 			[_x-1.6001, _z-4.6533, _y], 	[], 0, "CAN_COLLIDE"],	//3
-	createVehicle ["ACamp",				[_x+4.9731, _z+0.7217, _y], 	[], 0, "CAN_COLLIDE"],	//4
-	createVehicle ["BAF_OrdnanceBox", 		[_x+2.2461, _z+1.7681, _y], 	[], 0, "CAN_COLLIDE"],	//5
-	createVehicle ["Land_A_tent", 			[_x+1.3779, _z-5.3525, _y], 	[], 0, "CAN_COLLIDE"],	//6
-	createVehicle ["ACamp", 			[_x+4.7051, _z-3.3716, _y], 	[], 0, "CAN_COLLIDE"],	//7
-	createVehicle ["WeaponHolder_ItemTentOld", 	[_x-3.8447, _z+0.9351, _y], 	[], 0, "CAN_COLLIDE"],	//8
-	createVehicle ["BAF_Launchers", 		[_x-3.5103, _z-0.6777, _y], 	[], 0, "CAN_COLLIDE"]	//9
+	createVehicle ["MAP_Misc_WoodPile", 		[_X-3.104, _Z+0.8384, _Y], 	[], 0, "CAN_COLLIDE"],	//0
+	_campfire,
+	createVehicle ["ACamp_EP1", 			[_X+1.3032, _Z+4.1563, _Y], 	[], 0, "CAN_COLLIDE"],	//2
+	createVehicle ["Land_A_tent", 			[_X-1.6001, _Z-4.6533, _Y], 	[], 0, "CAN_COLLIDE"],	//3
+	createVehicle ["ACamp",				[_X+4.9731, _Z+0.7217, _Y], 	[], 0, "CAN_COLLIDE"],	//4
+	createVehicle ["BAF_OrdnanceBox", 		[_X+2.2461, _Z+1.7681, _Y], 	[], 0, "CAN_COLLIDE"],	//5
+	createVehicle ["Land_A_tent", 			[_X+1.3779, _Z-5.3525, _Y], 	[], 0, "CAN_COLLIDE"],	//6
+	createVehicle ["ACamp", 			[_X+4.7051, _Z-3.3716, _Y], 	[], 0, "CAN_COLLIDE"],	//7
+	createVehicle ["WeaponHolder_ItemTentOld", 	[_X-3.8447, _Z+0.9351, _Y], 	[], 0, "CAN_COLLIDE"],	//8
+	createVehicle ["BAF_Launchers", 		[_X-3.5103, _Z-0.6777, _Y], 	[], 0, "CAN_COLLIDE"]	//9
 ];
 
 _itemCrate = _objectList select 5;
@@ -35,16 +50,16 @@ _weapCrate = _objectList select 9;
 _itemCrate setDir (_dir+58.662807);
 _weapCrate setDir (_dir-0.041808173);
 
-(_objectList select 0) setPos [_x-3.104, _z+0.8384, _y];
-(_objectList select 1) setPos [_x, _z, _y];
-(_objectList select 2) setPos [_x+1.3032, _z+4.1563, _y];
-(_objectList select 3) setPos [_x-1.6001, _z-4.6533, _y];
-(_objectList select 4) setPos [_x+4.9731, _z+0.7217, _y];
-_itemCrate setPos [_x+2.2461, _z+1.7681, _y];
-(_objectList select 6) setPos [_x+1.3779, _z-5.3525, _y];
-(_objectList select 7) setPos [_x+4.7051, _z-3.3716, _y];
-(_objectList select 8) setPos [_x-3.8447, _z+0.9351, _y];
-_weapCrate setPos [_x-3.5103, _z-0.6777, _y];
+(_objectList select 0) setPos [_X-3.104, _Z+0.8384, _Y];
+(_objectList select 1) setPos [_X, _Z, _Y];
+(_objectList select 2) setPos [_X+1.3032, _Z+4.1563, _Y];
+(_objectList select 3) setPos [_X-1.6001, _Z-4.6533, _Y];
+(_objectList select 4) setPos [_X+4.9731, _Z+0.7217, _Y];
+_itemCrate setPos [_X+2.2461, _Z+1.7681, _Y];
+(_objectList select 6) setPos [_X+1.3779, _Z-5.3525, _Y];
+(_objectList select 7) setPos [_X+4.7051, _Z-3.3716, _Y];
+(_objectList select 8) setPos [_X-3.8447, _Z+0.9351, _Y];
+_weapCrate setPos [_X-3.5103, _Z-0.6777, _Y];
 
 
 // Add items
@@ -175,7 +190,7 @@ _wpnumber = ai_patrol_radius_wp;
 ai_patrol_radius = 20;
 ai_patrol_radius_wp = 5;
 [
-	[_x-4.1538, _z-2.4683, _y],	// Relative position
+	[_X-4.1538, _Z-2.4683, _Y],	// Relative position
 	_numUnits,			//Number Of units
 	0.25,				//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 	6,				//Primary gun set number. "Random" for random weapon set.
@@ -191,23 +206,21 @@ ai_patrol_radius = _radius;
 ai_patrol_radius_wp = _wpnumber;
 
 // Create vehicle
-_veh = createVehicle [_vehclass, [_x+4.3032, _z+5.1563, _y], [], 0, "CAN_COLLIDE"];
+_veh = createVehicle [_vehclass, [_X+4.3032, _Z+5.1563, _Y], [], 0, "CAN_COLLIDE"];
 _veh setDir _dir;
-_veh setPos [_x+4.3032, _z+5.1563, _y];
+_veh setPos [_X+4.3032, _Z+5.1563, _Y];
 clearWeaponCargoGlobal _veh;
 clearMagazineCargoGlobal _veh;
 _veh setVariable ["ObjectID","1",true];
 PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_veh];
-
-diag_log format["WAI: Spawned a %1 at camp", _vehclass];
-diag_log format ["WAI: Spawned a camp of %1 Neutrals at %2", _numUnits, _position];
 
 _createdTime = floor(time);
 _notTimedOut = true;
 _playerPresent = false;
 _cleanCamp = false;
 
-ai_active_survivorcamps = ai_active_survivorcamps + 1;
+diag_log format ["WAI: Spawned a camp of %1 Neutrals at %2", _numUnits, _position];
+diag_log format["WAI: Spawned a %1 at camp", _vehclass];
 
 while { _notTimedOut } do {
 	sleep 5;

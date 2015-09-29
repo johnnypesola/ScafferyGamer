@@ -7,10 +7,10 @@ if (!isServer) exitWith { };
 
 
 ai_active_survivorcamps = 0;
-ai_max_active_survivorcamps = 8;
+ai_max_active_survivorcamps = 5;
 
 _campId = 10000;
-_timeout = 3600;
+_timeout = 900;
 
 _bestPlaces = [];
 while { true } do {
