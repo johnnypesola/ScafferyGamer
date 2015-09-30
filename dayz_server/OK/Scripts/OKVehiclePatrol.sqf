@@ -19,7 +19,7 @@ _patrol = createVehicle [_heli_class, _startingpos, [], 0, "FLY"];
 _patrol setFuel 1;
 _patrol engineOn true;
 _patrol setVehicleAmmo 1;
-_patrol flyInHeight 150;
+_patrol flyInHeight 100;
 _patrol addEventHandler ["GetOut",{(_this select 0) setFuel 0;[(_this select 0)] ExecVM OKAIPinata; (_this select 0) setDamage 1}];
 _patrol allowCrewInImmobile false; 
 _patrol lock false;
@@ -42,7 +42,7 @@ diag_log format["[OK]: Blackhawk Mission gunner1 in."];
 _gunner2 = _unitGroup createUnit ["Bandit1_DZ", [0,0,0], [], 1, "NONE"];
 _gunner2 assignAsGunner _patrol;
 _gunner2 moveInTurret [_patrol,[1]];
-[_gunner] joinSilent _unitGroup;
+[_gunner2] joinSilent _unitGroup;
 
 diag_log format["[OK]: Blackhawk Mission gunner2 in."];
 
@@ -82,8 +82,8 @@ _gearmagazines = _aigear select 0;
 //[_patrol] spawn veh_monitor;
 
 _unitGroup allowFleeing 0;
-_unitGroup setBehaviour "CARELESS";
-//_unitGroup setSpeedMode "FULL";
+_unitGroup setBehaviour "AWARE";
+_unitGroup setSpeedMode "FULL";
 _unitGroup setCombatMode "RED";
 for "_i" from 1 to _wpnum do {
 	_wp = _unitGroup addWaypoint [[(_position select 0),(_position select 1),0],_radius];
