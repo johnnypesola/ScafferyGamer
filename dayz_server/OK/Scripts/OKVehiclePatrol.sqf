@@ -14,12 +14,12 @@ _pilot = _unitGroup createUnit ["Bandit1_DZ", [0,0,0], [], 1, "NONE"];
 //ai_vehicle_units = (ai_vehicle_units + 1);
 
 //_patrol = ["patrol"] call OKGetVeh;
-_patrol = createVehicle [_heli_class, _startingpos, [], 0, "CAN_COLLIDE"];
+_patrol = createVehicle [_heli_class, _startingpos, [], 0, "FLY"];
 [_patrol] call OKSetupVehicle;
 _patrol setFuel 1;
 _patrol engineOn true;
 _patrol setVehicleAmmo 1;
-_patrol flyInHeight 300;
+_patrol flyInHeight 150;
 _patrol addEventHandler ["GetOut",{(_this select 0) setFuel 0;[(_this select 0)] ExecVM OKAIPinata; (_this select 0) setDamage 1}];
 _patrol allowCrewInImmobile false; 
 _patrol lock false;
