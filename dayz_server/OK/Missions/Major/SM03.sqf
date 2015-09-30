@@ -52,7 +52,7 @@ _blackhawk = createVehicle ["UH60_wreck_EP1",_coords,[], 0, "CAN_COLLIDE"];
 
 
 //Spawn patrol
-_patrolPos1 = [100, (_coords select 1), 300];
+_patrolPos1 = [100, (_coords select 1), 100];
 _patrol = OKSARList select floor (random (count OKSARList));
 [_coords,   //Position to patrol
 _patrolPos1, // Position to spawn
@@ -64,7 +64,7 @@ _patrol, //Classname of vehicle (make sure it has driver and gunner)
 
 sleep 30;
 
-_patrolPos2 = [(_coords select 0), 100, 290];
+_patrolPos2 = [(_coords select 0), 100, 100];
 _patrol2 = OKSARList select floor (random (count OKSARList));
 [_coords,   //Position to patrol
 _patrolPos2, // Position to spawn
