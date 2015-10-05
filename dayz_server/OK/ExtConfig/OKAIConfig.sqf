@@ -7,10 +7,14 @@
 
 ///////////////////////////////////////////////
 // Array of skin classnames for the AI to use
+
 OKBanditSkins1 = ["TK_INS_Bonesetter_EP1","TK_INS_Soldier_2_EP1","TK_INS_Soldier_3_EP1","TK_INS_Soldier_4_EP1","TK_INS_Soldier_AT_EP1","TK_INS_Soldier_EP1"];
-OKBanditSkins2 = ["MVD_Soldier","RUS_Commander","RU_Soldier"];
-OKBanditSkins3 = ["INS_Lopotev","INS_Bardak","INS_Commander","INS_Soldier_1","INS_Soldier_2","INS_Soldier_Medic"];
-OKBanditSkins4 = ["INS_Villager3","INS_Villager4","INS_Woodlander1","INS_Woodlander2","INS_Woodlander3","GUE_Commander","GUE_Soldier_Sniper"];
+//OKBanditSkins2 = ["MVD_Soldier","RUS_Commander","RU_Soldier"];
+OKBanditSkins2 = ["Bandit1_DZ","BanditW1_DZ"];
+//OKBanditSkins3 = ["INS_Lopotev","INS_Bardak","INS_Commander","INS_Soldier_1","INS_Soldier_2","INS_Soldier_Medic"];
+OKBanditSkins3 = ["TK_Special_Forces_EP1","TK_INS_Soldier_AAT_EP1","TK_GUE_Bonesetter_EP1","TK_GUE_Soldier_3_EP1"];
+//OKBanditSkins4 = ["INS_Villager3","INS_Villager4","INS_Woodlander1","INS_Woodlander2","INS_Woodlander3","GUE_Commander","GUE_Soldier_Sniper"];
+OKBanditSkins4 = ["Bandit2_DZ", "BanditW2_DZ"];
 
 ////////////////////////
 // Array of AI Skills

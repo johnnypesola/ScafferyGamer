@@ -737,12 +737,12 @@ PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_thebox];
 clearWeaponCargoGlobal _thebox;
 clearMagazineCargoGlobal _thebox;
 
-_hidden_box_number_of_gold = 2;
+_hidden_box_number_of_gold = floor (random 4) + 3;
 _hidden_box_random_items = [
 "ItemBriefcase100oz"
 ];
 
-_hidden_box_number_of_buildmats = 5;
+_hidden_box_number_of_buildmats = 10;
 _hidden_box_random_buildmats = [
 "cinder_wall_kit",
 "cinder_wall_kit",
@@ -794,6 +794,9 @@ _hidden_box_random_buildmats = [
 "PartGeneric",
 "PartGeneric",
 "PartGeneric",
+"ItemComboLock",
+"ItemComboLock",
+"ItemComboLock",
 "ItemComboLock"
 ];
 

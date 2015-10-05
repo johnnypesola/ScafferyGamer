@@ -82,7 +82,7 @@ if (_poc == 1) then
     };
 
 //Wait until the player is within 10 meters
-waitUntil{ {isPlayer _x && _x distance _coords <= 15 } count playableunits > 0 };
+waitUntil {sleep 3; {isPlayer _x && _x distance _coords <= 15 } count playableunits > 0 };
 
 //Visitors have arrived
 //[nil,nil,rTitleText,"Here we are!", "PLAIN",6] call RE;
@@ -105,7 +105,7 @@ if (_amb == 1) then
 [_vehicle] ExecVM OKSaveVeh;
 
 //Wait until all the players left area
-waitUntil{ _nu = {isPlayer _x && _x distance _coords > 30} count playableunits; _pu = count playableunits; _nu == _pu};
+waitUntil {sleep 3; _nu = {isPlayer _x && _x distance _coords > 30} count playableunits; _pu = count playableunits; _nu == _pu};
       
 //Let everyone know the mission is over
 [nil,nil,rTitleText,"Abandoned villa was visited.", "PLAIN",6] call RE;

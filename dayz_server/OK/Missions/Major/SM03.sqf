@@ -81,7 +81,7 @@ _survivor = [_coords,(round(random 7))+1,(round(random 3)),(round(random 3))] Ex
 
 
 //Wait until the player is within 5 meters
-waitUntil{ {isPlayer _x && _x distance _coords <= 5 } count playableunits > 0 }; 
+waitUntil {sleep 3; {isPlayer _x && _x distance _coords <= 5 } count playableunits > 0 }; 
 
 //Call OKSaveVeh to attempt to save the vehicles to the database
 //If saving is off, the script will exit.
