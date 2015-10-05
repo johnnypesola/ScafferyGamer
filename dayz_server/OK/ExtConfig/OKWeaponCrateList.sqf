@@ -196,7 +196,7 @@ OKSecret =
 "ItemDocument",
 "ItemCitrine",
 "ItemAmethyst",
-"ItemObsidian",
+"ItemObsidian"
 ];
 
 // Only 1 from this list may enter in the "Secret" box. 
