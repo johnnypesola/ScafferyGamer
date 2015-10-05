@@ -23,239 +23,217 @@ Place your custom group spawns below
 // ---- Napf military base #1 AI groups follow ----
 // ---- Napf military base #1 AI groups follow ----
 // ---- Napf military base #1 AI groups follow ----
+[] spawn {
+	Private ["_proceed", "_themags","_theweap","_thetool","_item","_thebox","_hidden_box_number_of_gold","_hidden_box_number_of_guns","_hidden_box_number_of_tools","_hidden_box_number_of_buildmats","_numberofguns","_numberoftools","_numberofitems","_numberofbuildmats","_hidden_box_random_items","_hidden_box_random_guns","_hidden_box_random_tools","_hidden_box_random_buildmats","_objects", "_rare_loot_items", "_result"];
 
 
-_radius = ai_patrol_radius;
-_wp = ai_patrol_radius_wp;
-ai_patrol_radius = 25;
-ai_patrol_radius_wp = 4;
+	waitUntil {sleep 5; {isPlayer _x && _x distance [16745.498, 19048.521, 0.01] <= 1000 } count playableunits > 0 };
 
-// Guards 1
-[[16745.498, 19048.521, 0.01], //position
-4,                    //Number Of units
-0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
-3,            //Primary gun set number. "Random" for random weapon set.
-4,                    //Number of magazines
-"",                    //Backpack "" for random or classname here.
-"Bandit2_DZ",           //Skin "" for random or classname here.
-5                  //Gearset number. "Random" for random gear set.
-] call spawn_neutral_group;
+	_radius = ai_patrol_radius;
+	_wp = ai_patrol_radius_wp;
+	ai_patrol_radius = 25;
+	ai_patrol_radius_wp = 4;
 
-// Guards 4
-[[16692.979, 19044.877, 0.01], //position
-3,                    //Number Of units
-0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
-4,            //Primary gun set number. "Random" for random weapon set.
-4,                    //Number of magazines
-"",                    //Backpack "" for random or classname here.
-"Bandit2_DZ",           //Skin "" for random or classname here.
-5                  //Gearset number. "Random" for random gear set.
-] call spawn_neutral_group;
+	// Guards 1
+	[[16745.498, 19048.521, 0.01], //position
+	4,                    //Number Of units
+	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+	3,            //Primary gun set number. "Random" for random weapon set.
+	4,                    //Number of magazines
+	"",                    //Backpack "" for random or classname here.
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	5                  //Gearset number. "Random" for random gear set.
+	] call spawn_neutral_group;
 
-// Guards 10
-[[16743.932, 18991.537, 0.01], //position
-3,                    //Number Of units
-0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
-1,            //Primary gun set number. "Random" for random weapon set.
-4,                    //Number of magazines
-"",                    //Backpack "" for random or classname here.
-"Bandit2_DZ",           //Skin "" for random or classname here.
-5                  //Gearset number. "Random" for random gear set.
-] call spawn_neutral_group;
+	// Guards 4
+	[[16692.979, 19044.877, 0.01], //position
+	3,                    //Number Of units
+	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+	4,            //Primary gun set number. "Random" for random weapon set.
+	4,                    //Number of magazines
+	"",                    //Backpack "" for random or classname here.
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	5                  //Gearset number. "Random" for random gear set.
+	] call spawn_neutral_group;
 
-// Guards 13
-[[16746.881, 19080.102, 0.01], //position
-3,                    //Number Of units
-0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
-4,            //Primary gun set number. "Random" for random weapon set.
-4,                    //Number of magazines
-"",                    //Backpack "" for random or classname here.
-"Bandit2_DZ",           //Skin "" for random or classname here.
-5                  //Gearset number. "Random" for random gear set.
-] call spawn_neutral_group;
+	// Guards 10
+	[[16743.932, 18991.537, 0.01], //position
+	3,                    //Number Of units
+	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+	1,            //Primary gun set number. "Random" for random weapon set.
+	4,                    //Number of magazines
+	"",                    //Backpack "" for random or classname here.
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	5                  //Gearset number. "Random" for random gear set.
+	] call spawn_neutral_group;
 
-// Guards 19
-[[16773.252, 19117.428, 0.01], //position
-3,                    //Number Of units
-0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
-4,            //Primary gun set number. "Random" for random weapon set.
-4,                    //Number of magazines
-"",                    //Backpack "" for random or classname here.
-"Bandit2_DZ",           //Skin "" for random or classname here.
-5                  //Gearset number. "Random" for random gear set.
-] call spawn_neutral_group;
+	// Guards 13
+	[[16746.881, 19080.102, 0.01], //position
+	3,                    //Number Of units
+	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+	4,            //Primary gun set number. "Random" for random weapon set.
+	4,                    //Number of magazines
+	"",                    //Backpack "" for random or classname here.
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	5                  //Gearset number. "Random" for random gear set.
+	] call spawn_neutral_group;
 
-// Guards 22
-[[16692.268, 19009.559, 0.01], //position
-3,                    //Number Of units
-0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
-1,            //Primary gun set number. "Random" for random weapon set.
-4,                    //Number of magazines
-"",                    //Backpack "" for random or classname here.
-"Bandit2_DZ",           //Skin "" for random or classname here.
-5                  //Gearset number. "Random" for random gear set.
-] call spawn_neutral_group;
+	// Guards 19
+	[[16773.252, 19117.428, 0.01], //position
+	3,                    //Number Of units
+	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+	4,            //Primary gun set number. "Random" for random weapon set.
+	4,                    //Number of magazines
+	"",                    //Backpack "" for random or classname here.
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	5                  //Gearset number. "Random" for random gear set.
+	] call spawn_neutral_group;
 
-ai_patrol_radius_wp = _wp;
-ai_patrol_radius = _radius;
+	// Guards 22
+	[[16692.268, 19009.559, 0.01], //position
+	3,                    //Number Of units
+	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+	1,            //Primary gun set number. "Random" for random weapon set.
+	4,                    //Number of magazines
+	"",                    //Backpack "" for random or classname here.
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	5                  //Gearset number. "Random" for random gear set.
+	] call spawn_neutral_group;
 
-// SearchLight 1
-[[[16623.537, 19096.074, 0.00014305115]], //position(s) (can be multiple).
-"SearchLight_TK_EP1",             //Classname of turret
-0.5,                 //Skill level 0-1. Has no effect if using custom skills
-"Bandit2_DZ",           //Skin "" for random or classname here.
-1,                    //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
-2,                    //Number of magazines. (not needed if ai_static_useweapon = False)
-"",                    //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
-5              //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
-] call spawn_neutral_static;
+	ai_patrol_radius_wp = _wp;
+	ai_patrol_radius = _radius;
 
-// SearchLight 2
-[[[16624.289, 19090.277, 0.00014305115]], //position(s) (can be multiple).
-"SearchLight_TK_EP1",             //Classname of turret
-0.5,                 //Skill level 0-1. Has no effect if using custom skills
-"Bandit2_DZ",           //Skin "" for random or classname here.
-1,                    //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
-2,                    //Number of magazines. (not needed if ai_static_useweapon = False)
-"",                    //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
-5              //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
-] call spawn_neutral_static;
+	// SearchLight 1
+	[[[16623.537, 19096.074, 0.00014305115]], //position(s) (can be multiple).
+	"SearchLight_TK_EP1",             //Classname of turret
+	0.5,                 //Skill level 0-1. Has no effect if using custom skills
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	1,                    //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
+	2,                    //Number of magazines. (not needed if ai_static_useweapon = False)
+	"",                    //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
+	5              //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
+	] call spawn_neutral_static;
 
-// M2staticMG 1
-[[[16685.227, 19087.596, 5.9127808e-005]], //position(s) (can be multiple).
-"M2StaticMG",             //Classname of turret
-0.5,                 //Skill level 0-1. Has no effect if using custom skills
-"Bandit2_DZ",           //Skin "" for random or classname here.
-1,                    //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
-2,                    //Number of magazines. (not needed if ai_static_useweapon = False)
-"",                    //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
-5              //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
-] call spawn_neutral_static;
+	// SearchLight 2
+	[[[16624.289, 19090.277, 0.00014305115]], //position(s) (can be multiple).
+	"SearchLight_TK_EP1",             //Classname of turret
+	0.5,                 //Skill level 0-1. Has no effect if using custom skills
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	1,                    //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
+	2,                    //Number of magazines. (not needed if ai_static_useweapon = False)
+	"",                    //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
+	5              //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
+	] call spawn_neutral_static;
 
-// M2staticMG 2
-[[[16712.932, 19018.701, 0.00045967102]], //position(s) (can be multiple).
-"M2StaticMG",             //Classname of turret
-0.5,                 //Skill level 0-1. Has no effect if using custom skills
-"Bandit2_DZ",           //Skin "" for random or classname here.
-1,                    //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
-2,                    //Number of magazines. (not needed if ai_static_useweapon = False)
-"",                    //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
-"Random"              //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
-] call spawn_neutral_static;
+	// M2staticMG 1
+	[[[16685.227, 19087.596, 5.9127808e-005]], //position(s) (can be multiple).
+	"M2StaticMG",             //Classname of turret
+	0.5,                 //Skill level 0-1. Has no effect if using custom skills
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	1,                    //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
+	2,                    //Number of magazines. (not needed if ai_static_useweapon = False)
+	"",                    //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
+	5              //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
+	] call spawn_neutral_static;
 
-// M2staticMG 3
-[[[16694.984, 18996.77, -0.0001411438]], //position(s) (can be multiple).
-"M2StaticMG",             //Classname of turret
-0.5,                 //Skill level 0-1. Has no effect if using custom skills
-"Bandit2_DZ",           //Skin "" for random or classname here.
-1,                    //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
-2,                    //Number of magazines. (not needed if ai_static_useweapon = False)
-"",                    //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
-5              //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
-] call spawn_neutral_static;
+	// M2staticMG 2
+	[[[16712.932, 19018.701, 0.00045967102]], //position(s) (can be multiple).
+	"M2StaticMG",             //Classname of turret
+	0.5,                 //Skill level 0-1. Has no effect if using custom skills
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	1,                    //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
+	2,                    //Number of magazines. (not needed if ai_static_useweapon = False)
+	"",                    //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
+	"Random"              //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
+	] call spawn_neutral_static;
 
-// HMMWV1
-[[16567.605, 19159.955, 0.011580579],   //Position to patrol
-[16567.605, 19159.955, 0.011580579],   // Position to spawn at
-200,               //Radius of patrol
-10,                     //Number of waypoints to give
-"HMMWV_Armored",      //Classname of vehicle (make sure it has driver and gunner)
-1                  //Skill level of units 
-] spawn vehicle_patrol;
+	// M2staticMG 3
+	[[[16694.984, 18996.77, -0.0001411438]], //position(s) (can be multiple).
+	"M2StaticMG",             //Classname of turret
+	0.5,                 //Skill level 0-1. Has no effect if using custom skills
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	1,                    //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
+	2,                    //Number of magazines. (not needed if ai_static_useweapon = False)
+	"",                    //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
+	5              //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
+	] call spawn_neutral_static;
 
-// HMMWV2
-[[16569.605, 19144.955, 0.011580579],   //Position to patrol
-[16569.605, 19144.955, 0.011580579],   // Position to spawn at
-50,               //Radius of patrol
-10,                     //Number of waypoints to give
-"HMMWV_M1151_M2_CZ_DES_EP1_DZ",      //Classname of vehicle (make sure it has driver and gunner)
-1                  //Skill level of units 
-] spawn vehicle_patrol;
+	// HMMWV1
+	[[16567.605, 19159.955, 0.011580579],   //Position to patrol
+	[16567.605, 19159.955, 0.011580579],   // Position to spawn at
+	200,               //Radius of patrol
+	10,                     //Number of waypoints to give
+	"HMMWV_Armored",      //Classname of vehicle (make sure it has driver and gunner)
+	1                  //Skill level of units 
+	] spawn vehicle_patrol;
 
-// HMMWV3
-[[16867.072, 18960.773, 0.011580579],   //Position to patrol
-[16867.072, 18960.773, 0.011580579],   // Position to spawn at
-50,               //Radius of patrol
-10,                     //Number of waypoints to give
-"HMMWV_M1151_M2_CZ_DES_EP1_DZ",      //Classname of vehicle (make sure it has driver and gunner)
-1                  //Skill level of units 
-] spawn vehicle_patrol;
+	// HMMWV2
+	[[16569.605, 19144.955, 0.011580579],   //Position to patrol
+	[16569.605, 19144.955, 0.011580579],   // Position to spawn at
+	50,               //Radius of patrol
+	10,                     //Number of waypoints to give
+	"HMMWV_M1151_M2_CZ_DES_EP1_DZ",      //Classname of vehicle (make sure it has driver and gunner)
+	1                  //Skill level of units 
+	] spawn vehicle_patrol;
+
+	// HMMWV3
+	[[16867.072, 18960.773, 0.011580579],   //Position to patrol
+	[16867.072, 18960.773, 0.011580579],   // Position to spawn at
+	50,               //Radius of patrol
+	10,                     //Number of waypoints to give
+	"HMMWV_M1151_M2_CZ_DES_EP1_DZ",      //Classname of vehicle (make sure it has driver and gunner)
+	1                  //Skill level of units 
+	] spawn vehicle_patrol;
 
 
-// LOOT
+	// LOOT
 
-_thebox = createVehicle ["USOrdnanceBox",[16771.174, 19084.066, -7.0571899e-005], [], 0, "CAN_COLLIDE"];
-_thebox setPos [16771.174, 19084.066, -7.0571899e-005];
-clearWeaponCargoGlobal _thebox;
-clearMagazineCargoGlobal _thebox;
-_thebox setVariable ["ObjectID","1",true];
-_thebox setVariable ["permaLoot",true];
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_thebox];
+	_thebox = createVehicle ["USOrdnanceBox",[16771.174, 19084.066, -7.0571899e-005], [], 0, "CAN_COLLIDE"];
+	_thebox setPos [16771.174, 19084.066, -7.0571899e-005];
+	clearWeaponCargoGlobal _thebox;
+	clearMagazineCargoGlobal _thebox;
+	_thebox setVariable ["ObjectID","1",true];
+	_thebox setVariable ["permaLoot",true];
+	PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_thebox];
 
-clearWeaponCargoGlobal _thebox;
-clearMagazineCargoGlobal _thebox;
+	clearWeaponCargoGlobal _thebox;
+	clearMagazineCargoGlobal _thebox;
 
-_hidden_box_number_of_gold = 5;
-_hidden_box_random_items = [
-"ItemBriefcase100oz"
-];
+	_hidden_box_number_of_gold = 5;
+	_hidden_box_random_items = [
+	"ItemBriefcase100oz"
+	];
 
-_hidden_box_number_of_buildmats = 0;
-_hidden_box_random_buildmats = [
-"CinderBlocks"
-];
+	_rare_loot_items = [
+		["ItemBriefcase100oz", 94],
+		["ItemTopaz", 5],
+		["ItemSapphire", 1]
+	];
 
-_hidden_box_number_of_guns = 0;
-_hidden_box_random_guns = [
-"DMR",
-"m107_DZ"
-];
+	_numberofitems = (round (random 5)) + _hidden_box_number_of_gold;
 
-_hidden_box_number_of_tools = 0;
-// classnames of tools to spawn in ammo boxes (only toolbelt items or weapon class Eg. "Chainsaw" or "ItemToolbox")
-_hidden_box_random_tools =[
-"ItemToolbox",
-"ItemKnife",
-"ItemCrowbar",
-"ItemEtool",
-"ItemHatchet_DZE",
-"Binocular_Vector",
-"ItemGPS",
-"NVGoggles",
-"chainsaw",
-"ItemSledge"
-];
+	for "_i" from 1 to _numberofitems do {
+		_item = _hidden_box_random_items call BIS_fnc_selectRandom;
+		_thebox addMagazineCargoGlobal [_item,1];
+	};
 
-_numberofguns = 0;// (round (random 2)) + _hidden_box_number_of_guns;
-_numberoftools = 0;// (round (random 2)) + _hidden_box_number_of_tools;
-_numberofitems = (round (random 5)) + _hidden_box_number_of_gold;
-_numberofbuildmats = 0;//(round (random 5)) + _hidden_box_number_of_buildmats;
-//for "_i" from 1 to _numberofguns do {
-//	_theweap = _hidden_box_random_guns call BIS_fnc_selectRandom;
-//	_themags = getArray (configFile >> "cfgWeapons" >> _theweap >> "magazines");
-//	_thebox addWeaponCargoGlobal [_theweap,1];
-//	_thebox addMagazineCargoGlobal [(_themags select 0),round(random 2) + 1];
-//};
-//for "_i" from 1 to _numberoftools do {
-//	_thetool = _hidden_box_random_tools call BIS_fnc_selectRandom;
-//	_thebox addWeaponCargoGlobal [_thetool,2];
-//};
+        // Add 1 item from the rare loot item list
+        _result = [];
+        {
+            _item = _x select 0;
+            _numberofitems = _x select 1;
+            for "_i" from  1 to _numberofitems do {
+                _result set [count _result, _item];
+            }; 
+        } forEach _rare_loot_items;
+        _create addMagazineCargoGlobal [(_sSelect call BIS_fnc_selectRandom),1];
 
-for "_i" from 1 to _numberofitems do {
-	_item = _hidden_box_random_items call BIS_fnc_selectRandom;
-	_thebox addMagazineCargoGlobal [_item,1];
-};
-//for "_i" from 1 to _numberofbuildmats do {
-//	_item = _hidden_box_random_buildmats call BIS_fnc_selectRandom;
-//	_thebox addMagazineCargoGlobal [_item,1];
-//};
 
-activeTier = 1;
-publicVariable "activeTier";
+	activeTier = 1;
+	publicVariable "activeTier";
 
-// Loot monitor
-[_theBox] spawn {
-	Private ["_proceed", "_themags","_theweap","_thetool","_item","_thebox","_hidden_box_number_of_gold","_hidden_box_number_of_guns","_hidden_box_number_of_tools","_hidden_box_number_of_buildmats","_numberofguns","_numberoftools","_numberofitems","_numberofbuildmats","_hidden_box_random_items","_hidden_box_random_guns","_hidden_box_random_tools","_hidden_box_random_buildmats","_objects"];
+
+	// Loot monitor
 	_thebox = _this select 0;
 	_proceed = false;
 	while {!_proceed} do {
@@ -278,7 +256,12 @@ publicVariable "activeTier";
 	_objects = [16685.227, 19087.596, 5.9127808e-005] nearObjects ["M2StaticMG", 300];
 	{ deleteVehicle _x } forEach _objects;
 
+
+
+
+	// ===============================
 	// RESPAWN AI TIER 2 FOR THIS BASE
+	// ===============================
 
 	clearWeaponCargoGlobal _thebox;
 	clearMagazineCargoGlobal _thebox;
@@ -287,11 +270,32 @@ publicVariable "activeTier";
 	_hidden_box_random_items = [
 		"ItemTopaz"
 	];
+
+	_rare_loot_items = [
+		["ItemBriefcase100oz", 17],
+		["ItemTopaz", 2],
+		["ItemSapphire", 1]
+	];
+
+	// Add the normal valuables...
 	_numberofitems = (round (random 1)) + _hidden_box_number_of_gold;
 	for "_i" from 1 to _numberofitems do {
 		_item = _hidden_box_random_items call BIS_fnc_selectRandom;
 		_thebox addMagazineCargoGlobal [_item,1];
 	};
+
+        // Add 1 item from the rare loot item list
+        _result = [];
+        {
+            _item = _x select 0;
+            _numberofitems = _x select 1;
+            for "_i" from  1 to _numberofitems do {
+                _result set [count _result, _item];
+            }; 
+        } forEach _rare_loot_items;
+        _create addMagazineCargoGlobal [(_sSelect call BIS_fnc_selectRandom),1];
+
+
 
 	_radius = ai_patrol_radius;
 	_wp = ai_patrol_radius_wp;
@@ -508,8 +512,6 @@ publicVariable "activeTier";
 };
 
 
-	
-
 // ---- Napf military base #1 AI groups end ----
 // ---- Napf military base #1 AI groups end ----
 // ---- Napf military base #1 AI groups end ----
@@ -519,10 +521,10 @@ publicVariable "activeTier";
 // ---- Napf military base #2 AI groups start ----
 // ---- Napf military base #2 AI groups start ----
 
-_radius = ai_patrol_radius;
-_wp = ai_patrol_radius_wp;
-ai_patrol_radius = 10;
-ai_patrol_radius_wp = 4;
+//_radius = ai_patrol_radius;
+//_wp = ai_patrol_radius_wp;
+//ai_patrol_radius = 10;
+//ai_patrol_radius_wp = 4;
 
 // M2staticMG 2
 //[[[10749.708, 19712.582, 0.00011444092]], //position(s) (can be multiple).
@@ -586,8 +588,8 @@ ai_patrol_radius_wp = 4;
 // ---- Napf military base #2 AI groups end ----
 // ---- Napf military base #2 AI groups end ----
 
-ai_patrol_radius_wp = _wp;
-ai_patrol_radius = _radius;
+//ai_patrol_radius_wp = _wp;
+//ai_patrol_radius = _radius;
 
 
 // ---- Napf military base #3 AI groups start ----
@@ -657,173 +659,181 @@ ai_patrol_radius = _radius;
 
 // Base 1 (rambo)
 
-// Gate guard 1
-[[10462.832, 2943.3831, 0.01], //position
-1,                    //Number Of units
-0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
-4,            //Primary gun set number. "Random" for random weapon set.
-4,                    //Number of magazines
-"",                    //Backpack "" for random or classname here.
-"Bandit2_DZ",           //Skin "" for random or classname here.
-5,                  //Gearset number. "Random" for random gear set.
-[10462.832, 2943.3831, 0.01] // target position
-] call spawn_neutral_group2;
+[] spawn {
+	Private ["_proceed", "_themags","_theweap","_thetool","_item","_thebox","_hidden_box_number_of_gold","_hidden_box_number_of_guns","_hidden_box_number_of_tools","_hidden_box_number_of_buildmats","_numberofguns","_numberoftools","_numberofitems","_numberofbuildmats","_hidden_box_random_items","_hidden_box_random_guns","_hidden_box_random_tools","_hidden_box_random_buildmats","_objects"];
 
-// Gate guard 2
-[[10461.204, 2951.3208, 0.01], // target position
-1,                    //Number Of units
-0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
-4,            //Primary gun set number. "Random" for random weapon set.
-4,                    //Number of magazines
-"",                    //Backpack "" for random or classname here.
-"Bandit2_DZ",           //Skin "" for random or classname here.
-5,                  //Gearset number. "Random" for random gear set.
-[10462.832, 2943.3831, 0.01] //position
-] call spawn_neutral_group2;
+	waitUntil {sleep 5; {isPlayer _x && _x distance [10462.832, 2943.3831, 0.01] <= 1000 } count playableunits > 0 };
 
-// Guards 5
-[[10524.751, 2982.8923, 0.01], //position
-3,                    //Number Of units
-0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
-2,            //Primary gun set number. "Random" for random weapon set.
-2,                    //Number of magazines
-"",                    //Backpack "" for random or classname here.
-"Bandit2_DZ",           //Skin "" for random or classname here.
-5                  //Gearset number. "Random" for random gear set.
-] call spawn_neutral_group;
+	// Gate guard 1
+	[[10462.832, 2943.3831, 0.01], //position
+	1,                    //Number Of units
+	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+	4,            //Primary gun set number. "Random" for random weapon set.
+	4,                    //Number of magazines
+	"",                    //Backpack "" for random or classname here.
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	5,                  //Gearset number. "Random" for random gear set.
+	[10462.832, 2943.3831, 0.01] // target position
+	] call spawn_neutral_group2;
 
-// Guards 6
-[[10561.786, 2950.842, 0.01], //position
-2,                    //Number Of units
-0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
-3,            //Primary gun set number. "Random" for random weapon set.
-2,                    //Number of magazines
-"",                    //Backpack "" for random or classname here.
-"Bandit2_DZ",           //Skin "" for random or classname here.
-5                  //Gearset number. "Random" for random gear set.
-] call spawn_neutral_group;
+	// Gate guard 2
+	[[10461.204, 2951.3208, 0.01], // target position
+	1,                    //Number Of units
+	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+	4,            //Primary gun set number. "Random" for random weapon set.
+	4,                    //Number of magazines
+	"",                    //Backpack "" for random or classname here.
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	5,                  //Gearset number. "Random" for random gear set.
+	[10462.832, 2943.3831, 0.01] //position
+	] call spawn_neutral_group2;
 
-// Guards 7
-[[10528.676, 2943.4734, 0.01], //position
-2,                    //Number Of units
-0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
-3,            //Primary gun set number. "Random" for random weapon set.
-2,                    //Number of magazines
-"",                    //Backpack "" for random or classname here.
-"Bandit2_DZ",           //Skin "" for random or classname here.
-5                  //Gearset number. "Random" for random gear set.
-] call spawn_neutral_group;
+	// Guards 5
+	[[10524.751, 2982.8923, 0.01], //position
+	3,                    //Number Of units
+	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+	2,            //Primary gun set number. "Random" for random weapon set.
+	2,                    //Number of magazines
+	"",                    //Backpack "" for random or classname here.
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	5                  //Gearset number. "Random" for random gear set.
+	] call spawn_neutral_group;
 
-// Sniper 2
-[[10501.552, 2966.0142, 0.259837], //position
-1,                    //Number Of units
-1,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
-5,            //Primary gun set number. "Random" for random weapon set.
-2,                    //Number of magazines
-"",                    //Backpack "" for random or classname here.
-"GUE_Soldier_Sniper_DZ",           //Skin "" for random or classname here.
-5,                  //Gearset number. "Random" for random gear set.
-[10501.552, 2966.0142, 0.259837]
-] call spawn_neutral_group2;
+	// Guards 6
+	[[10561.786, 2950.842, 0.01], //position
+	2,                    //Number Of units
+	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+	3,            //Primary gun set number. "Random" for random weapon set.
+	2,                    //Number of magazines
+	"",                    //Backpack "" for random or classname here.
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	5                  //Gearset number. "Random" for random gear set.
+	] call spawn_neutral_group;
 
-// Static 0 
-[[[10500.552, 2966.0142, 20.259837]], //position(s) (can be multiple).
-"M2StaticMG",   //Classname of turret
-1,      //Skill level 0-1. Has no effect if using custom skills
-"Bandit2_DZ",   //Skin "" for random or classname here.
-"Random",   //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
-2,      //Number of magazines. (not needed if ai_static_useweapon = False)
-"",      //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
-5   //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
-] call spawn_neutral_static;
+	// Guards 7
+	[[10528.676, 2943.4734, 0.01], //position
+	2,                    //Number Of units
+	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+	3,            //Primary gun set number. "Random" for random weapon set.
+	2,                    //Number of magazines
+	"",                    //Backpack "" for random or classname here.
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	5                  //Gearset number. "Random" for random gear set.
+	] call spawn_neutral_group;
 
-// Guards 8
-[[10483.693, 3039.9656, 0.01], //position
-2,                    //Number Of units
-0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
-1,            //Primary gun set number. "Random" for random weapon set.
-2,                    //Number of magazines
-"",                    //Backpack "" for random or classname here.
-"Bandit2_DZ",           //Skin "" for random or classname here.
-5                  //Gearset number. "Random" for random gear set.
-] call spawn_neutral_group;
+	// Sniper 2
+	[[10501.552, 2966.0142, 0.259837], //position
+	1,                    //Number Of units
+	1,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+	5,            //Primary gun set number. "Random" for random weapon set.
+	2,                    //Number of magazines
+	"",                    //Backpack "" for random or classname here.
+	"GUE_Soldier_Sniper_DZ",           //Skin "" for random or classname here.
+	5,                  //Gearset number. "Random" for random gear set.
+	[10501.552, 2966.0142, 0.259837]
+	] call spawn_neutral_group2;
 
-// Guards 10
-[[10568.737, 3022.5857, 0.01], //position
-2,                    //Number Of units
-0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
-4,            //Primary gun set number. "Random" for random weapon set.
-2,                    //Number of magazines
-"",                    //Backpack "" for random or classname here.
-"Bandit2_DZ",           //Skin "" for random or classname here.
-5                  //Gearset number. "Random" for random gear set.
-] call spawn_neutral_group;
+	// Static 0 
+	[[[10500.552, 2966.0142, 20.259837]], //position(s) (can be multiple).
+	"M2StaticMG",   //Classname of turret
+	1,      //Skill level 0-1. Has no effect if using custom skills
+	"Bandit2_DZ",   //Skin "" for random or classname here.
+	"Random",   //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
+	2,      //Number of magazines. (not needed if ai_static_useweapon = False)
+	"",      //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
+	5   //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
+	] call spawn_neutral_static;
 
-// Guards 11
-[[10530.094, 2863.3848, 0.01], //position
-3,                    //Number Of units
-0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
-4,            //Primary gun set number. "Random" for random weapon set.
-2,                    //Number of magazines
-"",                    //Backpack "" for random or classname here.
-"Bandit2_DZ",           //Skin "" for random or classname here.
-5                  //Gearset number. "Random" for random gear set.
-] call spawn_neutral_group;
+	// Guards 8
+	[[10483.693, 3039.9656, 0.01], //position
+	2,                    //Number Of units
+	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+	1,            //Primary gun set number. "Random" for random weapon set.
+	2,                    //Number of magazines
+	"",                    //Backpack "" for random or classname here.
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	5                  //Gearset number. "Random" for random gear set.
+	] call spawn_neutral_group;
 
-// Humvee 1
-[[10460.26, 2934.8992],   //Position to patrol
-[10460.26, 2934.8992],   // Position to spawn at
-100,               //Radius of patrol
-10,                     //Number of waypoints to give
-"HMMWV_M1151_M2_CZ_DES_EP1_DZ",      //Classname of vehicle (make sure it has driver and gunner)
-0.75                  //Skill level of units 
-] spawn vehicle_patrol;
+	// Guards 10
+	[[10568.737, 3022.5857, 0.01], //position
+	2,                    //Number Of units
+	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+	4,            //Primary gun set number. "Random" for random weapon set.
+	2,                    //Number of magazines
+	"",                    //Backpack "" for random or classname here.
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	5                  //Gearset number. "Random" for random gear set.
+	] call spawn_neutral_group;
 
-// Humvee 2
-[[10456.087, 2958.6243],   //Position to patrol
-[10456.087, 2958.6243],   // Position to spawn at
-100,               //Radius of patrol
-10,                     //Number of waypoints to give
-"HMMWV_M1151_M2_CZ_DES_EP1_DZ",      //Classname of vehicle (make sure it has driver and gunner)
-0.75                  //Skill level of units 
-] spawn vehicle_patrol;
+	// Guards 11
+	[[10530.094, 2863.3848, 0.01], //position
+	3,                    //Number Of units
+	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+	4,            //Primary gun set number. "Random" for random weapon set.
+	2,                    //Number of magazines
+	"",                    //Backpack "" for random or classname here.
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	5                  //Gearset number. "Random" for random gear set.
+	] call spawn_neutral_group;
 
-// Static 1 
-[[[10480.543, 2950.6602, -0.053607285]], //position(s) (can be multiple).
-"M2StaticMG",   //Classname of turret
-0.75,      //Skill level 0-1. Has no effect if using custom skills
-"Bandit2_DZ",   //Skin "" for random or classname here.
-"Random",   //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
-2,      //Number of magazines. (not needed if ai_static_useweapon = False)
-"",      //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
-5   //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
-] call spawn_neutral_static;
+	// Humvee 1
+	[[10460.26, 2934.8992],   //Position to patrol
+	[10460.26, 2934.8992],   // Position to spawn at
+	100,               //Radius of patrol
+	10,                     //Number of waypoints to give
+	"HMMWV_M1151_M2_CZ_DES_EP1_DZ",      //Classname of vehicle (make sure it has driver and gunner)
+	0.75                  //Skill level of units 
+	] spawn vehicle_patrol;
 
+	// Humvee 2
+	[[10456.087, 2958.6243],   //Position to patrol
+	[10456.087, 2958.6243],   // Position to spawn at
+	100,               //Radius of patrol
+	10,                     //Number of waypoints to give
+	"HMMWV_M1151_M2_CZ_DES_EP1_DZ",      //Classname of vehicle (make sure it has driver and gunner)
+	0.75                  //Skill level of units 
+	] spawn vehicle_patrol;
 
+	// Static 1 
+	[[[10480.543, 2950.6602, -0.053607285]], //position(s) (can be multiple).
+	"M2StaticMG",   //Classname of turret
+	0.75,      //Skill level 0-1. Has no effect if using custom skills
+	"Bandit2_DZ",   //Skin "" for random or classname here.
+	"Random",   //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
+	2,      //Number of magazines. (not needed if ai_static_useweapon = False)
+	"",      //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
+	5   //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
+	] call spawn_neutral_static;
+};
 
 // Base 2 (ammo)
 
+[] spawn {
+	Private ["_proceed", "_themags","_theweap","_thetool","_item","_thebox","_hidden_box_number_of_gold","_hidden_box_number_of_guns","_hidden_box_number_of_tools","_hidden_box_number_of_buildmats","_numberofguns","_numberoftools","_numberofitems","_numberofbuildmats","_hidden_box_random_items","_hidden_box_random_guns","_hidden_box_random_tools","_hidden_box_random_buildmats","_objects"];
 
+	waitUntil {sleep 5; {isPlayer _x && _x distance [7228.2642, 3221.6611, 0.01] <= 1000 } count playableunits > 0 };
 
-// Guards 1
-[[7228.2642, 3221.6611, 0.01], //position
-6,                    //Number Of units
-1,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
-4,            //Primary gun set number. "Random" for random weapon set.
-2,                    //Number of magazines
-"",                    //Backpack "" for random or classname here.
-"Bandit2_DZ",           //Skin "" for random or classname here.
-5                  //Gearset number. "Random" for random gear set.
-] call spawn_neutral_group;
+	// Guards 1
+	[[7228.2642, 3221.6611, 0.01], //position
+	6,                    //Number Of units
+	1,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+	4,            //Primary gun set number. "Random" for random weapon set.
+	2,                    //Number of magazines
+	"",                    //Backpack "" for random or classname here.
+	"Bandit2_DZ",           //Skin "" for random or classname here.
+	5                  //Gearset number. "Random" for random gear set.
+	] call spawn_neutral_group;
 
-// Humvee 1
-[[7234.813, 3199.3315],   //Position to patrol
-[7234.813, 3199.3315],   // Position to spawn at
-100,               //Radius of patrol
-10,                     //Number of waypoints to give
-"HMMWV_M1151_M2_CZ_DES_EP1_DZ",      //Classname of vehicle (make sure it has driver and gunner)
-0.75                  //Skill level of units 
-] spawn vehicle_patrol;
+	// Humvee 1
+	[[7234.813, 3199.3315],   //Position to patrol
+	[7234.813, 3199.3315],   // Position to spawn at
+	100,               //Radius of patrol
+	10,                     //Number of waypoints to give
+	"HMMWV_M1151_M2_CZ_DES_EP1_DZ",      //Classname of vehicle (make sure it has driver and gunner)
+	0.75                  //Skill level of units 
+	] spawn vehicle_patrol;
+};
 
 // ---- Napf military base #4 (Rambo) AI groups end ----
 // ---- Napf military base #4 (Rambo) AI groups end ----

@@ -132,6 +132,17 @@ if (_type == "secret") then {
 		_item = OKSecret select _sSelect;
 		_crate addMagazineCargoGlobal [_item,1];
 	};
+    
+    // Add 1 item from the rare secret loot item list
+    _sSelect = [];
+    {
+        _item = _x select 0;
+        _sCount = _x select 1;
+        for "_i" from  1 to _sCount do {
+            _sSelect set [count _sSelect, _item];
+        }; 
+    } forEach OKSecretRare;
+    _create addMagazineCargoGlobal [(_sSelect call BIS_fnc_selectRandom),1];
 };
 
 ///////////////////////////////////////////////////////////////////

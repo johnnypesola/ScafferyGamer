@@ -39,9 +39,17 @@ _unit enableAI "FSM";
 _unit addweapon "MP5SD";
 
 // Give ammo to unit
-for "_i" from 1 to 12 do {
+for "_i" from 1 to 11 do {
    _unit addMagazine "30Rnd_9x19_MP5SD";
 };
+
+// Give something valuable... if you're lucky you will get it!
+if ((random 100) >= 2) then {
+	_unit addMagazine "ItemTopaz";	// 98% chance for a Topaz
+} else {
+	_unit addMagazine "ItemSapphire";  // 2% chance for a Sapphire
+};
+
 
 // Give unit more health
 _unit addEventHandler ["HandleDamage",{if (_this select 1=="") then {damage (_this select 0)+((_this select 2)/300)}}];

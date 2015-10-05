@@ -197,7 +197,15 @@ OKSecret =
 "ItemCitrine",
 "ItemAmethyst",
 "ItemObsidian",
-"ItemTopaz"
+];
+
+// Only 1 from this list may enter in the "Secret" box. 
+// The chance to get one item from this list is picking one item 
+// from the set of the quantities per item summed together. See this example:
+OKSecretRare = [
+	["ItemDocument", 489],  // 97.8% chance to get a document. Equals 489/500 = 0.978
+	["ItemTopaz", 10],	// 2% chance to get a Topaz. Equals 10/500 = 0.02
+	["ItemSapphire",1]	// 0.2% chance to get a Sapphire. Equals 1/500 = 0.002
 ];
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
