@@ -29,9 +29,9 @@ if (isPlayer _player) then {
 	//If the player gets humanity per config, lets give it
 	if (OKMissHumanity) then {
 		if (_humanity >= 0) then {
-			_player setVariable ["humanity",(_humanity + OKCntHumanity),true];
-		} else {
 			_player setVariable ["humanity",(_humanity - OKCntHumanity),true];
+		} else {
+			_player setVariable ["humanity",(_humanity + OKCntHumanity),true];
 		};
 	};
 	
