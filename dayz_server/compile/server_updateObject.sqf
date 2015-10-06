@@ -27,7 +27,7 @@ if ((typeName _objectID != "string") || (typeName _uid != "string")) then
 };
 
 // Epoch Admin Tools
-if (_object getVariable "MalSar" == 1) exitWith {};
+if ((_object getVariable "MalSar") == 1) exitWith {};
 
 if (!_parachuteWest && !(locked _object)) then {
 	if (_objectID == "0" && _uid == "0") then

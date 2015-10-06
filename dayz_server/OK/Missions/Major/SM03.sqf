@@ -97,3 +97,4 @@ deleteMarker "OKMajDot";
 
 //Let the timer know the mission is over
 OKMajDone = true;
+OKMissionIdActive = OKMissionIdActive + 1;

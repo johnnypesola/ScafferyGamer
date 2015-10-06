@@ -226,7 +226,7 @@ Place your custom group spawns below
                 _result set [count _result, _item];
             }; 
         } forEach _rare_loot_items;
-        _create addMagazineCargoGlobal [(_sSelect call BIS_fnc_selectRandom),1];
+        _thebox addMagazineCargoGlobal [(_result call BIS_fnc_selectRandom),1];
 
 
 	activeTier = 1;
@@ -234,7 +234,6 @@ Place your custom group spawns below
 
 
 	// Loot monitor
-	_thebox = _this select 0;
 	_proceed = false;
 	while {!_proceed} do {
 		// When player loots the box
@@ -293,7 +292,7 @@ Place your custom group spawns below
                 _result set [count _result, _item];
             }; 
         } forEach _rare_loot_items;
-        _create addMagazineCargoGlobal [(_sSelect call BIS_fnc_selectRandom),1];
+        _thebox addMagazineCargoGlobal [(_result call BIS_fnc_selectRandom),1];
 
 
 

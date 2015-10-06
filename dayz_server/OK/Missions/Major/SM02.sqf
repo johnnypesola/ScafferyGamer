@@ -81,6 +81,7 @@ if (_poc == 1) then
         _unit1 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1] ExecVM OKAISpawn2;
     };
 
+
 //Wait until the player is within 10 meters
 waitUntil {sleep 3; {isPlayer _x && _x distance _coords <= 15 } count playableunits > 0 };
 
@@ -115,3 +116,5 @@ deleteMarker "OKMajDot";
 
 //Let the timer know the mission is over
 OKMajDone = true;
+OKMissionIdActive = OKMissionIdActive + 1;
+

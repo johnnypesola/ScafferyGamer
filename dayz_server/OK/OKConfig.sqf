@@ -7,7 +7,7 @@
 OKMissHumanity = true;
 
 // How Much Humanity?
-OKCntHumanity = -25;
+OKCntHumanity = 25;
 
 // Do you want AI kills to count as bandit kills?
 OKCntBanditKls = false;
@@ -17,6 +17,9 @@ OKRunGear = true;
 
 // How long before bodies disappear? (in seconds) (default = 2400)
 OKBodyTime = 2400;
+
+// How long before AI disappear after mission is completed (in seconds) (default = 1800)
+OKDespawnTime = 1800;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // You can adjust the weapons that spawn in weapon crates inside DZMSWeaponCrateList.sqf

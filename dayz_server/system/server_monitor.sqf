@@ -138,6 +138,12 @@ if (isServer && isNil "sm_done") then {
 			};
 
 			switch (_type) do {
+				case "DSHKM_CDF": {
+					_object removeMagazinesTurret ["50Rnd_127x107_DSHKM", [0]];
+				};
+				case "M2StaticMG": {
+					_object removeMagazinesTurret ["100Rnd_127x99_M2", [0]];
+				};
 				case "M113_TK_EP1": {
 					//_object removeMagazinesTurret ["100Rnd_127x99_M2", [0]];
 				};
