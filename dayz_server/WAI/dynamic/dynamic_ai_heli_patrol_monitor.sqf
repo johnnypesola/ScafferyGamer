@@ -42,7 +42,11 @@ _heliPatrolParamsList =
 			[20250.125, 5095.9839, 25],
 			[18636.664, 808.65967, 25]
 		],
-		["Mi17_DZ","UH1H_DZ"] call BIS_fnc_selectRandom,
+		["MH60S_DZ","MH60S_DZ","MH60S_DZ","MH60S_DZ","UH1H_DZ","UH1H_DZ",
+		"MH60S_DZ","MH60S_DZ","MH60S_DZ","MH60S_DZ","UH1H_DZ","UH1H_DZ",
+		"MH60S_DZ","MH60S_DZ","MH60S_DZ","MH60S_DZ","UH1H_DZ","UH1H_DZ",
+		"MH60S_DZ","MH60S_DZ","MH60S_DZ","MH60S_DZ","UH1H_DZ","UH1H_DZ",
+		"UH1H_DZ","UH1H_DZ","UH1Y_DZ","UH60M_EP1_DZ","CH_47F_EP1_DZ"] call BIS_fnc_selectRandom,
 		1.0,
 		3000
 	]
@@ -73,6 +77,8 @@ while { true } do {
 			// Have all members in group gotten killed?
 			if ({alive _x} count units (_group) == 0) then {
 
+				diag_log format ["WAI: Heli Patrol #%1 was destroyed. Respawning in %2 seconds...", _i, (_currentHeliPatrol select 2)];
+
 				// Yes, set alive flag to false
 				_groupAlive = false;
 				_currentHeliPatrol set [1, _groupAlive];
@@ -81,7 +87,6 @@ while { true } do {
 		} else {
 
 			_respawnTime	= _currentHeliPatrol select 2;
-			diag_log format ["WAI: Heli Patrol #%1 was destroyed. Respawning in %2 seconds...", _i, _respawnTime];
 
 			// Decrease respawn time
 			_respawnTime = _respawnTime - 20;
@@ -90,7 +95,11 @@ while { true } do {
 			// If time's up, respawn the patrol! :)
 			if (_respawnTime <= 0) then {
 
-				_heliPatrolParams set [3, (["Mi17_DZ","UH1H_DZ"] call BIS_fnc_selectRandom)];
+				_heliPatrolParams set [3, (["MH60S_DZ","MH60S_DZ","MH60S_DZ","MH60S_DZ","UH1H_DZ","UH1H_DZ",
+								"MH60S_DZ","MH60S_DZ","MH60S_DZ","MH60S_DZ","UH1H_DZ","UH1H_DZ",
+								"MH60S_DZ","MH60S_DZ","MH60S_DZ","MH60S_DZ","UH1H_DZ","UH1H_DZ",
+								"MH60S_DZ","MH60S_DZ","MH60S_DZ","MH60S_DZ","UH1H_DZ","UH1H_DZ",
+								"UH1H_DZ","UH1H_DZ","UH1Y_DZ","UH60M_EP1_DZ","CH_47F_EP1_DZ"] call BIS_fnc_selectRandom)];
 
 				diag_log format ["WAI: Time's up! Respawning Napf Heli Patrol #%1", _i];
 

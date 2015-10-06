@@ -130,9 +130,9 @@ for "_x" from 1 to _unitcount do {
 };
 
 // These are some waypoints cruising between WP and center
-_wppos1 = [_position];
-_wppos2 = [_spawn];
-//_wppos3 = [_position];
+_wppos1 = _position;
+_wppos2 = _spawn;
+//_wppos3 = _position;
 //_wppos4 = [_xpos-100, _ypos, 0];
 
 // We add the 4 waypoints
