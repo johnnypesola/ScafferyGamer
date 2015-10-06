@@ -67,6 +67,8 @@ call compile preprocessFileLineNumbers "\z\addons\dayz_server\OK\OKConfig.sqf";
 waitUntil {OKConfigured};
 OKConfigured = nil;
 
+OKMissionIdActive = 0;
+
 // These are Extended configuration files the user can adjust if wanted
 call compile preprocessFileLineNumbers "\z\addons\dayz_server\OK\ExtConfig\OKWeaponCrateList.sqf";
 call compile preprocessFileLineNumbers "\z\addons\dayz_server\OK\ExtConfig\OKAIConfig.sqf";

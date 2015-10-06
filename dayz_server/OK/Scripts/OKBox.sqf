@@ -142,7 +142,7 @@ if (_type == "secret") then {
             _sSelect set [count _sSelect, _item];
         }; 
     } forEach OKSecretRare;
-    _create addMagazineCargoGlobal [(_sSelect call BIS_fnc_selectRandom),1];
+    _crate addMagazineCargoGlobal [(_sSelect call BIS_fnc_selectRandom),1];
 };
 
 ///////////////////////////////////////////////////////////////////
