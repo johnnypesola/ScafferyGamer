@@ -3,7 +3,7 @@
 	Based on New Mission Format by Vampire
 */																					//
 
-private ["_missName","_coords","_survivor","_blackhawk","_patrol","_patrol2", "_patrolPos1", "_patrolPos2", "_unitToRemove"];
+private ["_missName","_coords","_survivors","_blackhawk","_patrol","_patrol2", "_patrolPos1", "_patrolPos2", "_patrolCrew1", "_patrolCrew2", "_startTime"];
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,32 +54,30 @@ _blackhawk = createVehicle ["UH60_wreck_EP1",_coords,[], 0, "CAN_COLLIDE"];
 //Spawn patrol
 _patrolPos1 = [100, (_coords select 1), 500];
 _patrol = OKSARList select floor (random (count OKSARList));
-[_coords,   //Position to patrol
+_patrolCrew1 = [_coords,   //Position to patrol
 _patrolPos1, // Position to spawn
 200, //Radius of patrol
 10,                     //Number of waypoints to give
 _patrol, //Classname of vehicle (make sure it has driver and gunner)
 1, //Skill level of units 
-"SM03"
 ] call OKVehiclePatrol;
 
 sleep 30;
 
 _patrolPos2 = [(_coords select 0), 100, 500];
 _patrol2 = OKSARList select floor (random (count OKSARList));
-[_coords,   //Position to patrol
+_patrolCrew2 = [_coords,   //Position to patrol
 _patrolPos2, // Position to spawn
 200, //Radius of patrol
 10,                     //Number of waypoints to give
 _patrol2, //Classname of vehicle (make sure it has driver and gunner)
 1, //Skill level of units 
-"SM03"
 ] call OKVehiclePatrol;
 
 //OKAISpawn spawns AI to the mission.
 //Usage: [_coords, count, skillLevel, skin]
-_survivor = [_coords,(round(random 7))+1,(round(random 3)),(round(random 3))] ExecVM OKAISpawn2;
-//_survivor = [_coords,1,0,2] ExecVM OKAISpawn;
+_survivors = [_coords,(round(random 7))+1,(round(random 3)),(round(random 3))] ExecVM OKAISpawn2;
+//_survivors = [_coords,1,0,2] ExecVM OKAISpawn;
 
 
 //Wait until the player is within 5 meters
@@ -93,24 +91,23 @@ waitUntil {sleep 3; {isPlayer _x && _x distance _coords <= 5 } count playableuni
 
 //Let everyone know the mission is over
 [nil,nil,rTitleText,"There's no survivors!", "PLAIN",6] call RE;
+
+_startTime = time;
+waitUntil { sleep 3; ({alive _x} count (units _survivors)) == 0 || (time - _startTime) > OKDespawnTime };
+
 diag_log format["[OK]: Blackhawk Mission has Ended."];
 deleteMarker "OKMajMarker";
 deleteMarker "OKMajDot";
 
 //Let the timer know the mission is over
 OKMajDone = true;
-OKMissionIdActive = OKMissionIdActive + 1;
 
-sleep 60;
 {
-	_unitToRemove = _x getVariable "OKClean";
-	if (!isNil "_unitToRemove") then {
-		if (_unitToRemove == "SM03") then {
-			if (_x != vehicle _x) then {
-				(vehicle _x) setDamage 1;
-			};
-			deleteVehicle _x;
-			sleep 0.05;
+	if (alive _x) then {
+		if (_x != vehicle _x) then {
+			(vehicle _x) setDamage 1;
 		};
+		deleteVehicle _x;
+		sleep 0.05;
 	};
-} forEach allUnits;
+} forEach ((units _patrolCrew1) + (units _patrolCrew2) + (units _survivors));
