@@ -72,6 +72,8 @@ ai_air_units = (ai_air_units +1);
 PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_helicopter];
 [_helicopter] spawn veh_monitor;
 
+_helicopter addEventHandler ["killed", {[getPosATL (_this select 0)] call fn_generateCrashLoot;}];
+
 _unitGroup allowFleeing 0;
 _unitGroup setBehaviour "CARELESS";
 _unitGroup setSpeedMode "FULL";

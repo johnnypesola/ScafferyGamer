@@ -55,6 +55,8 @@ for "_i" from 1 to _wpnum do {
 	_wp setWaypointCompletionRadius 200;
 };
 
+_helicopter addEventHandler ["killed", {[getPosATL (_this select 0)] call fn_generateCrashLoot;}];
+
 _wp = _unitGroup addWaypoint [[(_position select 0),(_position select 1),0],100];
 _wp setWaypointType "CYCLE";
 _wp setWaypointCompletionRadius 200;
