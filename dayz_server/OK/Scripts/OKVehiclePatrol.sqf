@@ -1,11 +1,12 @@
 if (!isServer)exitWith{};
-private ["_heliTurrets","_wpnum","_radius","_gunner","_gunner2","_skillarray","_startingpos","_heli_class","_startPos","_unitGroup","_pilot","_skill","_position","_wp","_patrol","_aicskill","_sl"];
+private ["_heliTurrets","_wpnum","_radius","_gunner","_gunner2","_skillarray","_startingpos","_heli_class","_startPos","_unitGroup","_pilot","_skill","_position","_wp","_patrol","_aicskill","_sl", "_missionTag"];
 _position = _this select 0;
 _startingpos = _this select 1;
 _radius = _this select 2;
 _wpnum = _this select 3;
 _heli_class = _this select 4;
 _skill = _this select 5;
+_missionTag = _this select 6;
 _skillarray = ["aimingAccuracy","aimingShake","aimingSpeed","endurance","spotDistance","spotTime","courage","reloadSpeed","commanding","general"];
 
 _unitGroup = createGroup east;
@@ -94,3 +95,9 @@ for "_i" from 1 to _wpnum do {
 _wp = _unitGroup addWaypoint [[(_position select 0),(_position select 1),0],100];
 _wp setWaypointType "CYCLE";
 _wp setWaypointCompletionRadius 200;
+
+if (!isNil "_missionTag") then {
+	_pilot setVariable ["OKClean", _missionTag];
+	_gunner setVariable ["OKClean", _missionTag];
+	_gunner2 setVariable ["OKClean", _missionTag];
+};
