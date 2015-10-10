@@ -142,34 +142,6 @@ _wpfin setWaypointType "CYCLE";
 
 diag_log format ["[OK]: Spawned %1 AI at %2",_unitcount,_position];
 
-// Start a monitor per group
-[_unitGroup] spawn {
-
-	private ["_unitGroup", "_done", "_timeout", "_timeLeft", "_unit", "_missionIdActive"];
-
-	_unitGroup = _this select 0;
-
-	// Don't despawn these AI until at least mission has finished!
-	_missionIdActive = OKMissionIdActive;
-	waitUntil {sleep 10; _missionIdActive != OKMissionIdActive};
-
-	_done = false;
-	_timeLeft = OKDespawnTime;
-	_timeout = false;
-	while {!_done} do {
-
-		// If all units are dead, then just exit the monitor.
-		if ({alive _x} count units _unitGroup == 0) then { _done = true; };
-
-		// If players are too far from units
-		if (_timeLeft <= 0) then { _timeout = true; _done = true; };
-
-		_timeLeft = _timeLeft - 10;
-
-		sleep 10;
-	};
-	// If timed out, just delete them.
-	if (_timeout) then { {deleteVehicle _x} count units _unitGroup; deleteGroup _unitGroup; };
-};
+_unitGroup
 
 //Evac to NWAF???
