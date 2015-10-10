@@ -14,6 +14,12 @@ OKRideList = ["ArmoredSUV_PMC_DZE","BTR60_TK_EP1","BRDM2_Gue","GAZ_Vodnik_DZE","
 //Name of the Mission
 _missName = "Abandoned villa";//land_a_villa_ep1
 
+_unit1 = grpNull;
+_unit2 = grpNull;
+_unit3 = grpNull;
+_unit4 = grpNull;
+_unit5 = grpNull;
+
 //OKFindPos loops BIS_fnc_findSafePos until it gets a valid result
 _coords = call OKFindPos;
 
@@ -112,19 +118,19 @@ waitUntil {sleep 3; _nu = {isPlayer _x && _x distance _coords > 30} count playab
 [nil,nil,rTitleText,"Abandoned villa was visited.", "PLAIN",6] call RE;
 
 _allUnits = [];
-if (!isNil "_unit1") then {
+if (!isNull "_unit1") then {
 	_allUnits = _allUnits + (units _unit1);
 };
-if (!isNil "_unit2") then {
+if (!isNull "_unit2") then {
 	_allUnits = _allUnits + (units _unit2);
 };
-if (!isNil "_unit3") then {
+if (!isNull "_unit3") then {
 	_allUnits = _allUnits + (units _unit3);
 };
-if (!isNil "_unit4") then {
+if (!isNull "_unit4") then {
 	_allUnits = _allUnits + (units _unit4);
 };
-if (!isNil "_unit5") then {
+if (!isNull "_unit5") then {
 	_allUnits = _allUnits + (units _unit5);
 };
 
