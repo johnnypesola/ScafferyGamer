@@ -3,7 +3,7 @@
 	New Mission Format by Vampire
 */																					//
 
-private ["_missName","_coords","_crate","_crate1","_vehicle","_variant","_villa","_nu","_pu","_sw","_loc","_poc","_amb","_unit1","_unit2","_unit3","_unit4","_unit5","_loot"];
+private ["_missName","_coords","_crate","_crate1","_vehicle","_variant","_villa","_nu","_pu","_sw","_loc","_poc","_amb","_unit1","_unit2","_unit3","_unit4","_unit5","_loot", "_allUnits", "_startTime"];
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Rides
@@ -78,7 +78,7 @@ switch (_variant) do
 //Usage: [_coords, count, skillLevel, skin]
 if (_poc == 1) then
     {
-        _unit1 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1] ExecVM OKAISpawn2;
+        _unit1 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1, _missionTag] ExecVM OKAISpawn2;
     };
 
 
@@ -91,13 +91,13 @@ diag_log format["[OK]: Abandoned mansion visited."];
 
 if (_amb == 1) then
     {
-        _unit2 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1] ExecVM OKAISpawn2;
+        _unit2 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1, _missionTag] ExecVM OKAISpawn2;
         sleep 15;
-        _unit3 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1] ExecVM OKAISpawn2;
+        _unit3 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1, _missionTag] ExecVM OKAISpawn2;
         sleep 15;
-        _unit4 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1] ExecVM OKAISpawn2;
+        _unit4 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1, _missionTag] ExecVM OKAISpawn2;
         sleep 15;
-        _unit5 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1] ExecVM OKAISpawn2;
+        _unit5 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1, _missionTag] ExecVM OKAISpawn2;
         sleep 15;
     };
 
@@ -110,11 +110,37 @@ waitUntil {sleep 3; _nu = {isPlayer _x && _x distance _coords > 30} count playab
       
 //Let everyone know the mission is over
 [nil,nil,rTitleText,"Abandoned villa was visited.", "PLAIN",6] call RE;
+
+_allUnits = [];
+if (!isNil "_unit1") then {
+	_allUnits = _allUnits + (units _unit1);
+};
+if (!isNil "_unit2") then {
+	_allUnits = _allUnits + (units _unit2);
+};
+if (!isNil "_unit3") then {
+	_allUnits = _allUnits + (units _unit3);
+};
+if (!isNil "_unit4") then {
+	_allUnits = _allUnits + (units _unit4);
+};
+if (!isNil "_unit5") then {
+	_allUnits = _allUnits + (units _unit5);
+};
+
+_startTime = time;
+waitUntil { sleep 3; ({alive _x} count _allUnits) == 0 || (time - _startTime) >= OKDespawnTime };
+
 diag_log format["[OK]: Abandoned mansion mission have ended."];
 deleteMarker "OKMajMarker";
 deleteMarker "OKMajDot";
 
 //Let the timer know the mission is over
 OKMajDone = true;
-OKMissionIdActive = OKMissionIdActive + 1;
+
+// Once timed out, if anyone is alive then just delete them.
+{
+	if (alive _x) then { deleteVehicle _x; };	
+	sleep 0.05;
+} forEach _allUnits;
 
