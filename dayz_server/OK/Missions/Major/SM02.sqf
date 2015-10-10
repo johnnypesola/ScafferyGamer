@@ -78,7 +78,7 @@ switch (_variant) do
 //Usage: [_coords, count, skillLevel, skin]
 if (_poc == 1) then
     {
-        _unit1 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1, _missionTag] ExecVM OKAISpawn2;
+        _unit1 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1] ExecVM OKAISpawn2;
     };
 
 
@@ -91,13 +91,13 @@ diag_log format["[OK]: Abandoned mansion visited."];
 
 if (_amb == 1) then
     {
-        _unit2 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1, _missionTag] ExecVM OKAISpawn2;
+        _unit2 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1] ExecVM OKAISpawn2;
         sleep 15;
-        _unit3 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1, _missionTag] ExecVM OKAISpawn2;
+        _unit3 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1] ExecVM OKAISpawn2;
         sleep 15;
-        _unit4 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1, _missionTag] ExecVM OKAISpawn2;
+        _unit4 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1] ExecVM OKAISpawn2;
         sleep 15;
-        _unit5 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1, _missionTag] ExecVM OKAISpawn2;
+        _unit5 = [_coords,(round(random 12))+1,(round(random 2))+1,(round(random 2))+1] ExecVM OKAISpawn2;
         sleep 15;
     };
 

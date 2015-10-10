@@ -59,7 +59,7 @@ _patrolPos1, // Position to spawn
 200, //Radius of patrol
 10,                     //Number of waypoints to give
 _patrol, //Classname of vehicle (make sure it has driver and gunner)
-1, //Skill level of units 
+1 //Skill level of units 
 ] call OKVehiclePatrol;
 
 sleep 30;
@@ -71,7 +71,7 @@ _patrolPos2, // Position to spawn
 200, //Radius of patrol
 10,                     //Number of waypoints to give
 _patrol2, //Classname of vehicle (make sure it has driver and gunner)
-1, //Skill level of units 
+1 //Skill level of units 
 ] call OKVehiclePatrol;
 
 //OKAISpawn spawns AI to the mission.
