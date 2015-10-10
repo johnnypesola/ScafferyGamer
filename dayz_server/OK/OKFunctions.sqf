@@ -8,8 +8,8 @@ OKMarkerLoop = "\z\addons\dayz_server\OK\Scripts\OKMarkerLoop.sqf";
 
 OKAddMajMarker = "\z\addons\dayz_server\OK\Scripts\OKAddMajMarker.sqf";
 
-OKAISpawn = "\z\addons\dayz_server\OK\Scripts\OKAISpawn.sqf";
-OKAISpawn2 = "\z\addons\dayz_server\OK\Scripts\OKAISpawn2.sqf";
+OKAISpawn = compile preprocessfilelinenumbers "\z\addons\dayz_server\OK\Scripts\OKAISpawn.sqf";
+OKAISpawn2 = compile preprocessFileLineNumbers "\z\addons\dayz_server\OK\Scripts\OKAISpawn2.sqf";
 OKVehiclePatrol = compile preprocessFileLineNumbers "\z\addons\dayz_server\OK\Scripts\OKVehiclePatrol.sqf";
 OKAIKilled = "\z\addons\dayz_server\OK\Scripts\OKAIKilled.sqf";
 OKAIPinata = "\z\addons\dayz_server\OK\Scripts\OKAIPinata.sqf";

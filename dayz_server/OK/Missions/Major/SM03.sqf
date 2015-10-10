@@ -3,7 +3,7 @@
 	Based on New Mission Format by Vampire
 */																					//
 
-private ["_missName","_coords","_survivors","_blackhawk","_patrol","_patrol2", "_patrolPos1", "_patrolPos2", "_patrolCrew1", "_patrolCrew2", "_startTime"];
+private ["_missName","_coords","_survivors","_blackhawk","_patrol","_patrol2", "_patrolPos1", "_patrolPos2", "_patrolCrew1", "_patrolCrew2", "_startTime", "_wp"];
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +76,7 @@ _patrol2, //Classname of vehicle (make sure it has driver and gunner)
 
 //OKAISpawn spawns AI to the mission.
 //Usage: [_coords, count, skillLevel, skin]
-_survivors = [_coords,(round(random 7))+1,(round(random 3)),(round(random 3))] ExecVM OKAISpawn2;
+_survivors = [_coords,(round(random 7))+1,(round(random 3)),(round(random 3))] call OKAISpawn2;
 //_survivors = [_coords,1,0,2] ExecVM OKAISpawn;
 
 
@@ -102,6 +102,25 @@ deleteMarker "OKMajDot";
 //Let the timer know the mission is over
 OKMajDone = true;
 
+{ deleteWaypoint [_patrolCrew1, 0]; } count waypoints _patrolCrew1;
+{ deleteWaypoint [_patrolCrew2, 0]; } count waypoints _patrolCrew2;
+
+_patrolCrew1 setCombatMode "BLUE";
+_patrolCrew1 setBehaviour "CARELESS";
+_wp = _patrolCrew1 addWaypoint [[10000,0,0], 200];
+_wp setWaypointType "MOVE";
+_wp setWaypointCompletionRadius 200;
+
+_patrolCrew2 setCombatMode "BLUE";
+_patrolCrew2 setBehaviour "CARELESS";
+_wp = _patrolCrew2 addWaypoint [[0,10000,0], 200];
+_wp setWaypointType "MOVE";
+_wp setWaypointCompletionRadius 200;
+
+// Send away helis to off bounds and destroy them there.
+_startTime = time;
+waitUntil { sleep 1; ((vehicle (leader _patrolCrew1)) distance [10000,0,100]) < 250 || (time - _startTime) > 450};
+waitUntil { sleep 1; ((vehicle (leader _patrolCrew2)) distance [0,10000,100]) < 250 || (time - _startTime) > 450};
 {
 	if (alive _x) then {
 		if (_x != vehicle _x) then {
@@ -111,3 +130,4 @@ OKMajDone = true;
 		sleep 0.05;
 	};
 } forEach ((units _patrolCrew1) + (units _patrolCrew2) + (units _survivors));
+
