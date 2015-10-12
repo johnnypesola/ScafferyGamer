@@ -92,15 +92,20 @@ waitUntil {sleep 3; {isPlayer _x && _x distance _coords <= 5 } count playableuni
 //Let everyone know the mission is over
 [nil,nil,rTitleText,"There's no survivors!", "PLAIN",6] call RE;
 
-_startTime = time;
-waitUntil { sleep 3; ({alive _x} count (units _survivors)) == 0 || (time - _startTime) > OKDespawnTime };
-
 diag_log format["[OK]: Blackhawk Mission has Ended."];
 deleteMarker "OKMajMarker";
 deleteMarker "OKMajDot";
 
 //Let the timer know the mission is over
 OKMajDone = true;
+
+sleep OKDespawnTime;
+
+// Once timed out, if anyone is alive then just delete them.
+{
+	if (alive _x) then { deleteVehicle _x; };
+	sleep 0.05;
+} forEach units _survivors;
 
 { deleteWaypoint [_patrolCrew1, 0]; } count waypoints _patrolCrew1;
 { deleteWaypoint [_patrolCrew2, 0]; } count waypoints _patrolCrew2;
