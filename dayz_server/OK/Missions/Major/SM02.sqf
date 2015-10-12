@@ -149,9 +149,3 @@ sleep OKDespawnTime;
 	if (alive _x) then { deleteVehicle _x; };
 	sleep 0.05;
 } forEach _allUnits;
-
-// The AI survivors steal the loot!
-clearWeaponCargoGlobal _crate;
-clearMagazineCargoGlobal _crate;
-clearWeaponCargoGlobal _crate1;
-clearMagazineCargoGlobal _crate1;
