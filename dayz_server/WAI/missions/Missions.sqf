@@ -5,7 +5,7 @@ diag_log "WAI: Starting AI Missions Monitor";
 markerready = true;
 markerbanditready = true;
 heromissionrunning = false;
-banditmissionrunning = true;
+banditmissionrunning = false;
 _result = 1;
 
 sleep (120);
