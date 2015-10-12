@@ -18,8 +18,8 @@ OKRunGear = true;
 // How long before bodies disappear? (in seconds) (default = 2400)
 OKBodyTime = 2400;
 
-// How long before AI disappear after mission is completed (in seconds) (default = 1800)
-OKDespawnTime = 1800;
+// How long before alive AI disappear after mission is completed (in seconds) (default = 1200)
+OKDespawnTime = 1200;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // You can adjust the weapons that spawn in weapon crates inside DZMSWeaponCrateList.sqf

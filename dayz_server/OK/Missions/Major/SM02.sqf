@@ -3,7 +3,7 @@
 	New Mission Format by Vampire
 */																					//
 
-private ["_missName","_coords","_crate","_crate1","_vehicle","_variant","_villa","_nu","_pu","_sw","_loc","_poc","_amb","_unit1","_unit2","_unit3","_unit4","_unit5","_loot", "_allUnits", "_startTime"];
+private ["_missName","_coords","_crate","_crate1","_vehicle","_variant","_villa","_nu","_pu","_sw","_loc","_poc","_amb","_unit1","_unit2","_unit3","_unit4","_unit5","_loot", "_allUnits"];
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Rides
@@ -134,8 +134,6 @@ if (!isNull _unit5) then {
 	_allUnits = _allUnits + (units _unit5);
 };
 
-_startTime = time;
-waitUntil { sleep 3; ({alive _x} count _allUnits) == 0 || (time - _startTime) >= OKDespawnTime };
 
 diag_log format["[OK]: Abandoned mansion mission have ended."];
 deleteMarker "OKMajMarker";
@@ -144,9 +142,16 @@ deleteMarker "OKMajDot";
 //Let the timer know the mission is over
 OKMajDone = true;
 
+sleep OKDespawnTime;
+
 // Once timed out, if anyone is alive then just delete them.
 {
-	if (alive _x) then { deleteVehicle _x; };	
+	if (alive _x) then { deleteVehicle _x; };
 	sleep 0.05;
 } forEach _allUnits;
 
+// The AI survivors steal the loot!
+clearWeaponCargoGlobal _crate;
+clearMagazineCargoGlobal _crate;
+clearWeaponCargoGlobal _crate1;
+clearMagazineCargoGlobal _crate1;
