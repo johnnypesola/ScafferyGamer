@@ -95,14 +95,14 @@ if (true) then
   _this setPos [19333.193, 6665.4287, -1.8119812e-005];
 };
 
-_vehicle_605 = objNull;
-if (true) then
-{
-  _this = createVehicle ["Base_WarfareBBarrier10xTall", [19327.293, 6674.9653, 0.00011539459], [], 0, "CAN_COLLIDE"];
-  _vehicle_605 = _this;
-  _this setDir -180.14767;
-  _this setPos [19327.293, 6674.9653, 0.00011539459];
-};
+//_vehicle_605 = objNull;
+//if (true) then
+//{
+//  _this = createVehicle ["Base_WarfareBBarrier10xTall", [19327.293, 6674.9653, 0.00011539459], [], 0, "CAN_COLLIDE"];
+//  _vehicle_605 = _this;
+//  _this setDir -180.14767;
+//  _this setPos [19327.293, 6674.9653, 0.00011539459];
+//};
 
 _vehicle_606 = objNull;
 if (true) then
@@ -116,7 +116,7 @@ if (true) then
 _vehicle_607 = objNull;
 if (true) then
 {
-  _this = createVehicle ["HeliH", [19327.934, 6692.3506, -0.0001373291], [], 0, "CAN_COLLIDE"];
+  _this = createVehicle ["HeliHCivil", [19327.934, 6692.3506, -0.0001373291], [], 0, "CAN_COLLIDE"];
   _vehicle_607 = _this;
   _this setDir -235.85406;
   _this setPos [19327.934, 6692.3506, -0.0001373291];
