@@ -2,7 +2,7 @@
 
 ##DISCLAIMER
 
-This SOFTWARE PRODUCT, i.e. DayZ Epoch mod "customization", is bound by the license http://www.bistudio.com/licenses/dayz-mod-license-share-alike.
+This SOFTWARE PRODUCT, i.e. "customization" of the DayZ Epoch mod, is bound by the license http://www.bistudio.com/licenses/dayz-mod-license-share-alike.
 
 It is based on the DayZ mod (created by Rocket) and on the DayZ Epoch mod (created by [VB]AWOL) for ARMA 2 (&copy; Bohemia Interactive), together
 with community provided addons and tailor-made addons/scripts for the Napf map.
