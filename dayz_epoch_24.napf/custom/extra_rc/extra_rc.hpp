@@ -36,6 +36,10 @@ class ExtraRc {
     text = "Place M2 Static Machine Gun";
     script = "[""M2StaticMG""] execVM ""custom\staticmg\place_machinegun.sqf"";";
   };
+  class convertToM107 {
+   text = "Split to 10xM107";
+   script = "[[""100Rnd_127x99_M2""],[""10Rnd_127x99_M107""], %1] execVM ""custom\ammo_tools\player_convertMags.sqf"";";
+  };
  };
  class 50Rnd_127x107_DSHKM {
   class buildM2Static {
@@ -57,7 +61,7 @@ class ExtraRc {
  };
  class 20Rnd_762x51_DMR {
   class convertToM240 {
-   text = "Make an M240 belt";
+   text = "Make M240 belt";
    script = "[[""20Rnd_762x51_DMR""],[""100Rnd_762x51_M240""]] execVM ""custom\ammo_tools\player_convertMags.sqf"";";
   };
  };
@@ -131,6 +135,40 @@ class ExtraRc {
   class convertToDMR {
    text = "Split into DMR mags";
    script = "[[""100Rnd_762x51_M240""],[""20Rnd_762x51_DMR""], %1] execVM ""custom\ammo_tools\player_convertMags.sqf"";";
+  };
+  class convertToFNFAL {
+   text = "Split nto FNFAL mags",
+   script = "[[""100Rnd_762x51_M240""],[""20Rnd_762x51_FNFAL""], %1] execVM ""custom\ammo_tools\player_convertMags.sqf"";";
+  };
+ };
+ class 1Rnd_HE_M203 {
+  class convertTo6Rnd {
+   text = "Combine into M32 shells";
+   script = "[[""1Rnd_HE_M203""],[""6Rnd_HE_M203""], %1] execVM ""custom\ammo_tools\player_convertMags.sqf"";";
+  };
+ };
+ class 6Rnd_HE_M203 {
+  class convertTo1Rnd {
+   text = "Split into 6x1 HE M203";
+   script = "[[""6Rnd_HE_M203""],[""1Rnd_HE_M203""], %1] execVM ""custom\ammo_tools\player_convertMags.sqf"";";
+  };
+ };
+ class 20Rnd_762x51_FNFAL {
+  class convertToM240 {
+   text = "Make M240 belt";
+   script = "[[""20Rnd_762x51_FNFAL""],[""100Rnd_762x51_M240""], %1] execVM ""custom\ammo_tools\player_convertMags.sqf"";";
+  };
+ };
+ class 10Rnd_127x99_M107 {
+  class convertToM2 {
+   text = "Make M2 belt";
+   script = "[[""10Rnd_127x99_M107""],[""100Rnd_127x99_M2""], %1] execVM ""custom\ammo_tools\player_convertMags.sqf"";";
+  };
+ };
+ class ItemObsidian {
+  class buildBed {
+   text = "Build Spawn Bed";
+   script = "[""Land_postel_panelak1"",[""ItemToolbox"",""ItemCrowbar"",""ItemHatchet""],[[""ItemObsidian"", 1],[""PartGeneric"", 1],[""PartWoodLumber"", 5]],[0,1.5,0.05]] execVM ""custom\snap_build\player_build.sqf"";";
   };
  };
 };

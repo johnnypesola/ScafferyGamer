@@ -1,5 +1,9 @@
 private ["_fromMagClass", "_toMagClass", "_fromMagSize", "_toMagSize", "_dialog", "_control", "_ammoQty", "_targetQty", "_val", "_item", "_magazineArray", "_sourceMagArray", "_currQty","_destMagArray", "_found", "_abort"];
 
+// Parameters:
+// _fromMagClass
+// _toMagClass
+// _fromMagClass_count
 _fromMagClass = (_this select 0) select 0;
 _toMagClass = (_this select 1) select 0;
 
@@ -60,6 +64,21 @@ if (_toMagSize == 0) then {
 		case "30Rnd_9x19_MP5": {
 			_toMagSize = 30;
 		};
+		case "1Rnd_HE_M203": {
+			_toMagSize = 1;
+		};
+		case "6Rnd_HE_M203": {
+			_toMagSize = 6;
+		};
+		case "20Rnd_762x51_FNFAL": {
+			_toMagSize = 20;
+		};
+		case "10Rnd_127x99_M107": {
+			_toMagSize = 10;
+		};
+		case "100Rnd_127x99_M2": {
+			_toMagSize = 100;
+		};
 		default { _toMagSize = 0; };
 	};
 };
@@ -90,6 +109,21 @@ if (_fromMagSize == 0) then {
 		};
 		case "30Rnd_9x19_MP5": {
 			_fromMagSize = 30;
+		};
+		case "1Rnd_HE_M203": {
+			_fromMagSize = 1;
+		};
+		case "6Rnd_HE_M203": {
+			_fromMagSize = 6;
+		};
+		case "20Rnd_762x51_FNFAL": {
+			_fromMagSize = 20;
+		};
+		case "10Rnd_127x99_M107": {
+			_fromMagSize = 10;
+		};
+		case "100Rnd_127x99_M2": {
+			_fromMagSize = 100;
 		};
 		default { _fromMagSize = 0; };
 	};

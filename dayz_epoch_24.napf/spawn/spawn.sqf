@@ -12,7 +12,7 @@ moveMap = {
 	_grid = _spawn select 1;
 	if (count _spawn > 4) then {_grid = getMarkerPos "center";_zoom = 4;};
 	if (_text == "Near MyGroup") then {GROUP_POS};
-	if (_text == "Near MyPlot") then {PLOT_POS};
+	if (_text == "Near MyBed") then {PLOT_POS};
 	_ctrl = (findDisplay 88890) displayCtrl 8890;
 	_ctrl ctrlMapAnimAdd [1,_zoom,_grid];
 	ctrlMapAnimCommit _ctrl;
@@ -36,8 +36,11 @@ spawnFill = {
 		};
 	} count allDead;
 	if (_spawnNearPlot) then {
-		_poles = (getMarkerPos "center") nearEntities ["Plastic_Pole_EP1_DZ",_mapRadius];
-		{if ((_x getVariable ["ownerPUID","0"]) == _puid) exitWith {uiNamespace setVariable ["myPlotPos",[_x]];};} count _poles;
+		// PASTORN: Spawn at bed
+		_poles = (getMarkerPos "center") nearEntities ["Land_postel_panelak1",_mapRadius];
+		{if ((_x getVariable ["playerSpawn","0"]) == _puid) exitWith {uiNamespace setVariable ["myPlotPos",[_x]];};} count _poles;
+		//_poles = (getMarkerPos "center") nearEntities ["Plastic_Pole_EP1_DZ",_mapRadius];
+		//{if ((_x getVariable ["ownerPUID","0"]) == _puid) exitWith {uiNamespace setVariable ["myPlotPos",[_x]];};} count _poles;
 	};
 	_block = [];
 	if (count _bodies > 0) then {
@@ -74,7 +77,7 @@ spawnFill = {
 		};
 	} forEach _spawnPoints;
 	if ((_blockGroup < 1) && {_spawnNearGroup} && {count (uiNamespace getVariable "myGroupPos") > 0}) then {_index = _lb lbAdd "Near MyGroup";_lb lbSetColor [_index,[1,.7,.4,1]];UNLCK_PIC};
-	if ((_blockPlot < 1) && {count (uiNamespace getVariable "myPlotPos") > 0}) then {_index = _lb lbAdd "Near MyPlot";_lb lbSetColor [_index,[1,.7,.4,1]];UNLCK_PIC};
+	if ((_blockPlot < 1) && {count (uiNamespace getVariable "myPlotPos") > 0}) then {_index = _lb lbAdd "Near MyBed";_lb lbSetColor [_index,[1,.7,.4,1]];UNLCK_PIC};
 	if (_puid in _customBase) then {
 		{if (_puid == _x) then {_index = _forEachIndex;};} forEach _customBase;
 		_base = _customBases select _index;
@@ -91,7 +94,7 @@ spawnPick = {
 	_go = 1;
 	GET_TEXT
 	if (_text == "Near MyGroup") then {_spawn = [0,[],0,0];};
-	if (_text == "Near MyPlot") then {_spawn = [0,[1],0,0];};
+	if (_text == "Near MyBed") then {_spawn = [0,[1],0,0];};
 	if (isNil "_spawn") exitWith {systemChat "Select a spawn!";_go=0;};
 	if (count _spawn > 2) then {
 		_level = _spawn select 2;

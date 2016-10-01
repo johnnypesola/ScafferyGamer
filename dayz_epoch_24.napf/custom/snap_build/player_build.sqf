@@ -38,6 +38,7 @@ _isBuildAdmin = adminBuild; // (getPlayerUID player) in AdminList;
 _vehicle = vehicle player;
 _inVehicle = (_vehicle != player);
 _playerName = name player;
+_playerUID = getPlayerUID player;
 
 DZE_Q = false;
 DZE_Z = false;
@@ -533,6 +534,7 @@ if (_hasRequiredTools && _hasbuilditem) then {
 
 
 				} else {
+
 					_object setVariable ["CharacterID",dayz_characterID,true];
 
 					// fire?
@@ -551,6 +553,10 @@ if (_hasRequiredTools && _hasbuilditem) then {
 								};	
 								hint "Tripwire is now armed!";
 							};
+						};
+
+						if ("Land_postel_panelak1" == typeOf _object) then {
+							_playerName = _playerUID;
 						};
 
 						//diag_log "Publish Other";

@@ -728,6 +728,8 @@ if (true) then
   _vehicle_239 = _this;
   _this setDir 331.1059;
   _this setPos [16759.879, 18992.189, 5.531311e-005];
+  _this setVariable ["ObjectID","1",true];
+
 };
 
 _vehicle_243 = objNull;
@@ -737,6 +739,7 @@ if (true) then
   _vehicle_243 = _this;
   _this setDir 114.86234;
   _this setPos [16666.688, 19056.133, 0.00025558472];
+  _this setVariable ["ObjectID","1",true];
 };
 
 _vehicle_244 = objNull;
