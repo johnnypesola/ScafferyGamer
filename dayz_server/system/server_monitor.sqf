@@ -205,7 +205,7 @@ if (isServer && isNil "sm_done") then {
 				case "M1126_ICV_mk19_EP1": {
 					//_object removeMagazinesTurret ["48Rnd_40mm_MK19", [0]];
 				};
-				case "Land_postel_panelak1": {
+				case "MAP_F_postel_manz_kov": {
 					// PlayerUID is encoded into object inventory
 					// assign playerUID value to the playerSpawn variable publicly over the server
 					_object setVariable ["playerSpawn", ((_intentory select 0) select 0) select 0, true];
@@ -260,7 +260,7 @@ if (isServer && isNil "sm_done") then {
 				
 			};
 
-			if (count _intentory > 0 && "Land_postel_panelak1" != typeOf _object) then {
+			if (count _intentory > 0 && "MAP_F_postel_manz_kov" != typeOf _object) then {
 				if (_type in DZE_LockedStorage) then {
 					// Fill variables with loot
 					_object setVariable ["WeaponCargo", (_intentory select 0),true];

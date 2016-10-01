@@ -35,7 +35,7 @@ switch (_class) do {
 
 		PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_object];
 	};
-	case "Land_postel_panelak1": {
+	case "MAP_F_postel_manz_kov": {
 
 		// PASTORN: SPAWN BED MOD
 
@@ -70,7 +70,7 @@ switch (_class) do {
 
 	};
 
-	default: {
+	default {
 		_allowed = [_object, _name] call check_publishobject;
 		if (!_allowed) exitWith { deleteVehicle _object; };
 

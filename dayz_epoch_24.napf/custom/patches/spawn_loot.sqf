@@ -207,13 +207,14 @@ switch (_iClass) do {
 		_item addMagazineCargoGlobal [_iItem,1];
 	};
 	case "object": {
+		if (_iItem == "MedBox0") then { _iItem = "USOrdnanceBox"; };
 		_item = createVehicle [_iItem, _iPos, [], _radius, "CAN_COLLIDE"];
 		if ((count _iPos) > 2) then {
 			_item setPosATL _iPos;
 		};
 
 		// FIX: Arma 2 OA got broken at some point and the default MedBox0 doesn't contain its default loot, so we add it manually here
-		if (typeOf _item == "Medbox0") then {
+		if (typeOf _item == "USOrdnanceBox") then {
 			clearMagazineCargoGlobal _item;
 			_lootItemsQty = 6 + (floor random 4) + 1;
 			_medLootTable = [
@@ -231,7 +232,7 @@ switch (_iClass) do {
 						"ItemPainkiller",
 						"ItemPainkiller"
 			];
-			for "_i" from 1 to (count _lootItemsQty) do {
+			for "_i" from 1 to _lootItemsQty do {
 				_item addMagazineCargoGlobal [_medLootTable call BIS_fnc_selectRandom, 1];
 			};
 		};

@@ -555,7 +555,7 @@ if (_hasRequiredTools && _hasbuilditem) then {
 							};
 						};
 
-						if ("Land_postel_panelak1" == typeOf _object) then {
+						if ("MAP_F_postel_manz_kov" == typeOf _object) then {
 							_playerName = _playerUID;
 						};
 

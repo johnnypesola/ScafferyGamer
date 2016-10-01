@@ -137,7 +137,7 @@ class ExtraRc {
    script = "[[""100Rnd_762x51_M240""],[""20Rnd_762x51_DMR""], %1] execVM ""custom\ammo_tools\player_convertMags.sqf"";";
   };
   class convertToFNFAL {
-   text = "Split nto FNFAL mags",
+   text = "Split nto FNFAL mags";
    script = "[[""100Rnd_762x51_M240""],[""20Rnd_762x51_FNFAL""], %1] execVM ""custom\ammo_tools\player_convertMags.sqf"";";
   };
  };
@@ -168,7 +168,7 @@ class ExtraRc {
  class ItemObsidian {
   class buildBed {
    text = "Build Spawn Bed";
-   script = "[""Land_postel_panelak1"",[""ItemToolbox"",""ItemCrowbar"",""ItemHatchet""],[[""ItemObsidian"", 1],[""PartGeneric"", 1],[""PartWoodLumber"", 5]],[0,1.5,0.05]] execVM ""custom\snap_build\player_build.sqf"";";
+   script = "[""MAP_F_postel_manz_kov"",[""ItemToolbox"",""ItemCrowbar"",""ItemHatchet_DZE""],[[""ItemObsidian"", 1],[""PartGeneric"", 1],[""PartWoodLumber"", 5]],[0,1.5,0.05]] execVM ""custom\snap_build\player_build.sqf"";";
   };
  };
 };

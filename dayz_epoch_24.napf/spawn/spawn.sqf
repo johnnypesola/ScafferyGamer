@@ -37,7 +37,11 @@ spawnFill = {
 	} count allDead;
 	if (_spawnNearPlot) then {
 		// PASTORN: Spawn at bed
-		_poles = (getMarkerPos "center") nearEntities ["Land_postel_panelak1",_mapRadius];
+		_poles = nearestObjects [(getMarkerPos "center"), ["MAP_F_postel_manz_kov"], _mapRadius];
+		diag_log format ["Found %1 beds within %2 meters from map center.", count _poles, _mapRadius];
+		{
+			diag_log format["Found bed '%1' with player spawn ID '%2'.", (typeof _x), (_x getVariable ["playerSpawn", "0"])];
+		} foreach _poles;
 		{if ((_x getVariable ["playerSpawn","0"]) == _puid) exitWith {uiNamespace setVariable ["myPlotPos",[_x]];};} count _poles;
 		//_poles = (getMarkerPos "center") nearEntities ["Plastic_Pole_EP1_DZ",_mapRadius];
 		//{if ((_x getVariable ["ownerPUID","0"]) == _puid) exitWith {uiNamespace setVariable ["myPlotPos",[_x]];};} count _poles;
