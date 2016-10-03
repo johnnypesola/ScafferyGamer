@@ -25,6 +25,22 @@ for "_i" from 109 to 120 do {
 	_control = _dialog displayCtrl _i;
 	_item = gearSlotData _control;
 	_val = gearSlotAmmoCount _control;
+	if (_val == 0) then { _val = 1; };
+	if (typeName (_item) == "STRING") then {
+		if (_item == _fromMagClass) then {
+			_magazineArray set [count _magazineArray, [_item,_val]];
+		};
+	} else {
+		if ((_item select 0) == _fromMagClass) then {
+			_magazineArray set [count _magazineArray, _item];
+		};
+	};
+};
+for "_i" from 122 to 129 do {
+	_control = _dialog displayCtrl _i;
+	_item = gearSlotData _control;
+	_val = gearSlotAmmoCount _control;
+	if (_val == 0) then { _val = 1; };
 	if (typeName (_item) == "STRING") then {
 		if (_item == _fromMagClass) then {
 			_magazineArray set [count _magazineArray, [_item,_val]];
@@ -38,94 +54,88 @@ for "_i" from 109 to 120 do {
 //diag_log format ["Inventory: %1", _magazineArray];
 
 // How much space in destination magazine
-_toMagSize = getNumber(configFile >> "cfgMagazines" >> _toMagClass >> "count");
-if (_toMagSize == 0) then {
-
-	//diag_log "No record in cfg! Need to do it manually...";
-	switch (_toMagClass) do {
-		case "200Rnd_556x45_M249": {
-			_toMagSize = 200;
-		};
-		case "100Rnd_556x45_M249": {
-			_toMagSize = 100;
-		};
-		case "100Rnd_556x45_BetaCMag": {
-			_toMagSize = 100;
-		};
-		case "20Rnd_762x51_DMR": {
-			_toMagSize = 20;
-		};
-		case "100Rnd_762x51_M240": {
-			_toMagSize = 100;
-		};
-		case "30Rnd_9x19_UZI": {
-			_toMagSize = 30;
-		};
-		case "30Rnd_9x19_MP5": {
-			_toMagSize = 30;
-		};
-		case "1Rnd_HE_M203": {
-			_toMagSize = 1;
-		};
-		case "6Rnd_HE_M203": {
-			_toMagSize = 6;
-		};
-		case "20Rnd_762x51_FNFAL": {
-			_toMagSize = 20;
-		};
-		case "10Rnd_127x99_M107": {
-			_toMagSize = 10;
-		};
-		case "100Rnd_127x99_M2": {
-			_toMagSize = 100;
-		};
-		default { _toMagSize = 0; };
+// Override mag class sizes if present here
+switch (_toMagClass) do {
+	case "200Rnd_556x45_M249": {
+		_toMagSize = 200;
 	};
+	case "100Rnd_556x45_M249": {
+		_toMagSize = 100;
+	};
+	case "100Rnd_556x45_BetaCMag": {
+		_toMagSize = 100;
+	};
+	case "20Rnd_762x51_DMR": {
+		_toMagSize = 20;
+	};
+	case "100Rnd_762x51_M240": {
+		_toMagSize = 100;
+	};
+	case "30Rnd_9x19_UZI": {
+		_toMagSize = 30;
+	};
+	case "30Rnd_9x19_MP5": {
+		_toMagSize = 30;
+	};
+	case "1Rnd_HE_M203": {
+		_toMagSize = 1;
+	};
+	case "6Rnd_HE_M203": {
+		_toMagSize = 6;
+	};
+	case "20Rnd_762x51_FNFAL": {
+		_toMagSize = 20;
+	};
+	case "10Rnd_127x99_M107": {
+		_toMagSize = 10;
+	};
+	case "100Rnd_127x99_M2": {
+		_toMagSize = 100;
+	};
+	default { _toMagSize = getNumber(configFile >> "cfgMagazines" >> _toMagClass >> "count"); };
 };
 
 // Format of the source magazine
-_fromMagSize = getNumber(configFile >> "cfgMagazines" >> _fromMagClass >> "count");
-if (_fromMagSize == 0) then {
-
-	//diag_log "No record in cfg! Need to do it manually...";
-	switch (_fromMagClass) do {
-		case "200Rnd_556x45_M249": {
-			_fromMagSize = 200;
-		};
-		case "100Rnd_556x45_M249": {
-			_fromMagSize = 100;
-		};
-		case "100Rnd_556x45_BetaCMag": {
-			_fromMagSize = 100;
-		};
-		case "20Rnd_762x51_DMR": {
-			_fromMagSize = 20;
-		};
-		case "100Rnd_762x51_M240": {
-			_fromMagSize = 100;
-		};
-		case "30Rnd_9x19_UZI": {
-			_fromMagSize = 30;
-		};
-		case "30Rnd_9x19_MP5": {
-			_fromMagSize = 30;
-		};
-		case "1Rnd_HE_M203": {
-			_fromMagSize = 1;
-		};
-		case "6Rnd_HE_M203": {
-			_fromMagSize = 6;
-		};
-		case "20Rnd_762x51_FNFAL": {
-			_fromMagSize = 20;
-		};
-		case "10Rnd_127x99_M107": {
-			_fromMagSize = 10;
-		};
-		case "100Rnd_127x99_M2": {
-			_fromMagSize = 100;
-		};
-		default { _fromMagSize = 0; };
+// Override mag class sizes if present here
+switch (_fromMagClass) do {
+	case "200Rnd_556x45_M249": {
+		_fromMagSize = 200;
+	};
+	case "100Rnd_556x45_M249": {
+		_fromMagSize = 100;
+	};
+	case "100Rnd_556x45_BetaCMag": {
+		_fromMagSize = 100;
+	};
+	case "20Rnd_762x51_DMR": {
+		_fromMagSize = 20;
+	};
+	case "100Rnd_762x51_M240": {
+		_fromMagSize = 100;
+	};
+	case "30Rnd_9x19_UZI": {
+		_fromMagSize = 30;
+	};
+	case "30Rnd_9x19_MP5": {
+		_fromMagSize = 30;
+	};
+	case "1Rnd_HE_M203": {
+		_fromMagSize = 1;
+	};
+	case "6Rnd_HE_M203": {
+		_fromMagSize = 6;
+	};
+	case "20Rnd_762x51_FNFAL": {
+		_fromMagSize = 20;
+	};
+	case "10Rnd_127x99_M107": {
+		_fromMagSize = 10;
+	};
+	case "100Rnd_127x99_M2": {
+		_fromMagSize = 100;
+	};
+	default { 
+		_fromMagSize = getNumber(configFile >> "cfgMagazines" >> _fromMagClass >> "count");
 	};
 };
 
@@ -137,6 +147,7 @@ if ((count _this) == 3) then {
 	_newMagArray = [];
 	// How many in current magazine
 	_ammoQty = _this select 2;
+	if (_ammoQty == 0) then { _ammoQty = 1;};
 	//diag_log format ["Got input ammo qty: %1, of type %2", _ammoQty, _fromMagClass];
 
 	if (isNil ("DZE_AcknowledgeConvert")) then {

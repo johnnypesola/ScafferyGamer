@@ -667,7 +667,7 @@ if (!isNull cursorTarget && !_inVehicle && !_isPZombie && (player distance curso
 
 	
 
-    //Player Deaths
+	//Player Deaths
 	if(_typeOfCursorTarget == "Info_Board_EP1") then {
 		if (s_player_information < 0) then {
 			s_player_information = player addAction [localize "STR_EPOCH_ACTIONS_MURDERS", "\z\addons\dayz_code\actions\list_playerDeaths.sqf",[], 7, false, true, "",""];
@@ -816,7 +816,7 @@ if (!isNull cursorTarget && !_inVehicle && !_isPZombie && (player distance curso
 	//call compile preprocessFileLineNumbers "custom\mf-tow\init.sqf";
 
 
-    //Sleep
+	//Sleep
 	if(_isTent && _ownerID == dayz_characterID) then {
 		if ((s_player_sleep < 0) && (player distance _cursorTarget < 3)) then {
 			s_player_sleep = player addAction [localize "str_actions_self_sleep", "\z\addons\dayz_code\actions\player_sleep.sqf",_cursorTarget, 0, false, true, "",""];
@@ -1024,7 +1024,7 @@ if (!isNull cursorTarget && !_inVehicle && !_isPZombie && (player distance curso
 	player removeAction s_player_followdog;
 	s_player_followdog = -1;
     
-    // vault
+	// vault
 	player removeAction s_player_unlockvault;
 	s_player_unlockvault = -1;
 	player removeAction s_player_packvault;
@@ -1048,6 +1048,13 @@ if (!isNull cursorTarget && !_inVehicle && !_isPZombie && (player distance curso
 	s_player_fuelauto = -1;
 	player removeAction s_player_fuelauto2;
 	s_player_fuelauto2 = -1;
+
+	// plot pole
+	player removeAction s_player_maintain_area;
+	s_player_maintain_area = -1;
+	player removeAction s_player_maintain_area_preview;
+	s_player_maintain_area_preview = -1;
+
 };
 
 

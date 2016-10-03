@@ -555,10 +555,6 @@ if (_hasRequiredTools && _hasbuilditem) then {
 							};
 						};
 
-						if ("MAP_F_postel_manz_kov" == typeOf _object) then {
-							_playerName = _playerUID;
-						};
-
 						//diag_log "Publish Other";
 						PVDZE_obj_Publish = [dayz_characterID,_object,[_dir,_location],_classname,_playerName];
 						publicVariableServer "PVDZE_obj_Publish";

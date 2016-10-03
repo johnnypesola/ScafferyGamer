@@ -112,11 +112,11 @@ _publicClasses = [
 		[],3,
 		0,0
 	],*/
-	["Bandit","Bandit2_DZ","BanditW1_DZ",["10x_303",2],["LeeEnfield","ItemToolbox"],"",[],[],0,-2000],
-	["Thief","Rocker1_DZ","SurvivorWurban_DZ",[],["ItemToolbox"],"",[],[],0,-500],
+	["Bandit","Bandit2_DZ","BanditW1_DZ",["10x_303",2],["LeeEnfield","ItemToolbox","ItemMap"],"",[],[],0,-2000],
+	["Thief","Rocker1_DZ","SurvivorWurban_DZ",[],["ItemToolbox","ItemMap"],"",[],[],0,-500],
 	["Survivor","Survivor2_DZ","SurvivorW2_DZ",[],[],"",[],[],0,0],
-	["Scout","INS_Soldier_AR_DZ","SurvivorWdesert_DZ",[],["ItemToolbox"],"",[],[],0,3000],
-	["Hero","Soldier_Sniper_PMC_DZ","SurvivorWpink_DZ",["10x_303",2],["LeeEnfield","ItemToolbox"],"",[],[],0,5000]
+	["Scout","INS_Soldier_AR_DZ","SurvivorWdesert_DZ",[],["ItemToolbox","ItemMap"],"",[],[],0,3000],
+	["Hero","Soldier_Sniper_PMC_DZ","SurvivorWpink_DZ",["10x_303",2],["LeeEnfield","ItemToolbox","ItemMap"],"",[],[],0,5000]
 	//["British Soldier","Soldier1_DZ","SurvivorWcombat_DZ",["30Rnd_556x45_Stanag",2],["BAF_L85A2_RIS_Holo"],"",[],[],0,0],
 	//["Business Person","Functionary1_EP1_DZ","SurvivorWurban_DZ",["8Rnd_B_Beneli_74Slug",3,"ItemBriefcaseS20oz"],["Remington870_lamp"],"",[],[],0,0],
 	//["Civilian","Haris_Press_EP1_DZ","SurvivorW3_DZ",["15Rnd_W1866_Slug",2],["Winchester1866"],"",[],[],0,0],

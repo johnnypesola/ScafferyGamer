@@ -64,9 +64,9 @@ if (_damage > 0.4) then {
 			_scale = _scale + 500;
 		};
 	} else {
-		_scale = 800;
+		_scale = 4000;
 		if (_isHeadHit) then {
-			_scale = _scale + 800;
+			_scale = _scale + 4000;
 		};
 	};
 	if ((isPlayer _source) && !(player == _source)) then {
@@ -95,9 +95,12 @@ if (_damage > 0.4) then {
 if (_hit in USEC_MinorWounds) then {
 	if (_ammo == "zombie") then {
 		if (_hit == "legs") then {
-			[_unit,_hit,(_damage / 6)] call object_processHit;
+			[_unit,_hit,(_damage*3000)] call object_processHit;
+			//[_unit,_hit,(_damage / 6)] call object_processHit;
 		} else {
-			[_unit,_hit,(_damage / 4)] call object_processHit;
+			// 8 times more damage!
+			[_unit,_hit,(_damage*4000)] call object_processHit;
+			//[_unit,_hit,(_damage / 4)] call object_processHit;
 		};
 	} else {
 		[_unit,_hit,(_damage / 2)] call object_processHit;

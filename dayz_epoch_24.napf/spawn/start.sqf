@@ -50,7 +50,7 @@ if (_go) then {
 	
 	{_x hideObject false;_x allowDamage true;player reveal _x;} count _nearFinal;
 	deleteVehicle _holder;
-	fnc_usec_damageHandler = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_damageHandler.sqf";
+	fnc_usec_damageHandler = compile preprocessFileLineNumbers "custom\damage\fn_damageHandler.sqf";
 	enableEnvironment true;
 	0 fadeSound 1;
 	if (isNil "_halo") then {cutText ["","BLACK IN"];};

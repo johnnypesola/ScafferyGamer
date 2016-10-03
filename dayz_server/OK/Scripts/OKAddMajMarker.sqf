@@ -16,7 +16,7 @@ if (_minute < 10) then
 OKMajName = OKMajName + _daytime;
 
 _nul = createMarker ["OKMajMarker", OKMajCoords];
-"OKMajMarker" setMarkerColor "ColorGreen";
+"OKMajMarker" setMarkerColor "ColorYellow";
 "OKMajMarker" setMarkerShape "ELLIPSE";
 "OKMajMarker" setMarkerBrush "Grid";
 "OKMajMarker" setMarkerSize [175,175];

@@ -76,8 +76,10 @@ if (!isDedicated) then {
 	//Zombies
 	zombie_findTargetAgent = 	compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\zombie_findTargetAgent.sqf";
 	zombie_loiter = 			compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\zombie_loiter.sqf";			//Server compile, used for loiter behaviour
-	zombie_generate = 			compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\zombie_generate.sqf";			//Server compile, used for loiter behaviour
-	wild_spawnZombies = 		compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\wild_spawnZombies.sqf";			//Server compile, used for loiter behaviour
+	//zombie_generate = 			compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\zombie_generate.sqf";			//Server compile, used for loiter behaviour
+	//wild_spawnZombies = 		compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\wild_spawnZombies.sqf";			//Server compile, used for loiter behaviour
+	zombie_generate = 			compile preprocessFileLineNumbers "custom\slow_zombies\zombie_generate.sqf";			//Server compile, used for loiter behaviour
+	wild_spawnZombies = 		compile preprocessFileLineNumbers "custom\slow_zombies\wild_spawnZombies.sqf";			//Server compile, used for loiter behaviour
 
 	pz_attack = 				compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\pzombie\pz_attack.sqf";
 
@@ -146,6 +148,7 @@ if (!isDedicated) then {
 		dayz_hunger = dayz_hunger + (_this select 0);
 		dayz_thirst = dayz_thirst + (_this select 1);
 	};
+
 
 	epoch_totalCurrency = {
 		// total currency
