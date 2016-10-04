@@ -17,7 +17,7 @@ while {_run} do
 		deleteMarker "OKMajDot";
 		//Re-Add the markers
 		_nul = createMarker ["OKMajMarker", OKMajCoords];
-		"OKMajMarker" setMarkerColor "ColorGreen";
+		"OKMajMarker" setMarkerColor "ColorYellow";
 		"OKMajMarker" setMarkerShape "ELLIPSE";
 		"OKMajMarker" setMarkerBrush "Grid";
 		"OKMajMarker" setMarkerSize [175,175];
