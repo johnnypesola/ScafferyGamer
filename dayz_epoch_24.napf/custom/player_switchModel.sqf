@@ -179,3 +179,4 @@ if (_ismelee == "true") then {
 };
 
 {player reveal _x} count (nearestObjects [getPosATL player, dayz_reveal, 50]);
+disableUserInput false;
