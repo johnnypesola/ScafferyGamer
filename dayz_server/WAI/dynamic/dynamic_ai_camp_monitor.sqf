@@ -1,9 +1,10 @@
 private ["_bestPlaces","_safePos","_direction","_campId","_vehicleClass","_numUnits","_timeout"];
 
 if (!isServer) exitWith { };
-
+waitUntil {!isNil "WAIconfigloaded" && {WAIconfigloaded}};
 // Activate after 150 seconds 
 
+sleep 150;
 
 
 ai_active_survivorcamps = 0;

@@ -773,6 +773,7 @@ if (true) then
   _vehicle_251 = _this;
   _this setDir -273.51862;
   _this setPos [16701.484, 19048.014, 4.5776367e-005];
+  MILBASE1_alarm_tower = _this;
 };
 
 _vehicle_252 = objNull;

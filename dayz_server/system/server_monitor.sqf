@@ -431,7 +431,10 @@ if (isServer && isNil "sm_done") then {
 	};
 
         // WAI missions
-        [] ExecVM "\z\addons\dayz_server\WAI\init.sqf";
+        [] ExecVM "\z\addons\dayz_server\WAI\Init.sqf";
+
+	// Supply drops
+	[] ExecVM "\z\addons\dayz_server\WAI\supply_dropper.sqf";
 
         // OK missions
         [] ExecVM "\z\addons\dayz_server\OK\OKInit.sqf";

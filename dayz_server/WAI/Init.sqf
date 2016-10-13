@@ -7,9 +7,13 @@ group_goalposition = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\
 spawn_static = 			compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\SpawnStatic.sqf";
 spawn_neutral_static = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\SpawnNeutralStatic.sqf";
 spawn_hero_static = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\SpawnHeroStatic.sqf";
+spawn_3rd_faction_static = 	compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\Spawn3rdFactionStatic.sqf";
 heli_para = 			compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\heli_para.sqf";
+heli_para_3rd_faction = 	compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\heli_para_3rd_faction.sqf";
 heli_patrol = 			compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\heli_patrol.sqf";
+heli_patrol_3rd_faction = 	compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\heli_patrol_3rd_faction.sqf";
 vehicle_patrol = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\vehicle_patrol.sqf";
+vehicle_patrol_3rd_faction = 	compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\vehicle_patrol_3rd_faction.sqf";
 vehicle_patrol_neutral = 	compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\vehicle_patrol_neutral.sqf";
 friendly_transport =	 	compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\transport_friendly.sqf";
 survivor_camp = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\SpawnNeutralCamp.sqf";
@@ -22,6 +26,7 @@ fn_createHeliPatrol = 		compile preprocessFileLineNumbers "\z\addons\dayz_server
 on_kill = compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\ai_killed.sqf";
 on_kill_hero = compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\ai_hero_killed.sqf";
 on_kill_neutral = compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\ai_neutral_killed.sqf";
+on_kill_3rd_faction = compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\ai_3rd_faction_killed.sqf";
 
 ai_monitor = compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\AImonitor.sqf";
 veh_monitor = compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\vehicle_monitor.sqf";
@@ -225,6 +230,8 @@ generateItems = {
 	[ _items_list, _tools_list ]
 };
 
+
+
 createCenter east;
 createCenter resistance;
 
@@ -280,3 +287,5 @@ if (ai_mission_sysyem) then {
 
 // Boat transports Airport <-> Northern Island
 [] ExecVM "\z\addons\dayz_server\WAI\transport\transporters.sqf";
+
+

@@ -60,6 +60,7 @@ _unit addEventHandler ["Killed",{
 	[GetPos (_this select 0), [["ItemComboLock", "magazine"]]] call fn_generateCrashLoot;
 
 	[_this select 0] call explodeKent;
+	WAI_kentIsDead = true;
 }];
 
 // Get positions to move to

@@ -1,6 +1,9 @@
 private["_heliPatrolParamsList","_heliPatrolList","_heliClass","_startTime","_elapsedTime", "_heliPatrolParams", "_i", "_currentHeliPatrol", "_numHeliPatrols"];
 
 if (!isServer) exitWith {};
+waitUntil {!isNil "WAIconfigloaded" && {WAIconfigloaded}};
+
+sleep 130;
 
 // Heli Patrol Parameters
 _heliPatrolParamsList = 

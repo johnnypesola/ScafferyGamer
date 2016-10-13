@@ -2,6 +2,10 @@ Private["_transportList","_startPos","_pos","_waypoints","_classname", "_current
 
 if (!isServer) exitWith{};
 
+waitUntil {!isNil "WAIconfigloaded" && {WAIconfigloaded}};
+
+sleep 120;
+
 _transportList = [
 	[
 		// Northern Island to Airport transport boat

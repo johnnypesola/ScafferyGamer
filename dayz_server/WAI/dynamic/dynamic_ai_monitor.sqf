@@ -1,6 +1,9 @@
 private["_position","_unitnumber","_skill","_gun","_mags","_backpack","_skin","_gear","_dyn_id","_pos","_alive","_data","_y","_unit","_tmp_patrol_radius","_tmp_patrol_wp","_heliPatrolParams","_heliPatrolList","_heliClass","_startTime","_elapsedTime", "_heliPatrolCallParams", "_i"];
 
 if(!isServer) exitWith { };
+waitUntil {!isNil "WAIconfigloaded" && {WAIconfigloaded}};
+
+sleep 160;
 
 // This is a list of all dynamic AI on the map.
 dyn_ai_list = [
