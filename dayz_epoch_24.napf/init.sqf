@@ -44,6 +44,7 @@ DZE_SelfTransfuse = true;
 DZE_DeathMsgGlobal = true;
 DZE_PlayerZed   = false;
 DZE_GodModeBase = false;
+DZE_MissionLootTable = true;
 
 DZE_DiagFpsSlow = true;
 DZE_DiagVerbose = false;
