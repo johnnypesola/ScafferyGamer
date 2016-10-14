@@ -883,7 +883,11 @@ if (!isNull cursorTarget && !_inVehicle && !_isPZombie && (player distance curso
 					s_player_parts set [count s_player_parts,_buy];
 				
 				} count (_traderMenu select 1);
-				// Database menu
+
+				_buyV = player addAction ["<t color='#0059FF'>Advanced Trading</t>", "zupa\advancedTrading\init.sqf",(_traderMenu select 0), 999, true, false, "",""];
+				s_player_parts set [count s_player_parts,_buyV];
+
+				// Database menu 
 				_buy = player addAction [localize "STR_EPOCH_PLAYER_289", "\z\addons\dayz_code\actions\show_dialog.sqf",(_traderMenu select 0), 999, true, false, "",""];
 				s_player_parts set [count s_player_parts,_buy];
 
