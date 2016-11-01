@@ -117,21 +117,97 @@ OKWeps3 = [
 "M79_EP1",
 "M32_EP1",
 "SCAR_H_STD_EGLM_Spect",
+"SCAR_H_STD_EGLM_Spect",
+"SCAR_H_STD_EGLM_Spect",
+"SCAR_H_STD_EGLM_Spect",
+"SCAR_H_STD_EGLM_Spect",
+"SCAR_H_STD_EGLM_Spect",
+"SCAR_H_STD_EGLM_Spect",
+"SCAR_H_STD_EGLM_Spect",
+"SCAR_H_STD_EGLM_Spect",
+"M4A1_HWS_GL_camo",
+"M4A1_HWS_GL_camo",
+"M4A1_HWS_GL_camo",
+"M4A1_HWS_GL_camo",
+"M4A1_HWS_GL_camo",
+"M4A1_HWS_GL_camo",
+"M4A1_HWS_GL_camo",
+"M4A1_HWS_GL_camo",
 "M4A1_HWS_GL_camo",
 "M16A2GL",
+"M16A2GL",
+"M16A2GL",
+"M16A2GL",
+"M16A2GL",
+"M16A2GL",
+"M16A2GL",
+"M16A2GL",
+"M16A2GL",
+"M16A2GL",
+"Mk_48_DZ",
+"Mk_48_DZ",
+"Mk_48_DZ",
+"Mk_48_DZ",
+"Mk_48_DZ",
+"Mk_48_DZ",
+"Mk_48_DZ",
+"Mk_48_DZ",
 "Mk_48_DZ",
 "Pecheneg_DZ",
+"Pecheneg_DZ",
+"Pecheneg_DZ",
+"Pecheneg_DZ",
+"Pecheneg_DZ",
+"Pecheneg_DZ",
+"Pecheneg_DZ",
+"Pecheneg_DZ",
+"Pecheneg_DZ",
+"m240_scoped_EP1_DZE",
+"m240_scoped_EP1_DZE",
+"m240_scoped_EP1_DZE",
+"m240_scoped_EP1_DZE",
+"m240_scoped_EP1_DZE",
+"m240_scoped_EP1_DZE",
+"m240_scoped_EP1_DZE",
+"m240_scoped_EP1_DZE",
 "m240_scoped_EP1_DZE"
 ];
 
 OKWeps4 = [
 "FN_FAL_ANPVS4",
+"FN_FAL_ANPVS4",
+"SCAR_H_LNG_Sniper",
+"SCAR_H_LNG_Sniper",
+"SCAR_H_LNG_Sniper",
+"SCAR_H_LNG_Sniper",
+"SCAR_H_LNG_Sniper",
+"SCAR_H_LNG_Sniper",
+"SCAR_H_LNG_Sniper",
 "SCAR_H_LNG_Sniper",
 "M107_DZ",
 "BAF_LRR_scoped",
+"BAF_LRR_scoped",
+"M40A3",
+"M40A3",
+"M40A3",
 "M40A3",
 "M24",
+"M24",
+"M24",
+"M24",
+"M24",
+"M24",
+"M24",
+"M24",
 "KSVK_DZE",
+"SVD",
+"SVD",
+"SVD",
+"SVD",
+"SVD",
+"SVD",
+"SVD",
+"SVD",
 "SVD"
 ];
 
@@ -140,27 +216,27 @@ OKWeps4 = [
 // They are all the same, but can be customized.
 // "Binocular_Vector","NVGoggles","ItemMap","ItemCompass","ItemGPS","ItemWatch","ItemKnife","Itemtoolbox","ItemCrowbar","Itemetool","ItemHatchet_DZE"
 OKGear0 = [
-["ItemBandage","ItemBandage","ItemPainkiller","ItemJerrycan","PartEngine","ItemMorphine"],
+["ItemBandage","ItemBandage","ItemPainkiller","ItemJerrycan","PartEngine","ItemMorphine","ItemGoldBar4oz"],
 ["ItemKnife","NVGoggles","ItemHatchet"]
 ];
 
 OKGear1 = [
-["ItemBandage","ItemBandage","PartFueltank","PartGlass","PartVRotor","ItemPainkiller","FoodMRE","ItemSodaCoke"],
+["ItemBandage","ItemBandage","PartFueltank","PartGlass","PartVRotor","ItemPainkiller","FoodMRE","ItemSodaCoke","ItemGoldBar2oz"],
 ["ItemMap","ItemCompass","ItemFlashlight","Binocular_Vector"]
 ];
 
 OKGear2 = [
-["ItemBandage","ItemBandage","PartWheel","ItemMorphine","ItemEpinephrine","ItemPainkiller","FoodMRE","ItemSodaCoke"],
+["ItemBandage","ItemBandage","PartWheel","ItemMorphine","ItemEpinephrine","ItemPainkiller","FoodMRE","ItemSodaCoke","ItemGoldBar4oz"],
 ["ItemKnife","ItemFlashlight","ItemGPS","ItemWatch"]
 ];
 
 OKGear3 = [
-["ItemBandage","ItemBandage","ItemPainkiller","PartGlass","PartVRotor","PartWheel","ItemSodaCoke","ItemAntibiotic","ItemBloodbag"],
+["ItemBandage","ItemBandage","ItemPainkiller","PartGlass","PartVRotor","PartWheel","ItemSodaCoke","ItemAntibiotic","ItemBloodbag","ItemGoldBar3oz"],
 ["ItemKnife","ItemFlashlight","ItemRadio","Itemtoolbox","ItemCrowbar"]
 ];
 
 OKGear4 = [
-["ItemBandage","ItemBandage","ItemPainkiller","ItemMorphine","ItemEpinephrine","ItemPainkiller","ItemAntibiotic","ItemBloodbag"],
+["ItemBandage","ItemBandage","ItemPainkiller","ItemMorphine","ItemEpinephrine","ItemPainkiller","ItemAntibiotic","ItemBloodbag","ItemGoldBar3oz"],
 ["ItemKnife","ItemFlashlight","ItemCompass","Itemetool","ItemHatchet_DZE"]
 ];
 
