@@ -92,6 +92,12 @@ switch (_toMagClass) do {
 	case "100Rnd_127x99_M2": {
 		_toMagSize = 100;
 	};
+	case "50Rnd_127x107_DSHKM": {
+		_toMagSize = 50;
+	};
+	case "5Rnd_127x108_KSVK": {
+		_toMagSize = 5;
+	};
 	default { _toMagSize = getNumber(configFile >> "cfgMagazines" >> _toMagClass >> "count"); };
 };
 
@@ -133,6 +139,12 @@ switch (_fromMagClass) do {
 	};
 	case "100Rnd_127x99_M2": {
 		_fromMagSize = 100;
+	};
+	case "50Rnd_127x107_DSHKM": {
+		_fromMagSize = 50;
+	};
+	case "5Rnd_127x108_KSVK": {
+		_fromMagSize = 5;
 	};
 	default { 
 		_fromMagSize = getNumber(configFile >> "cfgMagazines" >> _fromMagClass >> "count");

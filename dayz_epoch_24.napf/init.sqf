@@ -245,3 +245,12 @@ execVM "admintools\Activate.sqf";
 		};
 	};
 };
+
+// Very simple reticle :P
+[] spawn {
+	while {true} do {
+		waitUntil {typeOf (vehicle player) == "UH60_wreck_EP1"};
+		cutText ["+", "PLAIN", 1];
+		sleep 1;
+	};
+};

@@ -668,7 +668,7 @@ Place your custom group spawns below
 		"M113_TK_EP1","AH6J_EP1","UH1Y","pook_H13_gunship",
 		"pook_H13_transport_GUE","AAV","BTR90_HQ_DZE","LAV25_HQ_DZE",
 		"M1126_ICV_M2_EP1","M1126_ICV_mk19_EP1","BAF_Jackal2_L2A1_w",
-		"M1133_MEV_EP1","M113Ambul_UN_EP1"
+		"M1133_MEV_EP1","M113Ambul_TK_EP1_DZ"
 	] call BIS_fnc_selectRandom;
 	_location = [16759.6,19046,0.00144861];
 

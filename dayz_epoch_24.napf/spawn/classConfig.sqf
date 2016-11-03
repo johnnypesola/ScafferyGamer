@@ -77,7 +77,7 @@ Then replace all occurrences of "Item1","Item2","Item3","Item4" with SHORT_HAND_
 #define VIP_TOOLS "Binocular_Vector","NVGoggles","ItemCompass","ItemHatchet","ItemKnife","Itemmatchbox","Itemetool","ItemSledge","ItemWatch","ItemGPS","ItemCrowbar"
 
 _startBag = ""; // "DZ_Patrol_Pack_EP1";
-_startMags = ["ItemBandage"];
+_startMags = ["ItemBandage",["HandChemGreen","HandRoadFlare"] call BIS_fnc_selectRandom];
 _startWeps = ["ItemRadio"];
 _customLoadout = [
 	"0", // ebay

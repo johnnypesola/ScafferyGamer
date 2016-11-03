@@ -748,6 +748,7 @@ if (true) then
   _this = createVehicle ["T72Wreck", [16604.443, 19110.932, 0.00014877319], [], 0, "CAN_COLLIDE"];
   _vehicle_244 = _this;
   _this setPos [16604.443, 19110.932, 0.00014877319];
+  _this setVariable ["ObjectID","1",true];
 };
 
 _vehicle_246 = objNull;
@@ -756,6 +757,7 @@ if (true) then
   _this = createVehicle ["UH60_wreck_EP1", [16630.666, 19138.006, 0.00014877319], [], 0, "CAN_COLLIDE"];
   _vehicle_246 = _this;
   _this setPos [16630.666, 19138.006, 0.00014877319];
+  _this setVariable ["ObjectID","1",true];
 };
 
 _vehicle_247 = objNull;
@@ -764,6 +766,7 @@ if (true) then
   _this = createVehicle ["BRDMWreck", [16731.818, 19063.76, 0.00016593933], [], 0, "CAN_COLLIDE"];
   _vehicle_247 = _this;
   _this setPos [16731.818, 19063.76, 0.00016593933];
+  _this setVariable ["ObjectID","1",true];
 };
 
 _vehicle_251 = objNull;

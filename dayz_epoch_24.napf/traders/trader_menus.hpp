@@ -757,6 +757,7 @@ class CfgTraderCategory
     class KSVK_DZE {type = "trade_weapons";buy[] = {3,"ItemGoldBar10oz"};sell[] = {1,"ItemGoldBar10oz"};};
     class M4A1_HWS_GL {type = "trade_weapons";buy[] = {8,"ItemGoldBar"};sell[] = {4,"ItemGoldBar"};};
     class BAF_L85A2_UGL_Holo {type = "trade_weapons";buy[] = {8,"ItemGoldBar"};sell[] = {4,"ItemGoldBar"};};
+    class AKS_GOLD {type = "trade_weapons";buy[] = {1,"ItemGoldBar10oz"};sell[] = {1,"ItemGoldBar10oz"};};
   };
   // Explosives
   class Category_529

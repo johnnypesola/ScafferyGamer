@@ -46,6 +46,10 @@ class ExtraRc {
     text = "Place DShKM Static Machine Gun";
     script = "[""DSHKM_CDF""] execVM ""custom\staticmg\place_machinegun.sqf"";";
   };
+  class convertToKSVK {
+    text = "Split to 10xKSVK";
+    script = "[[""50Rnd_127x107_DSHKM""],[""5Rnd_127x108_KSVK""], %1] execVM ""custom\ammo_tools\player_convertMags.sqf"";";
+  };
  };
  class ItemRadio {
   class GroupManagement {
@@ -93,7 +97,7 @@ class ExtraRc {
    script = "[[""100Rnd_556x45_BetaCMag""],[""100Rnd_556x45_M249""], %1] execVM ""custom\ammo_tools\player_convertMags.sqf"";";
   };
   class convertTo200Rnd {
-   text = "Merge to 200rnd M249";
+   text = "Make 200rnd M249 belt";
    script = "[[""100Rnd_556x45_BetaCMag""],[""200Rnd_556x45_M249""]] execVM ""custom\ammo_tools\player_convertMags.sqf"";";
   };
  };
@@ -165,6 +169,13 @@ class ExtraRc {
    script = "[[""10Rnd_127x99_M107""],[""100Rnd_127x99_M2""]] execVM ""custom\ammo_tools\player_convertMags.sqf"";";
   };
  };
+ class 5Rnd_127x108_KSVK {
+  class convertToDShKM {
+   text = "Make DShKM belt";
+   script = "[[""5Rnd_127x108_KSVK""],[""50Rnd_127x107_DSHKM""]] execVM ""custom\ammo_tools\player_convertMags.sqf"";";
+  };
+ };
+
  class ItemObsidian {
   class buildBed {
    text = "Build Spawn Bed";
