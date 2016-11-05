@@ -1,0 +1,92 @@
+; Improvised Explosive Device Script
+; By Jeevz
+; v1.2 12/13/06
+
+
+; This script will create an explosion of a
+; selected size on any object when called
+; The arguments are [objectName, explosionPower]
+; Explosion Power will be 1 of 4 choices
+; Small - Good for Anti-Personnel use
+; Medium - Will usually disable a Humvee without killing the occupants
+; Large - Will usually destroy a passing humvee and kill or severly injure all occupants, will disable the tracks and possibly engine on M1A1
+; Huge - Nothing will survive, I mean... it's HUGE :-)
+
+
+; Example script call --> [theCar, "Small"] exec "IED.sqs"
+
+;start script
+
+_theObject = _this select 0
+_theExplosion = _this select 1
+
+;locate the Object to be blown up
+_bombLoc =  GetPos _theObject
+_bombLocX = _bombLoc select 0
+_bombLocY = _bombLoc select 1
+_bombLocZ = _bombLoc select 2
+
+
+; Deterimine the ordinance used to create the explosion
+? (_theExplosion == "Small") : _ammoType = "R_57mm_HE"
+? (_theExplosion == "Medium") : _ammoType = "M_Sidewinder_AA"
+? (_theExplosion == "Large") : _ammoType = "M_Sidewinder_AA"
+? (_theExplosion == "Huge") : _ammoType = "Bo_GBU12_LGB"
+
+; Get the explosion size and blow the object up
+
+? (_theExplosion == "Small") : goto "SMALL"
+? (_theExplosion == "Medium") : goto "MEDIUM"
+? (_theExplosion == "Large") : goto "LARGE"
+? (_theExplosion == "Huge") : goto "HUGE"
+
+
+#SMALL
+_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+_theObject setdammage 1
+deleteVehicle _theObject;
+exit
+
+#MEDIUM
+_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+_theObject setdammage 1
+deleteVehicle _theObject;
+exit
+
+#LARGE
+_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+_theObject setdammage 1
+deleteVehicle _theObject;
+exit
+
+#HUGE
+_ammoType createVehicle[_bombLocX, _bombLocY, _bombLocZ]
+_ammoType setVectorDirAndUp [[0,0,1],[0,1,0]];
+_theObject setdammage 1
+deleteVehicle _theObject;
+exit

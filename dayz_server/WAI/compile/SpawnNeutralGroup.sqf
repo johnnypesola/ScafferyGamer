@@ -58,6 +58,7 @@ for "_x" from 1 to _unitnumber do {
 	} else {
 		_aiskin = _skin;
 	};
+	diag_log format["Creating neutral unit for group %1 with params: skin:%2, pos:%3, markers:%4, place_radius:%5, rank:%6", _unitGroup, _aiskin, _position, [], 10, "PRIVATE"];
 	_unit = _unitGroup createUnit [_aiskin, [(_position select 0),(_position select 1),(_position select 2)], [], 10, "PRIVATE"];
 	[_unit] joinSilent _unitGroup;
 	if (_backpack == "") then {

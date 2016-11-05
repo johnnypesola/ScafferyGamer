@@ -51,12 +51,19 @@ _needUpdate = _object in needUpdate_objects;
 _object_position = {
 	private["_position","_worldspace","_fuel","_key","_query"];
 		_position = getPosATL _object;
-		_worldspace = [getDir _object, _position] call AN_fnc_formatWorldspace;
+		_worldspace = [getDir _object, _position];
 		_fuel = 0;
 		if (_object isKindOf "AllVehicles") then {
 			_fuel = fuel _object;
 		};
-		_key = [_objectID,format["'%1'",_worldspace],_fuel];
+		_key = [
+			_objectID,
+			((_worldspace select 1) select 0) call KK_fnc_floatToString,	// x
+			((_worldspace select 1) select 1) call KK_fnc_floatToString,	// y
+			((_worldspace select 1) select 2) call KK_fnc_floatToString,	// z
+			(_worldspace select 0) call KK_fnc_floatToString,		// dir
+			_fuel
+		];
 		_query = ["vehicleMoved",_key] call dayz_prepareDataForDB;
 		//diag_log ("HIVE: WRITE: "+ str(_query));
 		_query call server_hiveWrite;
@@ -73,10 +80,10 @@ _object_inventory = {
 		if (str(_inventory) != _previous) then {
 			_object setVariable["lastInventory", _inventory];
 			if (_objectID == "0") then {
-				_key = [_uid, format["'%1'", _inventory]];
+				_key = [_uid,  _inventory select 1, _inventory select 0, _inventory select 2];
 				_query = ["objectInventoryByUID",_key] call dayz_prepareDataForDB;
 			} else {
-				_key = [_objectID, format["'%1'", _inventory]];
+				_key = [_objectID,  _inventory select 1, _inventory select 0, _inventory select 2];
 				_query = ["objectInventoryByID",_key] call dayz_prepareDataForDB;
 			};
 			//diag_log ("HIVE: WRITE: "+ str(_key));
@@ -96,7 +103,7 @@ _object_damage = {
 			_object setHit ["_selection", _hit];
 		} count _hitpoints;
 	
-		_key = [_objectID,format["'%1'", _array],_damage];
+		_key = [_objectID, _array,_damage];
 		_query = ["vehicleDamagedByID",_key] call dayz_prepareDataForDB;
 		//diag_log ("HIVE: WRITE: "+ str(_query));
 		_query call server_hiveWrite;
@@ -118,10 +125,10 @@ _object_killed = {
 	} count _hitpoints;
 	
 	if (_objectID == "0") then {
-		_key = [_uid,format["'%1'", _array],_damage];
+		_key = [_uid, _array, _damage];
 		_query = ["vehicleDamagedByUID", _key] call dayz_prepareDataForDB;
 	} else {
-		_key = [_objectID,format["'%1'", _array],_damage];
+		_key = [_objectID, _array, _damage];
 		_query = ["vehicleDamagedByID", _key] call dayz_prepareDataForDB;
 	};
 	//diag_log ("HIVE: WRITE: "+ str(_query));
@@ -154,7 +161,7 @@ _object_repair = {
 		_object setHit ["_selection", _hit];
 	} count _hitpoints;
 	
-	_key = [_objectID,format["'%1'",_array],_damage];
+	_key = [_objectID, _array, _damage];
 	_query = ["vehicleDamagedByID", _key] call dayz_prepareDataForDB;
 	//diag_log ("HIVE: WRITE: "+ str(_query));
 	_query call server_hiveWrite;

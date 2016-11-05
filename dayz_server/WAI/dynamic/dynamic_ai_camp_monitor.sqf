@@ -17,11 +17,15 @@ _bestPlaces = [];
 while { true } do {
 
 	if (ai_active_survivorcamps < ai_max_active_survivorcamps) then {
-
+		diag_log format["WAI: Looking for camp site from center %1.", getMarkerPos "center"];
 		_safePos = [getMarkerPos "center",0,5000,10,0,1,0] call BIS_fnc_findSafePos;
+		diag_log format["WAI: Found camp site place at %1.", _safePos];
 		_bestPlaces = selectBestPlaces [_safePos, 100, "forest+trees-meadow-houses-(10*sea)", 5, 10];
+		diag_log format["WAI: Selecting spot from the following spots: %1", _bestPlaces];
+		
 		if (count _bestPlaces > 0) then {
 			_safePos = (_bestPlaces call BIS_fnc_selectRandom) select 0;
+			diag_log format["WAI: Selected spot %1.", _safePos];
 			_safePos = [ _safePos select 0, _safePos select 1, 0];
 		};
 		_direction = (random 360);

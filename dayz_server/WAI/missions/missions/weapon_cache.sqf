@@ -1,6 +1,6 @@
 private ["_position","_box","_missiontimeout","_cleanmission","_playerPresent","_starttime","_currenttime","_cleanunits","_rndnum"];
 
-_position = [getMarkerPos "center",0,5500,10,0,2000,0] call BIS_fnc_findSafePos;
+_position = [] call wai_find_pos;
 diag_log format["WAI: Mission Weapon Cache Started At %1",_position];
 _box = createVehicle ["BAF_VehicleBox",[(_position select 0),(_position select 1),0], [], 0, "CAN_COLLIDE"];
 [_box] call spawn_ammo_box;

@@ -5,7 +5,7 @@ _vehclass = cargo_trucks call BIS_fnc_selectRandom;
 _vehclass2 = refuel_trucks call BIS_fnc_selectRandom;
 _vehclass3 = military_unarmed call BIS_fnc_selectRandom;
 
-_position = [getMarkerPos "center",0,5500,10,0,2000,0] call BIS_fnc_findSafePos;
+_position = [] call wai_find_pos;
 diag_log format["WAI: Mission Soldier Convoy Started At %1",_position];
 
 _box = createVehicle ["BAF_VehicleBox",[(_position select 0),(_position select 1),0], [], 0, "CAN_COLLIDE"];

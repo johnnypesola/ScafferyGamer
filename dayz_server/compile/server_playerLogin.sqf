@@ -116,8 +116,20 @@ if (!_isNew) then {
 		};
 		//_randomSpot = true;
 	
+
+
 		//Wait for HIVE to be free
-		_key = [_charID,format["'%1'", [_wpns,_mags]],format["'%1'", [_bcpk, [],[]]]];
+		_key = [
+			_charID,	// character ID
+			_mags,		// inventory magazines
+			_wpns,		// inventory weapons
+			_bcpk,		// backpack classname
+			[[],[]],	// backpack magazines
+			[[],[]]		// backpack weapons
+		];
+
+		diag_log format ["INFO: server_playerLogin:131: _key = %1", _key];
+
 		_query = ["playerInit", _key] call dayz_prepareDataForDB;
 		_query call server_hiveWrite;
 	};

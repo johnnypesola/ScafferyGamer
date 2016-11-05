@@ -49,7 +49,22 @@ if (_spawnDMG) then {
 // TODO: check if uid already exists and if so increment by 1 and check again as soon as we find nothing continue.
 
 //Send request
-_key = [dayZ_instance, _class, _damage , _characterID, [_worldspace select 0, _worldspace select 1] call AN_fnc_formatWorldspace, [], _array, _fuel,_uid];
+_key = [
+	dayZ_instance,
+	_class,
+	_damage ,
+	_characterID,
+	((_worldspace select 1) select 0) call KK_fnc_floatToString,	// x
+	((_worldspace select 1) select 1) call KK_fnc_floatToString,	// y
+	((_worldspace select 1) select 2) call KK_fnc_floatToString,	// z
+	(_worldspace select 0) call KK_fnc_floatToString,		// dir
+	[], // inv magazines
+	[], // inv weapons
+	[], // inv backpacks
+	_array, // hitpoints
+	_fuel,  // fuel
+	_uid
+];
 _query = ["objectPublish", _key] call dayz_prepareDataForDB;
 diag_log ("HIVE: WRITE: "+ str(_query)); 
 _query call server_hiveWrite;

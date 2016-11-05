@@ -43,14 +43,38 @@ if (isNull _playerObj || !isPlayer _playerObj) exitWith {
 };
 
 //Wait for HIVE to be free
-//diag_log ("SETUP: RESULT: Successful with " + str(_primary));
+diag_log ("SETUP: RESULT: Successful with " + str(_primary));
 
-_medical =		_primary select 1;
-_stats =		[_primary select 3, _primary select 4, _primary select 5, _primary select 6];
-_state =		_primary select 7;
-_worldspace = 		_primary select 0;
-_humanity =		_primary select 8;
-_lastinstance =		_primary select 9;
+_medical = [
+	_primary select 4,	// is dead 		0
+	_primary select 5,	// is inconscious 	1
+	_primary select 6,	// is infected		2
+	_primary select 7,	// is injured		3
+	_primary select 8,	// is in pain		4
+	_primary select 9,	// is in cardiac arrest	5
+	_primary select 10,	// has low blood	6
+	_primary select 11,	// blood qty		7
+	_primary select 12,	// wounds array		8
+	[_primary select 13, _primary select 14],	// [hit in legs, hit in arms]	9
+	_primary select 15,	// unconscious time	10
+	_primary select 16	// messing array [hunger, thirst]	11
+];
+_stats = [
+	_primary select 18,	// zed kills
+	_primary select 19,	// zed headshots
+	_primary select 20,	// survivor kills
+	_primary select 21	// bandit kills
+];
+_state = [
+	_primary select 22,	// current weapon
+	_primary select 23,	// current animation
+	_primary select 24,	// current body temp.
+	_primary select 25	// friendlies array
+];
+	
+_worldspace =	[_primary select 3, [_primary select 0, _primary select 1, _primary select 2]];
+_humanity =	_primary select 26;
+_lastinstance =	_primary select 27;
 
 //Set position
 _randomSpot = false;
@@ -74,9 +98,9 @@ if (count _worldspace > 0) then {
 	};
 	
 	// Came from another server force random spawn
-	if (_lastinstance != dayZ_instance) then {
-		_randomSpot = true;	// TODO: Remove random spot spawn, and instead set the ferry arrival spot here
-	};
+	//if (_lastinstance != dayZ_instance) then {
+	//	_randomSpot = true;	// TODO: Ferry! Remove random spot spawn, and instead set the ferry arrival spot here
+	//};
 
 	//_playerObj setPosATL _position;
 } else {
@@ -106,9 +130,8 @@ if (count _medical > 0) then {
 	} count (_medical select 8);
 	
 	//Add fractures
-	_fractures = (_medical select 9);
-	_playerObj setVariable ["hit_legs",(_fractures select 0),true];
-	_playerObj setVariable ["hit_hands",(_fractures select 1),true];
+	_playerObj setVariable ["hit_legs",(_medical select 9) select 0,true];
+	_playerObj setVariable ["hit_hands",(_medical select 9) select 1,true];
 	
 	if (count _medical > 11) then {
 		//Additional medical stats
@@ -141,7 +164,7 @@ if (count _stats > 0) then {
 	_playerObj setVariable["headShots_CHK",(_stats select 1)];
 	_playerObj setVariable["humanKills_CHK",(_stats select 2)];
 	_playerObj setVariable["banditKills_CHK",(_stats select 3)];
-	if (count _stats > 4) then {
+	if (count _stats > 4) then {	// TODO: DEAD CODE?
 		if (!(_stats select 3)) then {
 			_playerObj setVariable["selectSex",true,true];
 		};

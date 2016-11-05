@@ -57,7 +57,22 @@ _object setVariable ["OEMPos",(_worldspace select 1),true];
 _uid = _worldspace call dayz_objectUID2;
 
 //Send request
-_key = [dayZ_instance, _class, 0 , _charID, format["'%1'",[_worldspace select 0, _worldspace select 1] call AN_fnc_formatWorldspace], "'[]'", "'[]'", 0, _uid];
+_key = [
+	dayZ_instance,
+	_class,
+	0,	// damage
+	_charID,
+	((_worldspace select 1) select 0) call KK_fnc_floatToString,	// x
+	((_worldspace select 1) select 1) call KK_fnc_floatToString,	// y
+	((_worldspace select 1) select 2) call KK_fnc_floatToString,	// z
+	(_worldspace select 0) call KK_fnc_floatToString,		// dir
+	[], // inv magazines
+	[], // inv weapons
+	[], // inv backpacks
+	[], // hitpoints
+	0,  // fuel
+	_uid
+];
 _query = ["objectPublish", _key] call dayz_prepareDataForDB;
 //diag_log ("HIVE: WRITE: "+ str(_query));
 _query call server_hiveWrite;

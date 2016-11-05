@@ -1,6 +1,6 @@
 private ["_position","_randompos","_box","_missiontimeout","_cleanmission","_playerPresent","_starttime","_currenttime","_cleanunits","_rndnum"];
 
-_position = [getMarkerPos "center",0,5500,10,0,2000,0] call BIS_fnc_findSafePos;
+_position = [] call wai_find_pos;
 diag_log format["WAI: Mission Treasure Started At %1",_position];
 _box = createVehicle ["USOrdnanceBox",[(_position select 0),(_position select 1),-0.3], [], 0, "CAN_COLLIDE"]; // Lowering it 0.3 metres into the ground so it's a bit hidden
 [_box] call spawn_treasure_box;

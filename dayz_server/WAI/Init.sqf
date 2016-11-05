@@ -18,6 +18,7 @@ vehicle_patrol_neutral = 	compile preprocessFileLineNumbers "\z\addons\dayz_serv
 friendly_transport =	 	compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\transport_friendly.sqf";
 survivor_camp = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\SpawnNeutralCamp.sqf";
 kent_kombat =			compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\SpawnKentKombat.sqf";
+wai_find_pos =			compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\wai_find_pos.sqf";
 
 // Function that generates the loot when a heli has crashed (crew members can still be alive though)
 fn_generateCrashLoot = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\gen_crash_loot.sqf";
@@ -263,21 +264,38 @@ ai_air_units = 0;
 ai_vehicle_units = 0;
 ai_active_survivorcamps = 0;
 
+// Lets get the map name for mission location purposes
+WAIWorldName = toLower format ["%1", worldName];
+diag_log format["WAI: %1 detected. Map Specific Settings Adjusted!", WAIWorldName];
+
+
+
 //Load config
 [] ExecVM "\z\addons\dayz_server\WAI\AIconfig.sqf";
 //Wait for config
 waitUntil {WAIconfigloaded};
 diag_log "WAI: AI Config File Loaded";
 [] spawn ai_monitor;
-//Load custom spawns
-//[] ExecVM "\z\addons\dayz_server\WAI\customSpawns.sqf";
+
+if (WAIWorldName in ["chernarus","utes","zargabad","fallujah","takistan","tavi","lingor","namalsk","mbg_celle2","oring","panthera2","isladuala","smd_sahrani_a2","trinity"]) then {
+	_mapHardCenter = true;
+	
+	// Chernarus is supported
+	if (WAIWorldName == "chernarus") then {
+		[] ExecVM "\z\addons\dayz_server\WAI\customSpawns_chernarus.sqf";
+	};
+	if (WAIWorldName == "napf") then {
+		[] ExecVM "\z\addons\dayz_server\WAI\customSpawns_napf.sqf";
+	};
+};
+
 if (ai_mission_sysyem) then {
 	//Load AI mission system
-	//[] ExecVM "\z\addons\dayz_server\WAI\missions\missionIni.sqf";
+	[] ExecVM "\z\addons\dayz_server\WAI\missions\missionIni.sqf";
 };
 
 // Dynamic AI in the spawning cities
-//[] ExecVM "\z\addons\dayz_server\WAI\dynamic\dynamic_ai_monitor.sqf";
+[] ExecVM "\z\addons\dayz_server\WAI\dynamic\dynamic_ai_monitor.sqf";
 
 // Dynamic AI heli patrols around the map
 //[] ExecVM "\z\addons\dayz_server\WAI\dynamic\dynamic_ai_heli_patrol_monitor.sqf";
@@ -286,6 +304,8 @@ if (ai_mission_sysyem) then {
 [] ExecVM "\z\addons\dayz_server\WAI\dynamic\dynamic_ai_camp_monitor.sqf";
 
 // Boat transports Airport <-> Northern Island
-//[] ExecVM "\z\addons\dayz_server\WAI\transport\transporters.sqf";
+if (WAIWorldName == "napf") then {
+	[] ExecVM "\z\addons\dayz_server\WAI\transport\transporters.sqf";
+};
 
 

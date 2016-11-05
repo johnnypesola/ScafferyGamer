@@ -153,10 +153,10 @@ check_publishobject = {
 		};
 	} forEach _forbiddenPos;
 
-	if ((auth_enabled) && (!(_playername in auth_clients))) then {
-		_allowed = false;
-		diag_log format ["WARNING: Non-whitelisted player %1 tried to build object: %2", _playername, _object];
-	};
+	//if ((auth_enabled) && (!(_playername in auth_clients))) then {
+	//	_allowed = false;
+	//	diag_log format ["WARNING: Non-whitelisted player %1 tried to build object: %2", _playername, _object];
+	//};
     _allowed
 };
 
@@ -195,7 +195,7 @@ server_hiveWrite = {
 	private["_parameters","_query","_result"];
 	_parameters = _this;
 	_query = format ["%1:%2:%3", 1, DZE_DbSessionID, _parameters];
-	diag_log format["HIVE WRITE: '%1'", _query];
+	//diag_log format["HIVE WRITE: '%1'", _query];
 	"extDB2" callExtension _query;
 	true
 };
@@ -204,9 +204,9 @@ server_hiveWriteSingle = {
 	private["_parameters","_query","_result"];
 	_parameters = _this;
 	_query = format ["%1:%2:%3", 1, DZE_DbSessionID, _parameters];
-	diag_log format["HIVE WRITE: '%1'", _query];
+	//diag_log format["HIVE WRITE: '%1'", _query];
 	_result = call compile("extDB2" callExtension _query);
-	diag_log format["HIVE READ: '%1'", str ((_result select 1) select 0)];
+	//diag_log format["HIVE READ: '%1'", str ((_result select 1) select 0)];
 	(_result select 1) select 0
 };
 
@@ -214,7 +214,7 @@ server_hiveReadWrite = {
 	private["_parameters","_query","_result","_resultBig","_pipe"];
 	_parameters = _this;
 	_query = format ["%1:%2:%3", 0, DZE_DbSessionID, _parameters];
-	diag_log format["HIVE WRITE: '%1'", _query];
+	//diag_log format["HIVE WRITE: '%1'", _query];
 	_result = call compile ("extDB2" callExtension _query);
 	switch (_result select 0) do
 	{
@@ -227,7 +227,7 @@ server_hiveReadWrite = {
 			_result = (_result select 1) call server_hiveReadWriteLarge;
 		};
 	};
-	diag_log format["HIVE READ: '%1'", str (_result select 1)];
+	//diag_log format["HIVE READ: '%1'", str (_result select 1)];
 	_result select 1
 };
 
@@ -235,7 +235,7 @@ server_hiveReadWriteSingle = {
 	private["_parameters","_query","_result"];
 	_parameters = _this;
 	_query = format ["%1:%2:%3", 0, DZE_DbSessionID, _parameters];
-	diag_log format["HIVE WRITE: '%1'", _query];
+	//diag_log format["HIVE WRITE: '%1'", _query];
 	_result = call compile ("extDB2" callExtension _query);
 	switch (_result select 0) do
 	{
@@ -248,7 +248,7 @@ server_hiveReadWriteSingle = {
 			_result = (_result select 1) call server_hiveReadWriteLarge;
 		};
 	};
-	diag_log format["HIVE READ: '%1'", str ((_result select 1) select 0)];
+	//diag_log format["HIVE READ: '%1'", str ((_result select 1) select 0)];
 	(_result select 1) select 0
 };
 
@@ -256,7 +256,7 @@ server_hiveReadWriteSingleField = {
 	private["_parameters","_query","_result"];
 	_parameters = _this;
 	_query = format ["%1:%2:%3", 0, DZE_DbSessionID, _parameters];
-	diag_log format["HIVE WRITE: '%1'", _query];
+	//diag_log format["HIVE WRITE: '%1'", _query];
 	_result = call compile ("extDB2" callExtension _query);
 	switch (_result select 0) do
 	{
@@ -269,7 +269,7 @@ server_hiveReadWriteSingleField = {
 			_result = (_result select 1) call server_hiveReadWriteLarge;
 		};
 	};
-	diag_log format["HIVE READ: '%1'", str ((_result select 1) select 0)];
+	//diag_log format["HIVE READ: '%1'", str ((_result select 1) select 0)];
 	((_result select 1) select 0) select 0
 };
 
@@ -288,7 +288,7 @@ server_hiveReadWriteLarge = {
 };
 
 server_loadPlayer = {
-	private["_key","_query","_playerID","_result","_playerName","_charID","_worldspace","_inventory","_backpack","_survival","_model","_hiveVer","_primary","_isInfected","_generation","_humanity","_newPlayer"];
+	private["_key","_query","_playerID","_result","_playerName","_charID","_worldspace","_inventory","_backpack","_survival","_model","_hiveVer","_primary","_isInfected","_generation","_humanity","_newPlayer","_tries"];
 
 	_playerID = _this select 0;
 	_playerName = _this select 1;
@@ -310,11 +310,8 @@ server_loadPlayer = {
 
 	_key = [_playerID];
 	_query = ["playerExists", _key] call dayz_prepareDataForDB;
-	_result = _query call server_hiveReadWrite;
+	_result = _query call server_hiveReadWriteSingleField;
 
-	if (count _result > 0 && {count (_result select 0) > 0}) then {
-		_result = (_result select 0) select 0;
-	};
 	if (_result) then {
 
 		_key = [_playerID,_playerName];
@@ -342,14 +339,15 @@ server_loadPlayer = {
 		_query call server_hiveWrite;
 
 		_newPlayer = false;
-		_worldspace = call compile format["%1", _result select 1];
-		_inventory = call compile format["%1", _result select 2];
-		_backpack = call compile format["%1", _result select 3];
-		_survival = [_result select 4, _result select 5, _result select 6];
-		_model = _result select 7;
+		_worldspace = [_result select 4, [_result select 1, _result select 2, _result select 3]];
+		_inventory = [_result select 6, _result select 5];
+		_backpack = [_result select 7, _result select 9, _result select 8];
+		_survival = [_result select 10, _result select 11, _result select 12];
+		_model = _result select 13;
 		_hiveVer = 0.96;
 
 		_primary = ["PASS", _newPlayer, _charID, _worldspace, _inventory, _backpack, _survival, _model, _hiveVer];
+		diag_log format["Fetching character: %1", _primary];
 	} else {
 		_key = [_playerID];
 		_query = ["getPrevCharacter", _key] call dayz_prepareDataForDB;
@@ -368,27 +366,59 @@ server_loadPlayer = {
 			_humanity = _result select 1;
 			_model = _result select 2;
 			_isInfected = _result select 3;
+
+			diag_log format["Found previous dead char, fetching: [generation:%1, humanity:%2, model:'%3', isInfected:%4]", _generation, _humanity, _model, _isInfected]; 
 		};
 
 		// Add a new character
 		//_key = format["createCharacter:%1:%2:%3:%4:%5:%6:%7:%8",_playerID,_worldspace,_inventory,_backpack,_survival,_generation,_humanity];
 
-		_key = [_playerID, format["'%1'",_worldspace],format["'%1'",_inventory],format["'%1'",_backpack],format["'%1'",_survival],_generation,_humanity];
+		_key = [
+			_playerID, 
+			0,	// x
+			0,	// y
+			0,	// z
+			0,	// direction
+			[],	// inventory mags
+			[],	// inventory weaps
+			"",	// backpack classname
+			[],	// backpack mags
+			[],	// backpack weaps
+			0,	// is dead
+			0,	// is unconscious
+			0,	// is infected
+			0,	// is injured
+			0,	// is inpain
+			0,	// is cardiac arrest
+			0,	// is low blood
+			12000,	// blood qty
+			[],	// wounds
+			0,	// hit legs
+			0,	// hit arms
+			0,	// unconscious time
+			[0,0],	// messing (hunger, thirst)
+			_generation,
+			_humanity
+		];
 		_query = ["createCharacter", _key] call dayz_prepareDataForDB;
 		_query call server_hiveWrite;
 
 		_key = [_playerID];
 		_query = ["getCharacterID", _key] call dayz_prepareDataForDB;
-		while {isNil "_charID"} do {
-			sleep 0.1;
+		_tries = 0;
+		while {isNil "_charID" && _tries < 20} do {
+			sleep 1;
 
 			_result = _query call server_hiveReadWrite;
 			_charID = (_result select 0) select 0;
+			_tries = _tries + 1;
 		};
-
-		_newPlayer = true;
-
-		_primary = ["PASS", _newPlayer, _charID, _isInfected, _model, _hiveVer];
+		if (_tries >= 20) then {
+			_primary = ["ERROR"];
+		} else {
+			_newPlayer = true;
+			_primary = ["PASS", _newPlayer, _charID, _isInfected, _model, _hiveVer];
+		};
 	};
 	_primary
 };
@@ -418,7 +448,38 @@ server_characterSync = {
 	_currentState =	_this select 5;
 	_currentModel = _this select 6;
 
-	_key = [_characterID,format["'%1'",_playerPos],format["'%1'",_playerGear],format["'%1'",_playerBackp],format["'%1'",_medical],format["'%1'",_currentState],_currentModel];
+	//diag_log format["DEBUG: server_characterSync:448: MEDICAL: %1", _medical];
+
+	_key = [
+		_characterID,
+		(_playerPos select 1) select 0,	// x
+		(_playerPos select 1) select 1,	// y
+		(_playerPos select 1) select 2,	// z
+		_playerPos select 0,		// direction
+		_playerGear select 1,		// inv weapons
+		_playerGear select 0,		// inv magazines
+		_playerBackp select 0,		// backpack classname
+		_playerBackp select 2,		// backpack weapons
+		_playerBackp select 1,		// backpack magazines
+		_medical select 0,	// is dead
+		_medical select 1,	// is unconscious
+		_medical select 2,	// is infected
+		_medical select 3,	// is injured
+		_medical select 4,	// is in pain
+		_medical select 5,	// is in cardiac arrest
+		_medical select 6,	// has low blood
+		_medical select 7,	// blood qty
+		_medical select 8,	// wounds array
+		(_medical select 9) select 0,	// hit legs (broken legs)
+		(_medical select 9) select 1,	// hit arms (broken arms)
+		_medical select 10,	// unconscious time
+		_medical select 11,	// messing array [hunger, thirst]
+		_currentState select 0,	// current weapon
+		_currentState select 1,	// current animation
+		_currentState select 2,	// current body temp.
+		_currentState select 3,	// friendlies array
+		_currentModel
+	];
 	_query = ["characterSync", _key] call dayz_prepareDataForDB;
 	_query call server_hiveWrite;
 };
@@ -852,25 +913,14 @@ KK_fnc_floatToString = {
 };
 
 
-KK_fnc_positionToString = {
-    format [
-        "[%1,%2,%3]",
-        _this select 0 call KK_fnc_floatToString,
-        _this select 1 call KK_fnc_floatToString,
-        _this select 2 call KK_fnc_floatToString
-    ]
-};
-
-AN_fnc_formatWorldspace = {
-    private "_ws";
-    _ws = toArray str _this;
-    format ["[%1,%2%3]", _this select 0 call KK_fnc_floatToString, _this select 1 call KK_fnc_positionToString, toString ([_ws, (_ws find 93) + 1, count _ws - 2] call BIS_fnc_subSelect)]
-};
-
 dayz_prepareDataForDB = {
-	private["_opName","_columns","_numItems","_i","_item","_message"];
+	private["_opName","_columns","_numItems","_i","_item","_message","_delim"];
 	_opName = _this select 0;
 	_columns = _this select 1;
+	_delim = ":";
+	if (count _this > 2) then {
+		_delim = _this select 2;
+	};
 
 	// Preprocess
 	_numItems = count _columns;
@@ -881,7 +931,7 @@ dayz_prepareDataForDB = {
 		_message = _opName + ":" + _message;
 		for "_i" from 1 to _numItems - 1 do {
 			_item = _columns select _i;
-			_message = _message + format[":%1", _item];
+			_message = _message + format["%1%2", _delim, _item];
 		};
 	} else {
 		_message = _opName;
@@ -889,6 +939,21 @@ dayz_prepareDataForDB = {
 	_message
 }; 
 
+// This function is needed for the dynamic query for security,
+// the only unstripped character is the single quote, `'`.
+strip_quotes = {
+	private["_result","_arr","_j"];
+	_arr = toArray(_this);
+	_result = [];
+	_j = 0;
+	for "_i" from 0 to (count _arr) - 1 do {
+		if ((_arr select _i) != 39) then {
+			_result set [_j, _arr select _i];
+			_j = _j + 1;
+		};
+	};
+	toString(_result)
+};
 
 //DZGM
 currentInvites = [];
@@ -918,7 +983,7 @@ dayz_perform_purge = {
 dayz_perform_purge_player = {
 
 	private ["_countr","_backpack","_backpackType","_backpackWpn","_backpackMag","_objWpnTypes","_objWpnQty","_location","_dir","_holder","_weapons","_magazines"];
-    diag_log ("Purging player: " + str(_this));	
+	diag_log ("Purging player: " + str(_this));	
 
 	if(!isNull(_this)) then {
 
@@ -1006,8 +1071,7 @@ server_timeSync = {
 	private ["_hour","_minute","_date","_key","_query","_result","_outcome"];
 	_key = [];
 	_query = ["getDateTime", _key] call dayz_prepareDataForDB;
-	_date = _query call server_hiveReadWrite;
-	_date = _date select 0;
+	_date = (_query call server_hiveReadWrite) select 0;
 
 	_hour = _date select 3;
 	_minute = _date select 4;
@@ -1020,7 +1084,7 @@ server_timeSync = {
 	setDate _date;
 	PVDZE_plr_SetDate = _date;
 	publicVariable "PVDZE_plr_SetDate";
-	diag_log ("TIME SYNC: Local Time set to " + str(_date));	
+	//diag_log ("TIME SYNC: Local Time set to " + str(_date));	
 };
 
 // must spawn these 
@@ -1233,9 +1297,22 @@ server_setLocalObjVars = {
 // DZGM
 execVM "\z\addons\dayz_server\init\broadcaster.sqf";
 
+// Lets get the map name for deciding what to add here...
+DZE_Extras_WorldName = toLower format ["%1", worldName];
+diag_log format["%1 detected. Map Specific Settings Adjusted!", DZE_Extras_WorldName];
+
 //Napf Universal bases
-//call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\calling_military_base.sqf";
-//call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\pastorn_military_base.sqf";
-//call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\military_mission_base.sqf";
-//call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\traders.sqf";
-//call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\boat_harbors.sqf";
+if (DZE_Extras_WorldName == "napf") then {
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\calling_military_base.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\pastorn_military_base.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\military_mission_base.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\traders.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\boat_harbors.sqf";
+};
+if (DZE_Extras_WorldName == "chernarus") then {
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\elektro.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\epochbalota.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\epochcherno.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\neaf.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\nwaf.sqf";
+};

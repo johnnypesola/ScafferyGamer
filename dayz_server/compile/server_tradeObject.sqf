@@ -21,11 +21,18 @@ if (DZE_ConfigTrader) then {
 	_outcome = "PASS";
 } else {
 	//Send request
-	_key = [_traderID, _buyorsell];
-	_query = ["tradeObject", _key] call dayz_prepareDataForDB;
+	if (_buyorsell == 1) then { 	// sell
+		_key = [_traderID];
+		_query = ["sellObject", _key] call dayz_prepareDataForDB;
+		_query call server_hiveWrite;
+		_result = ["PASS"];
+	} else {			// buy
+		_key = [_traderID];
+		_query = ["buyObject", _key] call dayz_prepareDataForDB;
+		_data = _query call server_hiveReadWrite;
+		_result = call compile format ["%1",(_data select 0)];
+	};
 
-	_data = _query call server_hiveReadWrite;
-	_result = call compile format ["%1",(_data select 0)];
 	// diag_log ("TRADE: RES: "+ str(_result));
 	_outcome = _result select 0;
 };

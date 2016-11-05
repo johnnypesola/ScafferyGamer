@@ -31,9 +31,24 @@ _uid = _worldspace call dayz_objectUID3;
 // TODO: check if uid already exists && if so increment by 1 && check again as soon as we find nothing continue.
 
 //Send request
-_key = [dayZ_instance, _class, 0 , _characterID, format["'%1'", [_worldspace select 0, _worldspace select 1] call AN_fnc_formatWorldspace], "'[]'", "'[]'", 1, _uid];
+_key = [
+	dayZ_instance,
+	_class,
+	0,	// damage
+	_characterID,
+	((_worldspace select 1) select 0) call KK_fnc_floatToString,	// x
+	((_worldspace select 1) select 1) call KK_fnc_floatToString,	// y
+	((_worldspace select 1) select 2) call KK_fnc_floatToString,	// z
+	(_worldspace select 0) call KK_fnc_floatToString,		// dir
+	[], // inv magazines
+	[], // inv weapons
+	[], // inv backpacks
+	[], // hitpoints
+	1,  // fuel
+	_uid
+];
 _query = ["objectPublish", _key] call dayz_prepareDataForDB;
-diag_log ("HIVE: WRITE: "+ str(_query)); 
+//diag_log ("HIVE: WRITE: "+ str(_query)); 
 _query call server_hiveWrite;
 
 // Switched to spawn so we can wait a bit for the ID
@@ -58,18 +73,18 @@ _query call server_hiveWrite;
 		// GET DB ID
 		_key = [_uid];
 		_query = ["objectReturnID",_key] call dayz_prepareDataForDB;
-		diag_log ("HIVE: WRITE: "+ str(_query));
+		//diag_log ("HIVE: WRITE: "+ str(_query));
 		_result = _query call server_hiveReadWrite;
 		_outcome = (count _result > 0);
 		if (_outcome) then {
 			_oid = (_result select 0) select 0;
 			//_object setVariable ["ObjectID", _oid, true];
-			diag_log("CUSTOM: Selected " + str(_oid));
+			//diag_log("CUSTOM: Selected " + str(_oid));
 			_done = true;
 			_retry = 100;
 
 		} else {
-			diag_log("CUSTOM: trying again to get id for: " + str(_uid));
+			diag_log("TIMEOUT: trying again to get id for vehicle: " + str(_uid));
 			_done = false;
 			_retry = _retry + 1;
 		};
@@ -78,7 +93,7 @@ _query call server_hiveWrite;
 	// Remove marker
 	deleteVehicle _object;
 
-	if(!_done) exitWith { diag_log("CUSTOM: failed to get id for : " + str(_uid)); };
+	if(!_done) exitWith { diag_log("TIMEOUT: failed to get id for vehicle: " + str(_uid)); };
 
 	if(DZE_TRADER_SPAWNMODE) then {
 		_object_para = createVehicle ["ParachuteMediumWest", [0,0,0], [], 0, "CAN_COLLIDE"];

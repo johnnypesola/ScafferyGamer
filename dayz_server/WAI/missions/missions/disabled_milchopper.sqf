@@ -4,7 +4,7 @@ private ["_playerPresent","_cleanmission","_currenttime","_starttime","_missiont
 _vehclass = armed_chopper call BIS_fnc_selectRandom;
 
 _vehname	= getText (configFile >> "CfgVehicles" >> _vehclass >> "displayName");
-_position = [getMarkerPos "center",0,5500,10,0,2000,0] call BIS_fnc_findSafePos;
+_position = [] call wai_find_pos;
 diag_log format["WAI: Mission Armed Chopper Started At %1",_position];
 
 _veh = createVehicle [_vehclass,_position, [], 0, "CAN_COLLIDE"];

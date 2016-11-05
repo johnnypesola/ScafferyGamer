@@ -16,7 +16,7 @@ _lootTable = "HeliCrash";
 
 _crashName	= getText (configFile >> "CfgVehicles" >> _crashModel >> "displayName");
 
-_position = [getMarkerPos _spawnMarker,0,5500,10,0,2000,0] call BIS_fnc_findSafePos;
+_position = [] call wai_find_pos;
 
 //diag_log(format["CRASHSPAWNER: Spawning '%1' with loot table '%2' NOW! (%3) at: %4", _crashName, _lootTable, time, str(_position)]);
 diag_log format["WAI: Mission Crash_Spawner Started At %1",_position];
