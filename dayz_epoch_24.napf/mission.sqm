@@ -1177,7 +1177,7 @@ class Mission
 	};
 	class Markers
 	{
-		items=25;
+		items=27;
 		class Item0
 		{
 			position[]={10010.905,110.96082,10448.559};
@@ -1351,10 +1351,30 @@ class Mission
 			type="mil_circle";
 			colorName="ColorOrange";
 		};
+		class Item25
+		{
+			position[]={18334.291,0,2286.5381};
+			name="FerryZoneArea";
+			text="Ferry Zone Area";
+			markerType="ELLIPSE";
+			type="mil_dot";
+			colorName="ColorBlack";
+			fillName="Border";
+			a=200;
+			b=200;
+		};
+		class Item26
+		{
+			position[]={18334.17,0,2286.5479};
+			name="FerryZone";
+			text="Ferry Zone";
+			type="mil_circle";
+			colorName="ColorBlack";
+		};
 	};
 	class Sensors
 	{
-		items=22;
+		items=23;
 		class Item0
 		{
 			position[]={8246.3184,15.544708,15485.867};
@@ -1701,7 +1721,22 @@ class Mission
 			 
 			};
 		};
-
+		class Item22
+		{
+			position[]={18334.291,0,2286.5381};
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="ferryzone_safezone";
+			expCond="(player distance ferryzone_safezone) < 210;";
+			expActiv="inSafeZone = true; player_inTravelZone = true;";
+			expDesactiv="inSafeZone = false; player_inTravelZone = false;";
+			class Effects
+			{
+			 
+			};
+		};
 	};
 };
 class Intro

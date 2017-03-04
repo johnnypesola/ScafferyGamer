@@ -248,6 +248,9 @@ execVM "admintools\Activate.sqf";
 	};
 };
 
+// Init travel monitor
+execVM "custom\travel\player_travelMonitor.sqf";
+
 // Very simple reticle :P
 [] spawn {
 	while {true} do {

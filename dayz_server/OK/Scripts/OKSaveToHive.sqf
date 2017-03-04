@@ -42,12 +42,24 @@ if (OKEpoch) then {
 	];
 	_query = ["objectPublish", _key] call dayz_prepareDataForDB;
 	diag_log ("HIVE: WRITE: "+ str(_query));
-	_query call server_hiveWrite;
+	_result = _query call server_hiveReadWrite;
+
+	// Try to get object ID already here
+	if (0 < count _result) then {
+		_oid = str (_result select 0);
+		_object setVariable ["ObjectID", _oid, true];
+	};
 	
 	//If the server is busy, it might not write on the first try
 	//Because of this, we loop it until it works
 	_done = false;
 	_retry = 0;
+	if (!isNil "_oid") then {
+
+		_retry = 100;
+		_done = true;
+	};
+
 	while {_retry < 10} do
 	{
 		sleep 0.3;

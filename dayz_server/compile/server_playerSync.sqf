@@ -1,4 +1,4 @@
-private ["_empty","_name","_playerwasNearby","_character","_magazines","_force","_characterID","_charPos","_isInVehicle","_timeSince","_humanity","_debug","_distance","_isNewMed","_isNewPos","_isNewGear","_playerPos","_playerGear","_playerBackp","_medical","_distanceFoot","_lastPos","_backpack","_kills","_killsB","_killsH","_headShots","_lastTime","_timeGross","_timeLeft","_currentWpn","_currentAnim","_config","_onLadder","_isTerminal","_currentModel","_modelChk","_muzzles","_temp","_currentState","_array","_key","_query","_pos","_forceGear","_friendlies","_ws","_updatePos","_updateInv","_updateBackpack","_updateMed"];
+private ["_empty","_name","_playerwasNearby","_character","_magazines","_force","_characterID","_charPos","_isInVehicle","_timeSince","_humanity","_debug","_distance","_isNewMed","_isNewPos","_isNewGear","_playerPos","_playerGear","_playerBackp","_medical","_distanceFoot","_lastPos","_backpack","_kills","_killsB","_killsH","_headShots","_lastTime","_timeGross","_timeLeft","_currentWpn","_currentAnim","_config","_onLadder","_isTerminal","_currentModel","_modelChk","_muzzles","_temp","_currentState","_array","_key","_query","_pos","_forceGear","_friendlies","_ws","_updatePos","_updateInv","_updateBackpack","_updateMed","_direction"];
 
 _character = 	_this select 0;
 _magazines = _this select 1;
@@ -69,6 +69,7 @@ if (_characterID != "0") then {
 	_backpack = "";
 	_ws = "cherno";
 	_friendlies = [];
+	_direction = 0;
 	
 	//diag_log ("Found Character...");
 	
@@ -81,6 +82,7 @@ if (_characterID != "0") then {
 			//diag_log ("getting position..."); sleep 0.05;
 			//_playerPos = 	[round(direction _character),_charPos];
 			_lastPos = 		_character getVariable["lastPos",_charPos];
+			_direction = round (direction _character);
 			if (count _lastPos > 2 && count _charPos > 2) then {
 				if (!_isInVehicle) then {
 					_distanceFoot = round(_charPos distance _lastPos);
@@ -103,7 +105,7 @@ if (_characterID != "0") then {
 	};
 	if (_isNewGear || _forceGear) then {
 		//diag_log ("gear..."); sleep 0.05;
-		//_playerGear = [weapons _character,_magazines];
+		_playerGear = [weapons _character,_magazines];
 		//diag_log ("playerGear: " +str(_playerGear));
 
 		_backpack = unitBackpack _character;
@@ -111,9 +113,9 @@ if (_characterID != "0") then {
 
 		if(_playerwasNearby) then {
 			_empty = [[],[]];
-			//_playerBackp = [typeOf _backpack,_empty,_empty];
+			_playerBackp = [typeOf _backpack,_empty,_empty];
 		} else {
-			//_playerBackp = [typeOf _backpack,getWeaponCargo _backpack,getMagazineCargo _backpack];
+			_playerBackp = [typeOf _backpack,getWeaponCargo _backpack,getMagazineCargo _backpack];
 			_updateBackpack = true;
 		};
 	};
@@ -227,14 +229,14 @@ if (_characterID != "0") then {
 				// Collect data for update
 				[
 					_characterID,
-					_character,
+					_playerGear,
 					_updatePos,
 					_ws,
 					_charPos,
 					_updateInv,
-					_magazines,
+					_direction,
 					_updateBackpack,
-					_backpack,
+					_playerBackp,
 					_updateMed,
 					_medical,
 					_kills,
@@ -250,23 +252,23 @@ if (_characterID != "0") then {
 					_currentModel,
 					_humanity
 				] spawn {
-					private["_query", "_key","_characterID","_character","_updatePos","_ws","_charPos",
-						"_updateInv","_magazines","_updateBackpack","_backpack","_updateMed","_medical","_isDead",
+					private["_query", "_key","_characterID","_playerGear","_updatePos","_ws","_charPos",
+						"_updateInv","_direction","_updateBackpack","_playerBackp","_updateMed","_medical","_isDead",
 						"_isUncon","_isInfect","_isInjured","_isInPain","_isCardiac","_isLowBlood",
 						"_kills","_headShots","_distanceFoot","_timeSince","_currentWpn","_currentAnim",
 						"_temp","_friendlies","_killsH","_killsB","_currentModel","_humanity","_empty","_prof"];
 
-					_prof = diag_tickTime;
+					//_prof = diag_tickTime;
 					_key = [];
 					_characterID = _this select 0;
-					_character = _this select 1;
+					_playerGear = _this select 1;
 					_updatePos = _this select 2;
 					_ws = _this select 3;
 					_charPos = _this select 4;
 					_updateInv = _this select 5;
-					_magazines = _this select 6;
+					_direction = _this select 6;
 					_updateBackpack = _this select 7;
-					_backpack = _this select 8;
+					_playerBackp = _this select 8;
 					_updateMed = _this select 9;
 					_medical = _this select 10;
 					_kills = _this select 11;
@@ -282,24 +284,26 @@ if (_characterID != "0") then {
 					_currentModel = _this select 21;
 					_humanity = _this select 22;
 
+					_key = _key + [format["instance_id = %1", dayZ_instance]];
+
 					if (_updatePos) then {
 						_key = _key + [
 							format["ws_%1_x = %2", _ws, _charPos select 0],
 							format["ws_%1_y = %2", _ws, _charPos select 1],
 							format["ws_%1_z = %2", _ws, _charPos select 2],
-							format["ws_%1_dir = %2", _ws, round(direction _character)]
+							format["ws_%1_dir = %2", _ws, _direction]
 						];
 					};
 					if (_updateInv) then {
 						_key = _key + [
-							format["inventory_magazines = '%1'", (str _magazines) call strip_quotes],
-							format["inventory_weapons = '%1'", (str (weapons _character)) call strip_quotes],
-							format["backpack = '%1'", (typeOf _backpack) call strip_quotes]
+							format["inventory_magazines = '%1'", (str (_playerGear select 1)) call strip_quotes],
+							format["inventory_weapons = '%1'", (str (_playerGear select 0)) call strip_quotes],
+							format["backpack = '%1'", (_playerBackp select 0) call strip_quotes]
 						];
 						if (_updateBackpack) then {
 							_key = _key + [
-								format["backpack_magazines = '%1'", (str (getMagazineCargo _backpack)) call strip_quotes],
-								format["backpack_weapons = '%1'", (str (getWeaponCargo _backpack)) call strip_quotes]
+								format["backpack_magazines = '%1'", (str (_playerBackp select 2)) call strip_quotes],
+								format["backpack_weapons = '%1'", (str (_playerBackp select 1)) call strip_quotes]
 							];
 						} else {
 							_empty = [[],[]];
@@ -368,14 +372,16 @@ if (_characterID != "0") then {
 					};};
 					//diag_log format["DEBUG: server_playerSync: %1", _key];
 
-					_prof = diag_tickTime - _prof;
+					//_prof = diag_tickTime - _prof;
 
-					diag_log format ["Data processing took: %1 seconds", _prof];
+					//diag_log format ["Data processing took: %1 seconds", _prof];
 
 					//Wait for HIVE to be free
 					// Send request in background
 					_query = [format["playerUpdate:%1", _characterID call strip_quotes], _key, ","] call dayz_prepareDataForDB;
 					_query call server_hiveWrite;
+
+					//_character setVariable["write_lock", false, false];
 				};
 
 				//diag_log ("HIVE: WRITE: "+ str(_query) + " / " + _characterID);

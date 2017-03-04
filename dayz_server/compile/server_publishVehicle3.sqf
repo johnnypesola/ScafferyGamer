@@ -1,4 +1,4 @@
-private ["_activatingPlayer","_isOK","_object","_worldspace","_location","_dir","_class","_uid","_key","_query","_keySelected","_characterID","_donotusekey"];
+private ["_activatingPlayer","_isOK","_object","_worldspace","_location","_dir","_class","_uid","_key","_query","_keySelected","_characterID","_donotusekey","_result","_oid"];
 //PVDZE_veh_Publish2 = [_veh,[_dir,_location],_part_out,false,_keySelected,_activatingPlayer];
 _object = 		_this select 0;
 _worldspace = 	_this select 1;
@@ -42,25 +42,27 @@ _key = [
 ];
 _query = ["objectPublish",_key] call dayz_prepareDataForDB;
 //diag_log ("HIVE: WRITE: "+ str(_query)); 
-_query call server_hiveWrite;
+_result = _query call server_hiveReadWrite;
 
 // Switched to spawn so we can wait a bit for the ID
 [_object,_uid,_characterID,_class,_dir,_location,_donotusekey,_activatingPlayer] spawn {
-   private ["_object","_uid","_characterID","_done","_retry","_key","_result","_outcome","_oid","_class","_location","_donotusekey","_activatingPlayer","_countr","_objectID","_objectUID","_dir","_newobject","_weapons","_magazines","_backpacks","_objWpnTypes","_objWpnQty"];
+	private ["_object","_uid","_characterID","_done","_retry","_key","_result","_outcome","_oid","_class","_location","_donotusekey","_activatingPlayer","_countr","_objectID","_objectUID","_dir","_newobject","_weapons","_magazines","_backpacks","_objWpnTypes","_objWpnQty"];
 
-   _object = _this select 0;
-   _objectID 	= _object getVariable ["ObjectID","0"];
-   _objectUID	= _object getVariable ["ObjectUID","0"];
-   _uid = _this select 1;
-   _characterID = _this select 2;
-   _class = _this select 3;
-   _dir = _this select 4;
-   // _location = _this select 5;
-   _location = getPosATL _object;
-   _donotusekey = _this select 6;
-   _activatingPlayer = _this select 7;
+	_object = _this select 0;
+	_objectID 	= _object getVariable ["ObjectID","0"];
+	_objectUID	= _object getVariable ["ObjectUID","0"];
+	_uid = _this select 1;
+	_characterID = _this select 2;
+	_class = _this select 3;
+	_dir = _this select 4;
+	// _location = _this select 5;
+	_location = getPosATL _object;
+	_donotusekey = _this select 6;
+	_activatingPlayer = _this select 7;
 
-   _done = false;
+	_oid = "0";
+
+	_done = false;
 	_retry = 0;
 	// TODO: Needs major overhaul for 1.1
 	while {_retry < 10} do {

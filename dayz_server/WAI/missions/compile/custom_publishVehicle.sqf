@@ -1,4 +1,4 @@
-private ["_object","_worldspace","_location","_dir","_class","_uid","_dam","_hitpoints","_selection","_array","_damage","_fuel","_key","_query","_totaldam","_spawnDMG","_characterID"];
+private ["_object","_worldspace","_location","_dir","_class","_uid","_dam","_hitpoints","_selection","_array","_damage","_fuel","_key","_query","_totaldam","_spawnDMG","_characterID","_result","_oid"];
 //[_veh,[_dir,_location],"V3S_Civ",true]
 _object = 		_this select 0;
 _worldspace = 	_this select 1;
@@ -67,24 +67,37 @@ _key = [
 ];
 _query = ["objectPublish", _key] call dayz_prepareDataForDB;
 diag_log ("HIVE: WRITE: "+ str(_query)); 
-_query call server_hiveWrite;
+_result = _query call server_hiveReadWrite;
+
+// Try to get object ID already here
+if (0 < count _result) then {
+	_oid = str (_result select 0);
+	_object setVariable ["ObjectID", _oid, true];
+};
 
 PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_object];
 
 // Switched to spawn so we can wait a bit for the ID
-[_object,_uid,_fuel,_damage,_array,_characterID,_class] spawn {
-   private["_object","_uid","_fuel","_damage","_array","_characterID","_done","_retry","_key","_result","_outcome","_oid","_selection","_dam","_class"];
+[_object,_uid,_fuel,_damage,_array,_characterID,_class,_oid] spawn {
+	private["_object","_uid","_fuel","_damage","_array","_characterID","_done","_retry","_key","_result","_outcome","_oid","_selection","_dam","_class"];
 
-   _object = _this select 0;
-   _uid = _this select 1;
-   _fuel = _this select 2;
-   _damage = _this select 3;
-   _array = _this select 4;
-   _characterID = _this select 5;
-   _class = _this select 6;
+	_object = _this select 0;
+	_uid = _this select 1;
+	_fuel = _this select 2;
+	_damage = _this select 3;
+	_array = _this select 4;
+	_characterID = _this select 5;
+	_class = _this select 6;
+	_oid = _this select 7;
 
-   _done = false;
+	_done = false;
 	_retry = 0;
+	if (!isNil "_oid") then {
+
+		_retry = 100;
+		_done = true;
+	};
+
 	// TODO: Needs major overhaul
 	while {_retry < 10} do {
 		

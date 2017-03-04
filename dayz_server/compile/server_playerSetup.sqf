@@ -96,15 +96,28 @@ if (count _worldspace > 0) then {
 	if (_distance < 500) then {
 		_randomSpot = true;
 	};
-	
+
+	// Must disable for ferry service to work as intended
 	// Came from another server force random spawn
 	//if (_lastinstance != dayZ_instance) then {
-	//	_randomSpot = true;	// TODO: Ferry! Remove random spot spawn, and instead set the ferry arrival spot here
+	//	_randomSpot = true;
 	//};
-
 	//_playerObj setPosATL _position;
 } else {
 	_randomSpot = true;
+};
+
+if (_lastinstance != dayZ_instance) then {
+
+	// Ferry! Make player spawn at Skalisty Island in Chernarus and at South Airstrip in Napf.
+
+	diag_log format["FERRY: Detected player %1 coming from instance %2, spawning at ferry terminal.", _playerID, _lastinstance];
+
+	_randomSpot = false;
+
+	if (!isDedicated) then {endLoadingScreen;};
+	_debug = getMarkerpos "respawn_west";
+	_worldspace = [0,[_debug select 0,_debug select 1,0.3]];
 };
 
 //diag_log ("LOGIN: Location: " + str(_worldspace) + " doRnd?: " + str(_randomSpot));
@@ -260,7 +273,7 @@ _playerObj setVariable["lastPos",getPosATL _playerObj];
 
 // ESS
 //dayzPlayerLogin2 = [_worldspace,_state];
-dayzPlayerLogin2 = [_worldspace,_state,_randomSpot];
+dayzPlayerLogin2 = [_worldspace,_state,_randomSpot,(_lastinstance!=dayZ_instance)];
 
 // PVDZE_obj_Debris = DZE_LocalRoadBlocks;
 _clientID = owner _playerObj;

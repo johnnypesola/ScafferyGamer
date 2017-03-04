@@ -32,6 +32,11 @@ server_maintainArea = 			compile preprocessFileLineNumbers "\z\addons\dayz_serve
 /* PVS/PVC - Skaronator */
 server_sendToClient =			compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\server_sendToClient.sqf";
 
+// --- Ferry ---
+server_ferry_transportVehicle =		compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\server_ferry_transportVehicle.sqf";
+server_ferry_getVehicleCrewAssignments =compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\server_ferry_getVehicleCrewAssignments.sqf";
+server_ferry_receiveVehicle =		compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\server_ferry_receiveVehicle.sqf";
+
 //onPlayerConnected 			{[_uid,_name] call server_onPlayerConnect;};
 onPlayerDisconnected 		{[_uid,_name] call server_onPlayerDisconnect;};
 
@@ -900,6 +905,11 @@ dayz_recordLogin = {
 	_key = [_this select 0,_this select 1,_this select 2];
 	_query = ["recordCharacterLogin", _key] call dayz_prepareDataForDB;
 	_query call server_hiveWrite;
+
+	// This should be a good point where to confirm arrival to server.
+	{
+		if ((_this select 0) == getPlayerUID _x) exitWith {_x setVariable ["readyToBoard", true, false];};
+	} forEach playableUnits;
 };
 
 KK_fnc_floatToString = {
@@ -1303,11 +1313,13 @@ diag_log format["%1 detected. Map Specific Settings Adjusted!", DZE_Extras_World
 
 //Napf Universal bases
 if (DZE_Extras_WorldName == "napf") then {
+	server_ferryTerminalPos = [18333.551, 2286.2048, 0];
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\calling_military_base.sqf";
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\pastorn_military_base.sqf";
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\military_mission_base.sqf";
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\traders.sqf";
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\boat_harbors.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\ferry_terminal_napf.sqf";
 };
 if (DZE_Extras_WorldName == "chernarus") then {
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\elektro.sqf";
@@ -1315,4 +1327,5 @@ if (DZE_Extras_WorldName == "chernarus") then {
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\epochcherno.sqf";
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\neaf.sqf";
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\nwaf.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\ferry_terminal_chernarus.sqf";
 };

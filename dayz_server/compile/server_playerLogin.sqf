@@ -23,9 +23,9 @@ if (count _this > 2) then {
 //Variables
 _inventory =	[];
 _backpack = 	[];
-_survival =		[0,0,0];
+_survival =	[0,0,0];
 _isInfected =   0;
-_model =		"";
+_model =	"";
 
 if (_playerID == "") then {
 	_playerID = getPlayerUID _playerObj;
@@ -151,3 +151,7 @@ if (worldName == "chernarus") then {
 
 dayzPlayerLogin = [_charID,_inventory,_backpack,_survival,_isNew,dayz_versionNo,_model,_isHiveOk,_newPlayer,_isInfected];
 (owner _playerObj) publicVariableClient "dayzPlayerLogin";
+
+
+// NOTE: Some of the ferry code resides in server_playerSetup.sqf where position is sent out
+// Check for chernarus spawn spot.

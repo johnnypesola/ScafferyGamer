@@ -194,4 +194,3 @@ class CfgSounds
 #include "traders\trader_menus.hpp"
 #include "zupa\advancedTrading\ZSCdefines.hpp" // if u don't have it from ZSC
 #include "zupa\advancedTrading\advancedTrading.hpp"
-
