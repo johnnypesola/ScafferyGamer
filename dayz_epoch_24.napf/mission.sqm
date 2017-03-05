@@ -1353,19 +1353,19 @@ class Mission
 		};
 		class Item25
 		{
-			position[]={18334.291,0,2286.5381};
+			position[]={15700.0,0,184.0};
 			name="FerryZoneArea";
 			text="Ferry Zone Area";
 			markerType="ELLIPSE";
 			type="mil_dot";
 			colorName="ColorBlack";
 			fillName="Border";
-			a=200;
-			b=200;
+			a=300;
+			b=300;
 		};
 		class Item26
 		{
-			position[]={18334.17,0,2286.5479};
+			position[]={15700.17,0,184.01};
 			name="FerryZone";
 			text="Ferry Zone";
 			type="mil_circle";
@@ -1723,13 +1723,13 @@ class Mission
 		};
 		class Item22
 		{
-			position[]={18334.291,0,2286.5381};
+			position[]={15700.0,0,184.0};
 			activationBy="ANY";
 			repeating=1;
 			interruptable=1;
 			age="UNKNOWN";
 			name="ferryzone_safezone";
-			expCond="(player distance ferryzone_safezone) < 210;";
+			expCond="(player distance ferryzone_safezone) < 310;";
 			expActiv="inSafeZone = true; player_inTravelZone = true;";
 			expDesactiv="inSafeZone = false; player_inTravelZone = false;";
 			class Effects

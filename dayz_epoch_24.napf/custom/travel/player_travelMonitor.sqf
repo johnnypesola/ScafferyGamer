@@ -34,7 +34,6 @@ if (isServer) then {
 			_veh = objNull;
 			_rcvdVeh = objNull;
 
-			cutText ["","BLACK OUT",0];
 			_debug = getMarkerPos "respawn_west";
 			if (getText(configFile >> "CfgMods" >> "DayZ" >> "dir") == "@DayZ_Epoch") then {
 				if (surfaceIsWater _debug) then {
@@ -66,6 +65,10 @@ if (isServer) then {
 				};
 			};
 			diag_log "Travel: Done!";
+
+			if (100 > (player distance [0,0,0])) then {
+				cutText["","BLACK OUT",1];
+			};
 
 			while {alive player} do {
 

@@ -25,33 +25,52 @@ if (isServer) then {
 
 	if (isNil "checked_receiveVehicle") then { checked_receiveVehicle = false; };
 	if (isNil "travelMonitorRunning") then { travelMonitorRunning = false; };
-
-	if (isNil "player_inTravelZone") then {
-		player_inTravelZone = false;
-	};
+	if (isNil "player_inTravelZone") then {	player_inTravelZone = false; };
 
 	if (!travelMonitorRunning) then {
 		[] spawn {
-			private ["_menu","_veh","_rcvdVeh"];
+			private ["_menu","_veh","_rcvdVeh","_debug","_platform","_isPZombie","_holder"];
 			_menu = -1;
 			_veh = objNull;
 			_rcvdVeh = objNull;
 
-			while {alive player} do {
-
-				if (!isNil "dayz_clientPreload" && {dayz_clientPreload} && {!isNull player}) then {
-
-					// If this player transported something to this server - will be executed once.
-					if (!checked_receiveVehicle) then {
-						// Check if after login to a server there are pending transports to be received
-						PV_travel_receiveVeh = [player];
-						publicVariableServer "PV_travel_receiveVeh";
-
-						// This will call a series of events which will spawn in a transported vehicle
-						// and put the player inside, but only if there was a vehicle in transit to this server.
-						checked_receiveVehicle = true;
-					};
+			_debug = getMarkerPos "respawn_west";
+			if (getText(configFile >> "CfgMods" >> "DayZ" >> "dir") == "@DayZ_Epoch") then {
+				if (surfaceIsWater _debug) then {
+					_debug set [2,2];
+					_platform = "MetalFloor_DZ" createVehicleLocal _debug;
+					_platform setPosASL _debug;
+					_platform allowDamage false;
+					_platform hideObject true;
+					_platform enableSimulation false;
 				};
+				diag_log "Travel: Waiting for login...";
+				waitUntil {!isNil "PVDZE_plr_LoginRecord"};
+				_isPZombie = player isKindOf "PZombie_VB";
+			} else {
+				waitUntil {!isNil "PVDZ_plr_LoginRecord"};
+				_isPZombie = false;
+			};
+			diag_log "Travel: Login complete!";
+
+			// If this player transported something to this server - will be executed once.
+			// Check if after login to a server there are pending transports to be received
+
+			diag_log "Travel: Waiting for player to enter game...";
+			waitUntil {!isNil "dayzPlayerLogin2"};
+			if (3 < count dayzPlayerLogin2) then {
+				if (dayzPlayerLogin2 select 3) then {
+					PV_travel_receiveVeh = [player];
+					publicVariableServer "PV_travel_receiveVeh";
+				};
+			};
+			diag_log "Travel: Done!";
+
+			if (100 > (player distance [0,0,0])) then {
+				cutText["","BLACK OUT",1];
+			};
+
+			while {alive player} do {
 
 				if (_menu == -1) then {
 					if (player_inTravelZone && player != vehicle player) then {

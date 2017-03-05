@@ -1,4 +1,4 @@
-private ["_activatingPlayer","_isOK","_veh","_worldspace","_location","_dir","_class","_uid","_key","_query","_keySelected","_donotusekey","_result","_oid","_row","_fromInstance","_toInstance","_class","_charID","_inventoryMagazines","_inventoryWeapons","_inventoryBackpacks","_hitpoints","_fuel","_damage","_objWpnTypes","_objWpnQty","_passengers","_passengerIdx","_isBoat","_playerUID","_playerName","_pos","_found","_driver","_commander","_turrets","_subturrets","_cargo"];
+private ["_activatingPlayer","_isOK","_veh","_worldspace","_location","_dir","_class","_uid","_key","_query","_keySelected","_donotusekey","_result","_oid","_row","_fromInstance","_toInstance","_class","_charID","_inventoryMagazines","_inventoryWeapons","_inventoryBackpacks","_hitpoints","_fuel","_damage","_objWpnTypes","_objWpnQty","_passengers","_passengerIdx","_canBeOverWater","_playerUID","_playerName","_pos","_found","_driver","_commander","_turrets","_subturrets","_cargo"];
 
 _activatingPlayer = _this select 0;
 
@@ -90,10 +90,10 @@ for "_i" from 0 to (count _cargo)-1 do {
 
 if (_fromInstance == dayZ_instance) exitWith { diag_log format["FERRY: Vehicle %1 was sent from this instance by %2 [%3], it will not be spawned in.", _class, _playerName, _playerUID]; };
 
-if (_class isKindOf "Boat") then { _isBoat = 2; } else { _isBoat = 0; };
+if (_class isKindOf "Boat" || _class isKindOf "Air") then { _canBeOverWater = 2; } else { _canBeOverWater = 0; };
 
 _dir = 0;
-_pos = [server_ferryTerminalPos, 10, 1000, 10, _isBoat, 0.5, 0] call BIS_fnc_findSafePos; // Set position to somewhere safe in spawning zone
+_pos = [server_ferryTerminalPos, 10, 1000, 10, _canBeOverWater, 0.5, 0] call BIS_fnc_findSafePos; // Set position to somewhere safe in spawning zone
 
 if (_damage >= 1) exitWith {
 	diag_log format ["FERRY: Vehicle %1 transported in by player %2 [%3] has been destroyed!", _class, _playerName, _playerUID];
@@ -101,7 +101,7 @@ if (_damage >= 1) exitWith {
 
 if (_class isKindOf "Air") then {
 	// Create at 500m altitude
-	_veh = createVehicle [_class, [_pos select 0, _pos select 1, 500], [], 0, "FLY"];
+	_veh = createVehicle [_class, [_pos select 0, _pos select 1, 400], [], 0, "FLY"];
 	_veh setVariable ["ObjectID", "1"];	// Protect the vehicle so that server won't delete it
 } else {
 	// Create on ground / water surface
