@@ -1299,7 +1299,7 @@ class Mission
 		{
 			position[]={14800.0,0,2860.0};
 			name="FerryZoneArea";
-			text="Ferry Zone Area";
+			text="Travel Zone Area";
 			markerType="ELLIPSE";
 			type="mil_dot";
 			colorName="ColorBlack";
@@ -1311,7 +1311,7 @@ class Mission
 		{
 			position[]={14800.01,0,2860.01};
 			name="FerryZone";
-			text="Ferry Zone";
+			text="Travel Zone";
 			type="mil_circle";
 			colorName="ColorBlack";
 		};

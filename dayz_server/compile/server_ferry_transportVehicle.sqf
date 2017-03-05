@@ -55,9 +55,9 @@ diag_log format ["FERRY: Player %1 [%2], attempts to transport a vehicle of type
 // Check position
 _dir = 		_worldspace select 0;
 _location =	_worldspace select 1;
-if ((_location distance server_ferryTerminalPos) > 211) exitWith {
-	diag_log format["FERRY: Player %1 [%2]: Vehicle %3 is too far (%4m > 211m) to terminal!",
-		_playerName, _playerUID, _class, _location distance server_ferryTerminalPos];
+if ((_location distance server_ferryTerminalPos) > server_ferryTerminalRadius) exitWith {
+	diag_log format["FERRY: Player %1 [%2]: Vehicle %3 is too far (%4m > %5m) to terminal!",
+		_playerName, _playerUID, _class, _location distance server_ferryTerminalPos, server_ferryTerminalRadius];
 };
 
 // Check if already in transit

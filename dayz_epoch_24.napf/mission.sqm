@@ -1353,9 +1353,9 @@ class Mission
 		};
 		class Item25
 		{
-			position[]={15700.0,0,184.0};
+			position[]={15700.0,0,559.0};
 			name="FerryZoneArea";
-			text="Ferry Zone Area";
+			text="Travel Zone Area";
 			markerType="ELLIPSE";
 			type="mil_dot";
 			colorName="ColorBlack";
@@ -1365,9 +1365,9 @@ class Mission
 		};
 		class Item26
 		{
-			position[]={15700.17,0,184.01};
+			position[]={15700.17,0,559.01};
 			name="FerryZone";
-			text="Ferry Zone";
+			text="Travel Zone";
 			type="mil_circle";
 			colorName="ColorBlack";
 		};
@@ -1723,7 +1723,7 @@ class Mission
 		};
 		class Item22
 		{
-			position[]={15700.0,0,184.0};
+			position[]={15700.0,0,559.0};
 			activationBy="ANY";
 			repeating=1;
 			interruptable=1;

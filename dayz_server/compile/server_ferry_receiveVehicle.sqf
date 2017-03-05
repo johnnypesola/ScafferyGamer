@@ -88,24 +88,34 @@ for "_i" from 0 to (count _cargo)-1 do {
 };
 
 
-if (_fromInstance == dayZ_instance) exitWith { diag_log format["FERRY: Vehicle %1 was sent from this instance by %2 [%3], it will not be spawned in.", _class, _playerName, _playerUID]; };
+if (_fromInstance == dayZ_instance) exitWith {
 
-if (_class isKindOf "Boat" || _class isKindOf "Air") then { _canBeOverWater = 2; } else { _canBeOverWater = 0; };
+	diag_log format["FERRY: Vehicle %1 was sent from this instance by %2 [%3], it will not be spawned in.", _class, _playerName, _playerUID]; 
+	PV_travel_boardRcvdVeh = [0, objNull, 0, []];
+	(owner _activatingPlayer) publicVariableClient "PV_travel_boardRcvdVeh";
+	diag_log format ["FERRY: Send client %1 (%2) to ferry terminal.", owner _activatingPlayer, _playerName];
+};
 
-_dir = 0;
-_pos = [server_ferryTerminalPos, 10, 1000, 10, _canBeOverWater, 0.5, 0] call BIS_fnc_findSafePos; // Set position to somewhere safe in spawning zone
+_canBeOverWater = 1;
+_pos = [server_ferryTerminalPos, 0, 300, 10, _canBeOverWater, 20, 0] call BIS_fnc_findSafePos; // Set position to somewhere safe in spawning zone
+
+diag_log format ["FERRY: Spawning vehicle at %1", _pos];
 
 if (_damage >= 1) exitWith {
 	diag_log format ["FERRY: Vehicle %1 transported in by player %2 [%3] has been destroyed!", _class, _playerName, _playerUID];
 };
 
+
+_dir = 0; // Always face north
 if (_class isKindOf "Air") then {
-	// Create at 500m altitude
-	_veh = createVehicle [_class, [_pos select 0, _pos select 1, 400], [], 0, "FLY"];
+	// Create at 400m altitude
+	_pos = [_pos select 0, _pos select 1, 400];
+	_veh = createVehicle [_class, ATLToASL (_pos), [], 0, "FLY"];
 	_veh setVariable ["ObjectID", "1"];	// Protect the vehicle so that server won't delete it
 } else {
 	// Create on ground / water surface
-	_veh = createVehicle [_class, _pos, [], 0, "CAN_COLLIDE"];
+	_pos = [_pos select 0, _pos select 1, 0.1];
+	_veh = createVehicle [_class, ATLToASL (_pos), [], 0, "CAN_COLLIDE"];
 	_veh setVariable ["ObjectID", "1"];	// Protect the vehicle so that server won't delete it
 };
 
@@ -153,17 +163,17 @@ clearWeaponCargoGlobal  _veh;
 clearMagazineCargoGlobal  _veh;
 
 _veh setdir _dir;
-if (_class isKindOf "air") then {
-	_veh setposATL [_pos select 0, _pos select 1, 500];
+if (_veh isKindOf "Air") then {
+	_veh setposASL [_pos select 0, _pos select 1, 400];
+	_pos = getPosASL _veh;
+	if (3 > count _pos) then { _pos = ATLToASL ([_pos select 0, _pos select 1, 0.01]);};
 } else {
-	if (count _pos < 3) then {
-		_veh setposATL [_pos select 0, _pos select 1, 0];
-	} else {
-		_veh setposATL _pos;
-	};
+	_veh setposASL [_pos select 0, _pos select 1, 0.01];
+	_pos = getPosASL _veh;
+	if (3 > count _pos) then { _pos = ATLToASL ([_pos select 0, _pos select 1, 0.01]);};
 };
-_pos = getPosATL _veh;
-if (count _pos < 3) then { _pos = [_pos select 0, _pos select 1, 0];};
+
+diag_log format ["FERRY: Spawning vehicle at %1", _pos];
 
 {
 	_selection = _x select 0;
@@ -244,10 +254,14 @@ _query = ["objectPublish", _key] call dayz_prepareDataForDB;
 _result = _query call server_hiveReadWrite;
 
 // Try to get object ID already here
-if (0 < count _result) then {
-	_oid = str (_result select 0);
-	_veh setVariable ["ObjectID", _oid, true];
-	diag_log format["FERRY: Successfully published %1 with uid: %2 and object_id: %3", _class, _uid, _oid];
+if ((typeName _result) == "ARRAY") then {
+	if (0 < count _result) then {
+		_oid = str (_result select 0);
+		_veh setVariable ["ObjectID", _oid, true];
+		diag_log format["FERRY: Successfully published %1 with uid: %2 and object_id: %3", _class, _uid, _oid];
+	};
+} else {
+	diag_log format["FERRY: Failed to publish vehicle %1 with uid: %2 and object_id: %3: %4", _class, _uid, _oid, _result];
 };
 
 PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_veh];
