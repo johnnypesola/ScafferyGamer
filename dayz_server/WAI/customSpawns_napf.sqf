@@ -32,6 +32,8 @@ Place your custom group spawns below
 	_wp = ai_patrol_radius_wp;
 	ai_patrol_radius = 25;
 	ai_patrol_radius_wp = 4;
+	_thebox = objNull;
+
 
 	// Guards 1
 	[[16745.498, 19048.521, 0.01], //position
@@ -193,7 +195,7 @@ Place your custom group spawns below
 	clearMagazineCargoGlobal _thebox;
 	_thebox setVariable ["ObjectID","1",true];
 	_thebox setVariable ["permaLoot",true];
-	PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_thebox];
+	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_thebox];
 
 	clearWeaponCargoGlobal _thebox;
 	clearMagazineCargoGlobal _thebox;
@@ -205,8 +207,8 @@ Place your custom group spawns below
 
 	_rare_loot_items = [
 		["ItemBriefcase100oz", 94],
-		["ItemTopaz", 5],
-		["ItemSapphire", 1]
+		["ItemObsidian", 5],
+		["ItemAmethyst", 1]
 	];
 
 	_numberofitems = (round (random 5)) + _hidden_box_number_of_gold;
@@ -261,18 +263,24 @@ Place your custom group spawns below
 	// RESPAWN AI TIER 2 FOR THIS BASE
 	// ===============================
 
+	if (!isNull _thebox) then {
+		deleteVehicle _thebox;
+		sleep 0.1;
+	};
+
+	_thebox = createVehicle ["USOrdnanceBox",[16771.174, 19084.066, -7.0571899e-005], [], 0, "CAN_COLLIDE"];
 	clearWeaponCargoGlobal _thebox;
 	clearMagazineCargoGlobal _thebox;
 
 	_hidden_box_number_of_gold = 2;
 	_hidden_box_random_items = [
-		"ItemTopaz"
+		"ItemObsidian"
 	];
 
 	_rare_loot_items = [
 		["ItemBriefcase100oz", 17],
-		["ItemTopaz", 2],
-		["ItemSapphire", 1]
+		["ItemObsidian", 2],
+		["ItemAmethyst", 1]
 	];
 
 	// Add the normal valuables...
@@ -541,7 +549,8 @@ Place your custom group spawns below
 	sleep 0.1;
 
 	// SPAWN US HEAVY FORCES
-	_entities = ["LAV25", "M1126_ICV_M2_EP1", "M1128_MGS_EP1", "AAV", "M2A2_EP1", "BAF_FV510_W"];
+	_entities = ["AAV", "M2A2_EP1", "BAF_FV510_W"];
+	//_entities = ["LAV25", "M1126_ICV_M2_EP1", "M1128_MGS_EP1", "AAV", "M2A2_EP1", "BAF_FV510_W"];
 	_positions = 
 	[
 		[16567.605, 19159.955, 0.011580579],

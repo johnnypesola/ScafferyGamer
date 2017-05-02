@@ -12,7 +12,7 @@ clearWeaponCargoGlobal _crate;
 clearMagazineCargoGlobal _crate;
 
 // Define lists. Some lists are defined in OKWeaponCrateList.sqf in the ExtConfig.
-_bpackList = ["DZ_Assault_Pack_EP1","DZ_Czech_Vest_Puch","DZ_British_ACU","DZ_CivilBackpack_EP1","DZ_Backpack_EP1"];
+_bpackList = ["DZ_Assault_Pack_EP1","DZ_Czech_Vest_Pouch","DZ_British_ACU","DZ_CivilBackpack_EP1","DZ_Backpack_EP1"];
 _gshellList = ["HandGrenade_west","1Rnd_HE_M203","6Rnd_HE_M203"];
 _medical = ["ItemBandage","ItemMorphine","ItemEpinephrine","ItemPainkiller","ItemWaterbottle","FoodMRE","ItemAntibiotic","ItemBloodbag"];
 

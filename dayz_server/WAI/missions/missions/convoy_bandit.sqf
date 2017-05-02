@@ -17,7 +17,7 @@ _veh setDir _vehdir;
 clearWeaponCargoGlobal _veh;
 clearMagazineCargoGlobal _veh;
 _veh setVariable ["ObjectID","1",true];
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_veh];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_veh];
 diag_log format["WAI: Mission Soldier Convoy spawned a %1",_vehclass];
 
 _objPosition = getPosATL _veh;
@@ -27,7 +27,7 @@ _veh2 setDir _vehdir;
 clearWeaponCargoGlobal _veh2;
 clearMagazineCargoGlobal _veh2;
 _veh2 setVariable ["ObjectID","1",true];
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_veh2];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_veh2];
 diag_log format["WAI: Mission Soldier Convoy spawned a %1",_vehclass2];
 
 _objPosition2 = getPosATL _veh2;
@@ -37,7 +37,7 @@ _veh3 setDir _vehdir;
 clearWeaponCargoGlobal _veh3;
 clearMagazineCargoGlobal _veh3;
 _veh3 setVariable ["ObjectID","1",true];
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_veh3];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_veh3];
 diag_log format["WAI: Mission Soldier Convoy spawned a %1",_vehclass3];
 
 _objPosition3 = getPosATL _veh3;

@@ -7,17 +7,17 @@
 OKpistolList = ["Colt1911","glock17_EP1","M9","M9SD","Makarov","MakarovSD","revolver_EP1","UZI_EP1","UZI_SD_EP1"];
 
 // Sniper Rifles
-OKsniperList = ["SVD_CAMO","DMR_DZ","M40A3","M107_DZ","M110_NVG_EP1","SCAR_H_LNG_Sniper","SCAR_H_LNG_Sniper_SD","BAF_LRR_scoped"];
+OKsniperList = ["SVD_CAMO","DMR","M40A3","m107","M110_NVG_EP1","SCAR_H_LNG_Sniper","SCAR_H_LNG_Sniper_SD","BAF_LRR_scoped"];
 
 // Light Machineguns
-OKmgList = ["M240_DZ","M249_DZ","Mk_48_DZ","bizon_silenced","MP5SD","Pecheneg_DZ","PK_DZ"];
+OKmgList = ["M240_DZ","M249_DZ","Mk48_DZ","bizon_silenced","MP5SD","Pecheneg_DZ","PKM_DZ"];
 
 // Primary Rifles
 OKprimaryList = ["M16A4_ACG","BAF_L85A2_RIS_Holo","bizon_silenced","FN_FAL_ANPVS4","FN_FAL","G36A_camo","G36K_camo","M16A2GL","M4A1_AIM_SD_camo","M14_EP1","M4A1_HWS_GL_camo","M4A3_CCO_EP1","Sa58V_CCO_EP1","Sa58V_RCO_EP1","M79_EP1","M32_EP1","SCAR_H_CQC_CCO_SD","SCAR_H_STD_EGLM_Spect"];
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // "supply" box
-OKConTools = ["ItemToolbox","ItemCrowbar","ItemKnife","ItemEtool","ItemHatchet_DZE","ItemMatchbox_DZE","NVGoggles","ItemGPS","Binocular_Vector"];
+OKConTools = ["ItemToolbox","ItemCrowbar","ItemKnife","ItemEtool","ItemHatchet","ItemMatchbox","NVGoggles","ItemGPS","Binocular_Vector"];
 
 OKConSupply = ["CinderBlocks","CinderBlocks","CinderBlocks","CinderBlocks","CinderBlocks","CinderBlocks","MortarBucket","ItemTankTrap","ItemPole","PartGeneric","PartPlywoodPack","PartPlankPack","ItemSandbag","ItemWire","ItemJerrycan","PartEngine","PartFueltank","PartGlass","PartVRotor","PartWheel","ItemBriefcase100oz"];
 
@@ -254,7 +254,7 @@ OKCloth=[
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // EMS Stuff
-OKEMSToolsCon = ["ItemToolbox","ItemCrowbar","ItemKnife","ItemEtool","ItemHatchet_DZE","ItemMatchbox_DZE","NVGoggles","ItemGPS","Binocular_Vector"];
+OKEMSToolsCon = ["ItemToolbox","ItemCrowbar","ItemKnife","ItemEtool","ItemHatchet","ItemMatchbox","NVGoggles","ItemGPS","Binocular_Vector"];
 
 OKEMSSupplyCon = ["CinderBlocks","CinderBlocks","CinderBlocks","CinderBlocks","CinderBlocks","CinderBlocks","MortarBucket","ItemTankTrap","ItemPole","PartGeneric","PartPlywoodPack","PartPlankPack","ItemSandbag","ItemWire","ItemJerrycan","PartEngine","PartFueltank","PartGlass","PartVRotor","PartWheel","ItemBriefcase100oz"];
 

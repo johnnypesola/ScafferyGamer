@@ -69,7 +69,7 @@ ai_air_units = (ai_air_units +1);
 {_gunner setSkill [_x,0.7]} forEach _skillarray;
 {_gunner2 setSkill [_x,0.7]} forEach _skillarray;
 {_x addweapon "Makarov";_x addmagazine "8Rnd_9x18_Makarov";_x addmagazine "8Rnd_9x18_Makarov";} forEach (units _unitgroup);
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_helicopter];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_helicopter];
 [_helicopter] spawn veh_monitor;
 
 _helicopter addEventHandler ["killed", {[getPosATL (_this select 0)] call fn_generateCrashLoot;}];

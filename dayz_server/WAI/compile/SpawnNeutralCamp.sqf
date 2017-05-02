@@ -65,7 +65,7 @@ _weapCrate setPos [_X-3.5103, _Z-0.6777, _Y];
 // Add items
 _itemCrate setVariable ["ObjectID","1",true];
 _itemCrate setVariable ["permaLoot",true];
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_itemCrate];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_itemCrate];
 
 clearWeaponCargoGlobal _itemCrate;
 clearMagazineCargoGlobal _itemCrate;
@@ -86,9 +86,9 @@ for "_i" from 1 to _numberoftools do {
 		"ItemFishingPole",
 		"ItemFlashlightRed",
 		"ItemGPS",
-		"ItemHatchet_DZE",
+		"ItemHatchet",
 		"ItemMachete",
-		"ItemMatchbox_DZE",
+		"ItemMatchbox",
 		"NVGoggles",
 		"chainsaw"
 	] call BIS_fnc_selectRandom;
@@ -144,7 +144,7 @@ _extraStuff = [2, 2, 4, 2, 2, 2] call generateItems;
 // Add weapons
 _weapCrate setVariable ["ObjectID","1",true];
 _weapCrate setVariable ["permaLoot",true];
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_weapCrate];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_weapCrate];
 
 clearWeaponCargoGlobal _weapCrate;
 clearMagazineCargoGlobal _weapCrate;
@@ -163,7 +163,7 @@ for "_i" from 1 to _numberofguns do {
 		"VSS_vintorez",
 		"M8_sharpshooter",
 		"M40A3",
-		"Mk_48_DZ",
+		"Mk48_DZ",
 		"M240_DZ",
 		"M249_DZ",
 		"Pecheneg_DZ",
@@ -212,7 +212,7 @@ _veh setPos [_X+4.3032, _Z+5.1563, _Y];
 clearWeaponCargoGlobal _veh;
 clearMagazineCargoGlobal _veh;
 _veh setVariable ["ObjectID","1",true];
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_veh];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_veh];
 
 _createdTime = floor(time);
 _notTimedOut = true;

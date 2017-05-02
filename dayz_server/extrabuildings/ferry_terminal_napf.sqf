@@ -3,6 +3,7 @@
 // Made by Pastorn 2016
 //
 
+/*
 if (isServer) then {
 
 _vehicle_1 = objNull;
@@ -24,3 +25,4 @@ if (true) then
 };
 
 };
+*/

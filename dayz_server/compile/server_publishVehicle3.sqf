@@ -1,5 +1,7 @@
-private ["_activatingPlayer","_isOK","_object","_worldspace","_location","_dir","_class","_uid","_key","_query","_keySelected","_characterID","_donotusekey","_result","_oid"];
+private ["_activatingPlayer","_isOK","_object","_worldspace","_location","_dir","_class","_uid","_key","_query","_keySelected","_characterID","_donotusekey","_result","_oid"];	// extDB2
 //PVDZE_veh_Publish2 = [_veh,[_dir,_location],_part_out,false,_keySelected,_activatingPlayer];
+#include "\z\addons\dayz_server\compile\server_toggle_debug.hpp"
+
 _object = 		_this select 0;
 _worldspace = 	_this select 1;
 _class = 		_this select 2;
@@ -9,20 +11,28 @@ _activatingPlayer =  _this select 5;
 _characterID = _keySelected;
 
 _isOK = isClass(configFile >> "CfgVehicles" >> _class);
-if(!_isOK || isNull _object) exitWith { diag_log ("HIVE-pv3: Vehicle does not exist: "+ str(_class)); };
+if (!_isOK || isNull _object) exitWith {
+	diag_log ("HIVE-pv3: Vehicle does not exist: "+ str(_class));
+	dze_waiting = "fail";
+	(owner _activatingPlayer) publicVariableClient "dze_waiting";
+};
 
-if (auth_enabled && (!((name _activatingPlayer) in auth_clients))) exitWith {
-	diag_log ("PUBLISH: " + str(_activatingPlayer) + " not in whitelist; attempted to publish " + str(_class));
-}; 
-
-
+#ifdef OBJECT_DEBUG
 diag_log ("PUBLISH: Attempt " + str(_object));
+#endif
+
 _dir = 		_worldspace select 0;
 _location = _worldspace select 1;
+_uid = _worldspace call dayz_objectUID2;
 
-//Generate UID test using time
-_uid = _worldspace call dayz_objectUID3;
+// extDB2
+//Send request
+//_key = format["CHILD:308:%1:%2:%3:%4:%5:%6:%7:%8:%9:",dayZ_instance, _class, 0 , _characterID, _worldspace, [], [], 1,_uid];
+//#ifdef OBJECT_DEBUG
+//diag_log ("HIVE: WRITE: "+ str(_key)); 
+//#endif
 
+// extDB2
 //Send request
 _key = [
 	dayZ_instance,
@@ -33,6 +43,8 @@ _key = [
 	((_worldspace select 1) select 1) call KK_fnc_floatToString,	// y
 	((_worldspace select 1) select 2) call KK_fnc_floatToString,	// z
 	(_worldspace select 0) call KK_fnc_floatToString,		// dir
+	"0",
+	[[0,0,0],[0,0,0]],
 	[], // inv magazines
 	[], // inv weapons
 	[], // inv backpacks
@@ -41,54 +53,80 @@ _key = [
 	_uid
 ];
 _query = ["objectPublish",_key] call dayz_prepareDataForDB;
-//diag_log ("HIVE: WRITE: "+ str(_query)); 
+#ifdef OBJECT_DEBUG
+diag_log ("HIVE: WRITE: "+ str(_query)); 
+#endif
+
+//_key call server_hiveWrite;	// extDB2
 _result = _query call server_hiveReadWrite;
 
 // Switched to spawn so we can wait a bit for the ID
 [_object,_uid,_characterID,_class,_dir,_location,_donotusekey,_activatingPlayer] spawn {
-	private ["_object","_uid","_characterID","_done","_retry","_key","_result","_outcome","_oid","_class","_location","_donotusekey","_activatingPlayer","_countr","_objectID","_objectUID","_dir","_newobject","_weapons","_magazines","_backpacks","_objWpnTypes","_objWpnQty"];
+   private ["_object","_uid","_characterID","_done","_retry","_key","_result","_outcome","_oid","_class","_location","_donotusekey","_activatingPlayer","_countr","_objectID","_objectUID","_dir","_newobject","_weapons","_magazines","_backpacks","_objWpnTypes","_objWpnQty"];
 
-	_object = _this select 0;
-	_objectID 	= _object getVariable ["ObjectID","0"];
-	_objectUID	= _object getVariable ["ObjectUID","0"];
-	_uid = _this select 1;
-	_characterID = _this select 2;
-	_class = _this select 3;
-	_dir = _this select 4;
-	// _location = _this select 5;
-	_location = getPosATL _object;
-	_donotusekey = _this select 6;
-	_activatingPlayer = _this select 7;
+   _object = _this select 0;
+   _objectID 	= _object getVariable ["ObjectID","0"];
+   _objectUID	= _object getVariable ["ObjectUID","0"];
+   _uid = _this select 1;
+   _characterID = _this select 2;
+   _class = _this select 3;
+   _dir = _this select 4;
+   // _location = _this select 5;
+   _location = getPosATL _object;
+   _donotusekey = _this select 6;
+   _activatingPlayer = _this select 7;
 
-	_oid = "0";
+   _oid = "0";
 
-	_done = false;
+   _done = false;
 	_retry = 0;
 	// TODO: Needs major overhaul for 1.1
 	while {_retry < 10} do {
-		
-		sleep 1;
 		// GET DB ID
+		//_key = format["CHILD:388:%1:",_uid];	// extDB2
 		_key = [_uid];
 		_query = ["objectReturnID",_key] call dayz_prepareDataForDB;
-		//diag_log ("HIVE: WRITE: "+ str(_query));
+		#ifdef OBJECT_DEBUG
+		//diag_log ("HIVE: WRITE: "+ str(_key));	// extDB2
+		diag_log ("HIVE: WRITE: "+ str(_query));
+		#endif
+		
+		//_result = _key call server_hiveReadWrite;	// extDB2
 		_result = _query call server_hiveReadWrite;
+		//_outcome = _result select 0;	// extDB2
+		//if (_outcome == "PASS") then {
 		_outcome = (count _result > 0);
 		if (_outcome) then {
+			//_oid = _result select 1;	// extDB2
 			_oid = (_result select 0) select 0;
 			//_object setVariable ["ObjectID", _oid, true];
-			//diag_log("CUSTOM: Selected " + str(_oid));
+			#ifdef OBJECT_DEBUG
+			diag_log("CUSTOM: Selected " + str(_oid));
+			#endif
+			
 			_done = true;
 			_retry = 100;
 
 		} else {
-			diag_log("TIMEOUT: trying again to get id for vehicle: " + str(_uid));
+			diag_log("CUSTOM: trying again to get id for: " + str(_uid));
 			_done = false;
 			_retry = _retry + 1;
+			uiSleep 1;
 		};
 	};
 
-	if(!_done) exitWith { diag_log("TIMEOUT: failed to get id for vehicle: " + str(_uid)); };
+	if (!_done) exitWith {
+		diag_log("HIVE-pv3: failed to get id for : " + str(_uid));
+		// extDB2
+		//_key = format["CHILD:310:%1:",_uid];
+		//_key call server_hiveWrite;
+		_key = [_uid];
+		_query = ["objectDeleteByUID", _key] call dayz_prepareDataForDB;
+		_query call server_hiveWrite;
+		
+		dze_waiting = "fail";
+		(owner _activatingPlayer) publicVariableClient "dze_waiting";
+	};
 
 	// add items from previous vehicle here
 	_weapons = 		getWeaponCargo _object;
@@ -102,7 +140,8 @@ _result = _query call server_hiveReadWrite;
 	// Remove marker
 	deleteVehicle _object;
 
-	_newobject = createVehicle [_class, [0,0,0], [], 0, "CAN_COLLIDE"];
+	//_newobject = createVehicle [_class, [0,0,0], [], 0, "CAN_COLLIDE"];
+	_newobject = _class createVehicle [0,0,0];
 
 	// remove old vehicle from DB
 	[_objectID,_objectUID,_activatingPlayer] call server_deleteObj;
@@ -141,18 +180,19 @@ _result = _query call server_hiveReadWrite;
 	} count _objWpnTypes;
 
 	_object setVariable ["ObjectID", _oid, true];
-	
 	_object setVariable ["lastUpdate",time];
-	
 	_object setVariable ["CharacterID", _characterID, true];
 
-	PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_object];
+	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_object];
 
 	_object call fnc_veh_ResetEH;
 	
 	// for non JIP users this should make sure everyone has eventhandlers for vehicles.
 	PVDZE_veh_Init = _object;
 	publicVariable "PVDZE_veh_Init";
+	
+	dze_waiting = "success";
+	(owner _activatingPlayer) publicVariableClient "dze_waiting";
 	
 	diag_log ("PUBLISH: " + str(_activatingPlayer) + " Upgraded " + (_class) + " with ID " + str(_uid));
 };

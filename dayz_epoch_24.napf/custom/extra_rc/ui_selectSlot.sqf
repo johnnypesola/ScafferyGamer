@@ -1,22 +1,31 @@
-private ["_control","_button","_parent","_group","_pos","_item","_itemAmmo","_ammoMax","_conf","_name","_cfgActions","_numActions","_height","_menu","_config","_type","_script","_outputOriented","_compile","_array","_outputClass","_outputType"];
+//private ["_control","_button","_parent","_group","_pos","_item","_conf","_name","_cfgActions","_numActions","_height","_menu","_config","_type","_script","_outputOriented","_compile","_array","_outputClass","_outputType"];
 disableSerialization;
-_control = 	_this select 0;
-_button =	_this select 1;
-_parent = 	findDisplay 106;
+_control = _this select 0;
+_button = _this select 1;
+_parent = findDisplay 106;
 
-//if ((time - dayzClickTime) < 1) exitWith {};
-if (!DZE_SelfTransfuse && ((gearSlotData _control) == "ItemBloodBag")) exitWith {};
+if (carryClick) then {carryClick = false;};
+
 if (_button == 1) then {
-	//dayzClickTime = time;
+	private ["_conf","_name","_compile","_height","_item","_itemAmmo","_erc_cfgActions","_erc_numActions","_menu","_script","_config"];
 	_group = _parent displayCtrl 6902;
-	
-	_pos = 		ctrlPosition _group;
-	_pos set [0,((_this select 2) + 0.48)];
-	_pos set [1,((_this select 3) + 0.07)];
-	
-	_item = gearSlotData _control;
+
+	_pos = ctrlPosition _group;
+
+	_item = gearSlotData _control;	
 	_itemAmmo = gearSlotAmmoCount _control;
-	
+	if ( //No right click action
+		(!DZE_SelfTransfuse && _item in ["ItemBloodbag","wholeBloodBagANEG","wholeBloodBagAPOS","wholeBloodBagBNEG","wholeBloodBagBPOS","wholeBloodBagABNEG","wholeBloodBagABPOS","wholeBloodBagONEG","wholeBloodBagOPOS"]) or
+		(!dayz_groupSystem && _item == "ItemRadio")
+	) exitWith {};
+	if (mouseOverCarry) then {
+		_item = DayZ_onBack;
+		carryClick = true;
+	};
+
+	_pos set [0,((_this select 2) + 0.46)];
+	_pos set [1,((_this select 3) + 0.07)];
+
 	_conf = configFile >> "cfgMagazines" >> _item;
 	if (!isClass _conf) then {
 		_conf = configFile >> "cfgWeapons" >> _item;
@@ -26,38 +35,37 @@ if (_button == 1) then {
 	_cfgActions = _conf >> "ItemActions";
 	_numActions = (count _cfgActions);
 	_height = 0;
-	
+
 	//Populate Menu
-	for "_i" from 0 to (_numActions - 1) do 
+	for "_i" from 0 to (_numActions - 1) do
 	{
-		_menu = 	_parent displayCtrl (1600 + _i);
+		_menu = _parent displayCtrl (1600 + _i);
 		_menu ctrlShow true;
-		_config = 	(_cfgActions select _i);
-		_type = 	getText	(_config >> "text");
-		_script = 	getText	(_config >> "script");
-		_outputOriented = 	getNumber	(_config >> "outputOriented") == 1;
+		_config = (_cfgActions select _i);
+		_type = getText (_config >> "text");
+		_script = getText (_config >> "script");
+		_outputOriented = getNumber (_config >> "outputOriented") == 1;
 		_height = _height + (0.025 * safezoneH);
-		_compile =  format["_id = '%2' %1;",_script,_item];
+		_compile = format["_id = '%2' %1;",_script,_item];
 		uiNamespace setVariable ['uiControl', _control];
 		if (_outputOriented) then {
 			/*
 				This flag means that the action is output oriented
 				the output class will then be transferred to the script
-				&& the type used for the name
-			*/			
-			_array = 	getArray	(_config >> "output");
+				and the type used for the name
+			*/
+			_array = getArray (_config >> "output");
 			_outputClass = _array select 0;
 			_outputType = _array select 1;
 			_name = getText (configFile >> _outputType >> _outputClass >> "displayName");
-			_compile =  format["_id = ['%2',%3] %1;",_script,_item,_array];
+			_compile = format["_id = ['%2',%3] %1;",_script,_item,_array];
 		};
-		
+
 		_menu ctrlSetText format[_type,_name];
 		_menu ctrlSetEventHandler ["ButtonClick",_compile];
 	};
 
-	// DZGM
-	// ADDED: Add extra context menus
+	// SCAFFERY: Add extra context menus
 	_erc_cfgActions = (missionConfigFile >> "ExtraRc" >> _item);
 	_erc_numActions = (count _erc_cfgActions);
 	if (isClass _erc_cfgActions) then {

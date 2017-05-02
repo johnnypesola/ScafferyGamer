@@ -13,7 +13,7 @@ _veh setDir _vehdir;
 clearWeaponCargoGlobal _veh;
 clearMagazineCargoGlobal _veh;
 _veh setVariable ["ObjectID","1",true];
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_veh];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_veh];
 diag_log format["WAI: Mission Armed Chopper spawned a %1",_vehname];
 
 _objPosition = getPosATL _veh;

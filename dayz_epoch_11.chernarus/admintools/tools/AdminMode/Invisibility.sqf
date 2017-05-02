@@ -1,8 +1,9 @@
-private["_nyan", "_mo"];
-_mo = _this select 0;
-_nyan = format["{ if((getPlayerUID _x) == '%1') then { _x hideObject %2; }; } forEach playableUnits;", (getPlayerUID player), _mo];
+private["_hide"];
+if(isNil "invis") then {invis = true;} else {invis = !invis};
+
+_hide = format["{ if(((getPlayerUID _x) == '%1')) then { _x hideObject %2; }; } forEach playableUnits;", (getPlayerUID player), invis];
 sleep 0.1;
-player setVehicleInit _nyan;
+player setVehicleInit _hide;
 sleep 0.1;
 processInitCommands;
 sleep 0.1;

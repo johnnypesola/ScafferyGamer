@@ -149,11 +149,7 @@ OKSetupVehicle = {
 	_object setVariable ["ObjectID", _objectID, true];
 	_object setVariable ["ObjectUID", _objectID, true];
 	
-	if (OKEpoch) then {
-		PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor, _object];
-	} else {
-		dayz_serverObjectMonitor set [count dayz_serverObjectMonitor, _object];
-	};
+	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor, _object];
 	
 	waitUntil {(!isNull _object)};
 	
@@ -186,11 +182,7 @@ OKSetupVehicleArmed = {
 	_object setVariable ["ObjectID", _objectID, true];
 	_object setVariable ["ObjectUID", _objectID, true];
 	
-	if (OKEpoch) then {
-		PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor, _object];
-	} else {
-		dayz_serverObjectMonitor set [count dayz_serverObjectMonitor, _object];
-	};
+	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor, _object];
 	
 	waitUntil {(!isNull _object)};
 	
@@ -228,11 +220,7 @@ OKProtectObj = {
 		_object setVariable ["permaLoot",true];
 	};
 
-	if (OKEpoch) then {
-		PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor, _object];
-	} else {
-		dayz_serverObjectMonitor set [count dayz_serverObjectMonitor, _object];
-	};
+	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor, _object];
 
 	true
 };

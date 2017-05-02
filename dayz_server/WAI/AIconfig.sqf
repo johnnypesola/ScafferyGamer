@@ -35,7 +35,7 @@ ai_humanity_gain = True;
 
 /// Humanity added for AI kill 
 ai_add_humanity = 50;
-ai_remove_hero_humanity = 200;
+ai_remove_hero_humanity = 60;
 
 /// Adds bandit kill when killing an AI (True: on. False: off.)
 ai_banditkills_gain = false;
@@ -154,8 +154,8 @@ ai_gear_random = [ai_gear0,ai_gear1,ai_gear2,ai_gear3,ai_gear4];
 
 /// 0 ///
 //ai_wep0 = [
-//["AKS_74_UN_kobra","30Rnd_545x39_AKSD"], 
-//["M4A3_CCO_EP1","30Rnd_556x45_Stanag"], 
+//["AK74_Kobra_SD_DZ","30Rnd_545x39_AKSD"], 
+//["M4A1_CCO_DZ","30Rnd_556x45_Stanag"], 
 //["M4A1_AIM_SD_camo","30Rnd_556x45_StanagSD"], 
 //["M16A4","30Rnd_556x45_Stanag"], 
 //["m8_carbine","30Rnd_556x45_Stanag"], 
@@ -164,13 +164,13 @@ ai_gear_random = [ai_gear0,ai_gear1,ai_gear2,ai_gear3,ai_gear4];
 //];
 
 ai_wep0 = [
-["AK_74","30Rnd_545x39_AK"], 
-["M4A1","30Rnd_556x45_Stanag"],
-["MP5A5","30Rnd_9x19_MP5"], 
-["LeeEnfield","10x_303"], 
-["G36A_camo","30Rnd_556x45_Stanag"],
-["G36C_camo","100Rnd_556x45_BetaCMag"],
-["AKS_74_kobra","30Rnd_545x39_AK"]
+["AK74_DZ","30Rnd_545x39_AK"], 
+["M4A1_DZ","30Rnd_556x45_Stanag"],
+["MP5_DZ","30Rnd_9x19_MP5"], 
+["LeeEnfield_DZ","10Rnd_303British"], 
+["G36A_Camo_DZ","30Rnd_556x45_Stanag"],
+["G36K_Camo_DZ","100Rnd_556x45_BetaCMag"],
+["AK74_Kobra_DZ","30Rnd_545x39_AK"]
 ];
 
  
@@ -182,7 +182,7 @@ ai_wep0 = [
 //["SCAR_L_STD_Mk4CQT","30Rnd_556x45_Stanag"], 
 //["BAF_L86A2_ACOG","30Rnd_556x45_Stanag"], 
 //["M4A1_AIM_SD_camo","30Rnd_556x45_StanagSD"], 
-//["M14_EP1","20Rnd_762x51_DMR"], 
+//["M14_CCO_DZ","20Rnd_762x51_DMR"], 
 //["M8_sharpshooter","30Rnd_556x45_Stanag"]
 //];
 
@@ -190,7 +190,7 @@ ai_wep1 = [
 ["M16A4_ACG","30Rnd_556x45_Stanag"], 
 ["Sa58V_RCO_EP1","30Rnd_762x39_AK47"], 
 ["M4A3_CCO_EP1","30Rnd_556x45_Stanag"], 
-["M14_EP1","20Rnd_762x51_DMR"], 
+["M14_CCO_DZ","20Rnd_762x51_DMR"], 
 ["M8_sharpshooter","30Rnd_556x45_Stanag"],
 ["Sa58P_EP1","30Rnd_762x39_AK47"],
 ["FN_FAL","20Rnd_762x51_FNFAL"]
@@ -208,8 +208,8 @@ ai_wep2 = [
 
 /// 3 ///
 ai_wep3 = [ 
-["huntingrifle","5x_22_LR_17_HMR"], 
-["SVD_CAMO","10Rnd_762x54_SVD"], 
+["Huntingrifle","5x_22_LR_17_HMR"], 
+["SVD_Camo","10Rnd_762x54_SVD"], 
 ["VSS_Vintorez","20Rnd_9x39_SP5_VSS"], 
 ["M40A3","5Rnd_762x51_M24"],
 ["M24","5Rnd_762x51_M24"]
@@ -217,8 +217,9 @@ ai_wep3 = [
 
 /// 4 ///
 ai_wep4 = [
-["RPK_74","75Rnd_545x39_RPK"], 
-["MK_48_DZ","100Rnd_762x51_M240"], 
+["RPK74_DZ","75Rnd_545x39_RPK"], 
+["RPK_DZ","75Rnd_762x39_RPK"], 
+["Mk48_CCO_DZ","100Rnd_762x51_M240"], 
 ["M249_EP1_DZ","200Rnd_556x45_M249"], 
 ["Pecheneg_DZ","100Rnd_762x54_PK"], 
 ["M240_DZ","100Rnd_762x51_M240"],
@@ -227,8 +228,8 @@ ai_wep4 = [
 
 /// 5 ///
 ai_wep5 = [ 
-["SVD_CAMO","10Rnd_762x54_SVD"], 
-["M40A3","5Rnd_762x51_M24"],
+["SVD_Camo","10Rnd_762x54_SVD"], 
+["M40A3_DZ","5Rnd_762x51_M24"],
 ["BAF_LRR_scoped","5Rnd_86x70_L115A1"],
 ["m107_DZ","10Rnd_127x99_M107"]
 ];
@@ -244,12 +245,12 @@ ai_wep6 = [
 ["Makarov","8Rnd_9x18_Makarov"], 
 ["MakarovSD","8Rnd_9x18_MakarovSD"], 
 ["MakarovSD","8Rnd_9x18_MakarovSD"], 
-["Winchester1866","15Rnd_W1866_Slug"], 
-["M1014","8Rnd_B_Beneli_74Slug"], 
-["M9SD","15Rnd_9x19_M9SD"],
-["M9SD","15Rnd_9x19_M9SD"],
-["LeeEnfield","10x_303"],
-["MP5A5","30Rnd_9x19_MP5"]
+["Winchester1866_DZ","15Rnd_W1866_Slug"], 
+["M1014","8Rnd_12Gauge_Slug"], 
+["M9_SD_DZ","15Rnd_9x19_M9SD"],
+["M9_SD_DZ","15Rnd_9x19_M9SD"],
+["LeeEnfield_DZ","10Rnd_303British"],
+["MP5_DZ","30Rnd_9x19_MP5"]
 ];
 
 /// Arrays used in "Random" for weapons///
@@ -260,7 +261,7 @@ ai_wep_random = [ai_wep0,ai_wep1,ai_wep2,ai_wep3,ai_wep4];
 ai_packs = [
 "DZ_Patrol_Pack_EP1",
 "DZ_Assault_Pack_EP1",
-"DZ_Czech_Vest_Puch",
+"DZ_Czech_Vest_Pouch",
 "DZ_TerminalPack_EP1",
 "DZ_ALICE_Pack_EP1",
 "DZ_TK_Assault_Pack_EP1",

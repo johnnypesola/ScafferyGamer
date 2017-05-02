@@ -23,7 +23,7 @@ if ((typeOf _veh) == "RHIB" ) then {
 _veh allowCrewInImmobile true; 
 _veh setVariable ["MalSar",1,true];
 _veh lock false;
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_veh];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_veh];
 
 _pilot assignAsDriver _veh;
 _pilot moveInDriver _veh;

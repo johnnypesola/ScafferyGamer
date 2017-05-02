@@ -671,7 +671,7 @@ clearWeaponCargoGlobal _thebox;
 clearMagazineCargoGlobal _thebox;
 _thebox setVariable ["ObjectID","1",true];
 _thebox setVariable ["permaLoot",true];
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_thebox];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_thebox];
 
 clearWeaponCargoGlobal _thebox;
 clearMagazineCargoGlobal _thebox;
@@ -732,7 +732,7 @@ clearWeaponCargoGlobal _thebox;
 clearMagazineCargoGlobal _thebox;
 _thebox setVariable ["ObjectID","1",true];
 _thebox setVariable ["permaLoot",true];
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_thebox];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_thebox];
 
 clearWeaponCargoGlobal _thebox;
 clearMagazineCargoGlobal _thebox;
@@ -744,10 +744,10 @@ _hidden_box_random_items = [
 
 _hidden_box_number_of_buildmats = 10;
 _hidden_box_random_buildmats = [
-"cinder_wall_kit",
-"cinder_wall_kit",
-"cinder_wall_kit",
-"cinder_wall_kit",
+"half_cinder_wall_kit",
+"half_cinder_wall_kit",
+"half_cinder_wall_kit",
+"half_cinder_wall_kit",
 "cinder_garage_kit",
 "cinder_garage_kit",
 "cinder_garage_kit",

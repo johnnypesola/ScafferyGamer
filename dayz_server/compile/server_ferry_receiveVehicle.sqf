@@ -1,4 +1,4 @@
-private ["_activatingPlayer","_isOK","_veh","_worldspace","_location","_dir","_class","_uid","_key","_query","_keySelected","_donotusekey","_result","_oid","_row","_fromInstance","_toInstance","_class","_charID","_inventoryMagazines","_inventoryWeapons","_inventoryBackpacks","_hitpoints","_fuel","_damage","_objWpnTypes","_objWpnQty","_passengers","_passengerIdx","_canBeOverWater","_playerUID","_playerName","_pos","_found","_driver","_commander","_turrets","_subturrets","_cargo"];
+private ["_activatingPlayer","_isOK","_veh","_worldspace","_location","_dir","_class","_uid","_key","_query","_keySelected","_donotusekey","_result","_oid","_row","_fromInstance","_toInstance","_class","_charID","_inventoryMagazines","_inventoryWeapons","_inventoryBackpacks","_hitpoints","_fuel","_damage","_objWpnTypes","_objWpnQty","_passengers","_passengerIdx","_canBeOverWater","_playerUID","_playerName","_pos","_found","_driver","_commander","_turrets","_subturrets","_cargo","_storageMoney"];
 
 _activatingPlayer = _this select 0;
 
@@ -66,6 +66,7 @@ _inventoryBackpacks = 	_row select 11;
 _hitpoints = 		_row select 12;
 _fuel = 		_row select 13;
 _damage = 		_row select 14;
+_storageMoney = 	_row select 15;
 
 diag_log format ["FERRY: DEBUG: Got row data: %1", _row];
 
@@ -179,12 +180,15 @@ diag_log format ["FERRY: Spawning vehicle at %1", _pos];
 	_selection = _x select 0;
 	_dam = _x select 1;
 	if (_selection in dayZ_explosiveParts && _dam > 0.8) then {_dam = 0.8};
-	[_veh,_selection,_dam] call object_setFixServer;
+	[_veh,_selection,_dam] call fnc_veh_setFixServer;
 } count _hitpoints;
 
 
 _veh setDamage _damage;
 _veh setFuel _fuel;
+if (Z_SingleCurrency && {_type in DZE_MoneyStorageClasses}) then {
+	_veh setVariable [Z_MoneyVariable, _storageMoney, true];
+};
 
 //Add Weapons
 _objWpnTypes = _inventoryWeapons select 0;
@@ -243,6 +247,8 @@ _key = [
 	((_worldspace select 1) select 1) call KK_fnc_floatToString,	// y
 	((_worldspace select 1) select 2) call KK_fnc_floatToString,	// z
 	(_worldspace select 0) call KK_fnc_floatToString,		// dir
+	"0",
+	[[0,0,0],[0,0,0]],
 	_inventoryMagazines,
 	_inventoryWeapons,
 	_inventoryBackpacks,
@@ -264,7 +270,7 @@ if ((typeName _result) == "ARRAY") then {
 	diag_log format["FERRY: Failed to publish vehicle %1 with uid: %2 and object_id: %3: %4", _class, _uid, _oid, _result];
 };
 
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_veh];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_veh];
 
 // Switched to spawn so we can wait a bit for the ID
 [_veh,_uid,_fuel,_damage,_hitpoints,_charID,_class,_oid] spawn {

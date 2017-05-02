@@ -1,7 +1,7 @@
 /*
-[_objectID,_objectUID] call server_deleteObj;
+[_objectID,_objectUID,_activatingPlayer] call server_deleteObj;
 */
-private["_id","_uid","_key","_query"];
+private["_id","_uid","_key","_activatingPlayer","_query"];
 _id 	= _this select 0;
 _uid 	= _this select 1;
 _activatingPlayer 	= _this select 2;

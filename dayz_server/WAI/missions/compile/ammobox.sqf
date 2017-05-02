@@ -4,7 +4,7 @@ _box = _this select 0;
 //_box = createVehicle ["BAF_VehicleBox",[(_position select 0),(_position select 1),0], [], 0, "CAN_COLLIDE"];
 _box setVariable ["ObjectID","1",true];
 _box setVariable ["permaLoot",true];
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_box];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_box];
 
 
 clearWeaponCargoGlobal _box;

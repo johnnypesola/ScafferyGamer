@@ -117,15 +117,15 @@ generateItems = {
 
 	_num_ammo = _ammoAmount*floor ((random 1)+0.2);	// 20% chance that he carries casual ammo
 	_ammo = [
-		["2Rnd_shotgun_74Slug", 4],	// 4% chance
-		["2Rnd_shotgun_74Pellets", 4],	// 4% chance
+		["2Rnd_12Gauge_Slug", 4],	// 4% chance
+		["2Rnd_12Gauge_Buck", 4],	// 4% chance
 		["8Rnd_9x18_Makarov", 10],	// 10% chance
 		["6Rnd_45ACP", 5],		// 5% chance
 		["7Rnd_45ACP_1911", 5],		// 5% chance
 		["15Rnd_9x19_M9", 2],		// 2% chance
 		["17Rnd_9x19_glock17", 2],	// 2% chance
-		["8Rnd_B_Beneli_74Slug", 2],	// 2% chance
-		["8Rnd_B_Beneli_Pellets", 2],	// 2% chance
+		["8Rnd_12Gauge_Slug", 2],	// 2% chance
+		["8Rnd_12Gauge_Buck", 2],	// 2% chance
 		["15Rnd_W1866_Slug", 10],	// 10% chance
 		["30Rnd_9x19_UZI", 2],		// 2% chance
 		["30Rnd_9x19_MP5", 4],		// 4% chance
@@ -156,10 +156,10 @@ generateItems = {
 
 	_num_tools = _toolsAmount*floor ((random 1)+0.05);	// 5% chance he will carry one tool
 	_tools = [
-		["ItemMatchbox_DZE", 2],// 2% chance
+		["ItemMatchbox", 2],// 2% chance
 		["ItemKnife", 10],	// 10% chance
 		["ItemMachete", 5],	// 5% chance
-		["ItemHatchet_DZE", 9],	// 9% chance
+		["ItemHatchet", 9],	// 9% chance
 		["ItemCrowbar", 2],	// 2% chance
 		["ItemWatch", 5],	// 5% chance
 		["ItemMap", 2],		// 2% chance
@@ -277,14 +277,16 @@ waitUntil {WAIconfigloaded};
 diag_log "WAI: AI Config File Loaded";
 [] spawn ai_monitor;
 
-if (WAIWorldName in ["chernarus","utes","zargabad","fallujah","takistan","tavi","lingor","namalsk","mbg_celle2","oring","panthera2","isladuala","smd_sahrani_a2","trinity"]) then {
-	_mapHardCenter = true;
+if (WAIWorldName in ["chernarus","utes","zargabad","fallujah","takistan","tavi","lingor","namalsk","mbg_celle2","oring","panthera2","isladuala","smd_sahrani_a2","trinity","napf"]) then {
 	
+	_mapHardCenter = true;
 	// Chernarus is supported
 	if (WAIWorldName == "chernarus") then {
+		diag_log "WAI: Loading chernarus custom spawns...";
 		[] ExecVM "\z\addons\dayz_server\WAI\customSpawns_chernarus.sqf";
 	};
 	if (WAIWorldName == "napf") then {
+		diag_log "WAI: Loading napf custom spawns...";
 		[] ExecVM "\z\addons\dayz_server\WAI\customSpawns_napf.sqf";
 	};
 };

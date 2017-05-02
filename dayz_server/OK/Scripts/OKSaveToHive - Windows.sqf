@@ -60,7 +60,7 @@ if (OKEpoch) then {
 	_object allowDamage false;
 	_object setVariable ["lastUpdate", time];
 	_object setVariable ["CharacterID", "0", true];
-	PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor, _object];
+	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor, _object];
 	
 	sleep 1;
 	_object call fnc_veh_ResetEH;

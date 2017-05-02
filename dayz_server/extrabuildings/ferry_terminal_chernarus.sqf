@@ -3,8 +3,8 @@
 // Made by Pastorn 2016
 //
 
+/*
 if (isServer) then {
-
 _vehicle_1 = objNull;
 if (true) then
 {
@@ -22,5 +22,5 @@ if (true) then
   _this setVehicleInit "this setObjectTexture [0, ""images\ferry_chernarus_1opt.paa""];";
   _this setPos [13703.97, 2925.2139, 0.0001001358];
 };
-
 };
+*/

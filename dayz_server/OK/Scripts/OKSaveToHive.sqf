@@ -19,7 +19,7 @@ if (isNull _object OR !alive _object OR (damage _object) > .97) exitWith {};
 _ranFuel = random 1;
 if (_ranFuel < .1) then {_ranFuel = .1;};
 
-if (OKEpoch) then {
+//if (OKEpoch) then {
 
 	//The server is running DayZ Epoch, so we use the Epoch method.
 	_uid = _worldspace call dayz_objectUID3;
@@ -33,6 +33,8 @@ if (OKEpoch) then {
 		((_worldspace select 1) select 1) call KK_fnc_floatToString,	// y
 		((_worldspace select 1) select 2) call KK_fnc_floatToString,	// z
 		(_worldspace select 0) call KK_fnc_floatToString,		// dir
+		'0', // owner playeruid
+		[], // up vector
 		[], // inv magazines
 		[], // inv weapons
 		[], // inv backpacks
@@ -89,7 +91,7 @@ if (OKEpoch) then {
 	_object allowDamage false;
 	_object setVariable ["lastUpdate", time];
 	_object setVariable ["CharacterID", "0", true];
-	PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor, _object];
+	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor, _object];
 	
 	sleep 1;
 	_object call fnc_veh_ResetEH;
@@ -98,6 +100,7 @@ if (OKEpoch) then {
 	[_object,"all"] spawn server_updateObject;
 	_object allowDamage true;
 	
+/*
 } else {
 	
 	//They are running a different DayZ Varient
@@ -159,3 +162,4 @@ if (OKEpoch) then {
 	[_object,"all"] spawn server_updateObject;
 
 };
+*/

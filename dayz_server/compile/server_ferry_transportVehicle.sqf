@@ -105,7 +105,8 @@ _key = [
 	getBackpackCargo _object, // inv backpacks
 	_array, // hitpoints
 	fuel _object,  // fuel
-	damage _object	// damage
+	damage _object,	// damage
+	_object getVariable [Z_MoneyVariable, -1] // storage money
 ];
 
 _query = ["loadOntoFerry", _key] call dayz_prepareDataForDB;

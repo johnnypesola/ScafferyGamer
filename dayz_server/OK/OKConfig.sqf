@@ -7,7 +7,7 @@
 OKMissHumanity = true;
 
 // How Much Humanity?
-OKCntHumanity = 25;
+OKCntHumanity = 15;
 
 // Do you want AI kills to count as bandit kills?
 OKCntBanditKls = false;

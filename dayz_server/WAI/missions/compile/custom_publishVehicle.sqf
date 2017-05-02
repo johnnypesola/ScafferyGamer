@@ -58,6 +58,8 @@ _key = [
 	((_worldspace select 1) select 1) call KK_fnc_floatToString,	// y
 	((_worldspace select 1) select 2) call KK_fnc_floatToString,	// z
 	(_worldspace select 0) call KK_fnc_floatToString,		// dir
+	'0', // owner player uid
+	[], // up vector
 	[], // inv magazines
 	[], // inv weapons
 	[], // inv backpacks
@@ -75,7 +77,7 @@ if (0 < count _result) then {
 	_object setVariable ["ObjectID", _oid, true];
 };
 
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_object];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_object];
 
 // Switched to spawn so we can wait a bit for the ID
 [_object,_uid,_fuel,_damage,_array,_characterID,_class,_oid] spawn {
@@ -132,7 +134,7 @@ PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_object];
 		_selection = _x select 0;
 		_dam = _x select 1;
 		if (_selection in dayZ_explosiveParts && _dam > 0.8) then {_dam = 0.8};
-		[_object,_selection,_dam] call object_setFixServer;
+		[_object,_selection,_dam] call fnc_veh_setFixServer;
 	} count _array;
 	
 	_object setFuel _fuel;

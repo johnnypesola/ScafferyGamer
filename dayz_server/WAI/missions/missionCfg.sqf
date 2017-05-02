@@ -138,34 +138,34 @@ wai_mission_numberofguns = 8;
 ammo_box_guns = [
 "M9SD",
 "M9",
-"AKS_74_UN_kobra",
+"AK74_Kobra_SD_DZ",
 "AK_107_pso",
-"M4A3_CCO_EP1",
+"M4A1_CCO_DZ",
 "M4A1_AIM_SD_camo",
 "M16A4_ACG",
 "VSS_vintorez",
 "M8_sharpshooter",
 "M40A3",
-"Mk_48_DZ",
+"Mk48_CCO_DZ",
 "M240_DZ",
 "M249_DZ",
 "Pecheneg_DZ",
-"RPK_74",
+"RPK_DZ",
 "BAF_LRR_scoped",
 "DMR",
-"SVD_CAMO",
+"SVD_Camo",
 "SCAR_H_LNG_Sniper_SD",
 "M110_NVG_EP1",
 "Sa58V_RCO_EP1",
 "KSVK_DZE",
 "BAF_L86A2_ACOG",
-"M14_EP1",
+"M14_CCO_DZ",
 "Sa58V_CCO_EP1"
 ];
 
 // Number of tools to spawn in ammo boxes 
 wai_mission_numberoftools = 1;
-// classnames of tools to spawn in ammo boxes (only toolbelt items or weapon class Eg. "Chainsaw" or "ItemToolbox")
+// classnames of tools to spawn in ammo boxes (only toolbelt items or weapon class Eg. "ChainSaw" or "ItemToolbox")
 ammo_box_tools =[
 "ItemToolbox",
 "ItemKnife",
@@ -177,11 +177,11 @@ ammo_box_tools =[
 "ItemFishingPole",
 "ItemFlashlightRed",
 "ItemGPS",
-"ItemHatchet_DZE",
+"ItemHatchet",
 "ItemMachete",
-"ItemMatchbox_DZE",
+"ItemMatchbox",
 "NVGoggles",
-"chainsaw"
+"ChainSaw"
 ];
 
 // Number of items to spawn in ammo boxes 

@@ -1,11 +1,12 @@
-private ["_activatingPlayer","_isOK","_object","_worldspace","_location","_dir","_class","_uid","_key","_query","_keySelected","_characterID","_donotusekey","_result","_oid"];
-//PVDZE_veh_Publish2 = [_veh,[_dir,_location],_part_out,false,_keySelected,_activatingPlayer];
-_object = 		_this select 0;
-_worldspace = 	_this select 1;
-_class = 		_this select 2;
-_donotusekey =	_this select 3;
-_keySelected =  _this select 4;
-_activatingPlayer =  _this select 5;
+private ["_activatingPlayer","_isOK","_object","_worldspace","_location","_dir","_class","_uid","_key","_query","_keySelected","_characterID","_donotusekey","_result","_oid"];	// extDB2
+//PVDZE_veh_Publish2 = [[_dir,_location],_part_out,false,_keySelected,_activatingPlayer];
+#include "\z\addons\dayz_server\compile\server_toggle_debug.hpp"
+
+_worldspace = 	_this select 0;
+_class = 		_this select 1;
+_donotusekey =	_this select 2;
+_keySelected =  _this select 3;
+_activatingPlayer =  _this select 4;
 
 if(_donotusekey) then {
 	_isOK = true;
@@ -21,15 +22,13 @@ if(_donotusekey) then {
 	_characterID = str(getNumber(configFile >> "CfgWeapons" >> _keySelected >> "keyid"));
 };
 
-diag_log ("PUBLISH: Attempt " + str(_object));
 _dir = 		_worldspace select 0;
 _location = _worldspace select 1;
+_uid = _worldspace call dayz_objectUID2;
 
-//Generate UID test using time
-_uid = _worldspace call dayz_objectUID3;
-
-// TODO: check if uid already exists && if so increment by 1 && check again as soon as we find nothing continue.
-
+//Send request
+// extDB2
+//_key = format["CHILD:308:%1:%2:%3:%4:%5:%6:%7:%8:%9:",dayZ_instance, _class, 0 , _characterID, _worldspace, [], [], 1,_uid];
 //Send request
 _key = [
 	dayZ_instance,
@@ -40,6 +39,8 @@ _key = [
 	((_worldspace select 1) select 1) call KK_fnc_floatToString,	// y
 	((_worldspace select 1) select 2) call KK_fnc_floatToString,	// z
 	(_worldspace select 0) call KK_fnc_floatToString,		// dir
+	"0",
+	[[0,0,0],[0,0,0]],
 	[], // inv magazines
 	[], // inv weapons
 	[], // inv backpacks
@@ -48,30 +49,38 @@ _key = [
 	_uid
 ];
 _query = ["objectPublish", _key] call dayz_prepareDataForDB;
-//diag_log ("HIVE: WRITE: "+ str(_query)); 
+
+#ifdef OBJECT_DEBUG
+//diag_log ("HIVE: WRITE: "+ str(_key));	// extDB2
+diag_log ("HIVE: WRITE: "+ str(_query)); 
+#endif
+
+// extDB2
+//_key call server_hiveWrite;
 _result = _query call server_hiveReadWrite;
 
+// extDB2
 // Try to get object ID already here
 if (0 < count _result) then {
 	_oid = str (_result select 0);
-	_object setVariable ["ObjectID", _oid, true];
+	//_object setVariable ["ObjectID", _oid, true];
 };
 // Switched to spawn so we can wait a bit for the ID
-[_object,_uid,_characterID,_class,_dir,_location,_donotusekey,_activatingPlayer, _oid] spawn {
-	private ["_object","_uid","_characterID","_done","_retry","_key","_result","_outcome","_oid","_class","_location","_object_para","_donotusekey","_activatingPlayer"];
+[_uid,_characterID,_class,_dir,_location,_donotusekey,_activatingPlayer, _oid] spawn {
+   private ["_object","_uid","_characterID","_done","_retry","_key","_result","_outcome","_oid","_class","_location","_object_para","_donotusekey","_activatingPlayer"];
 
-	_object = _this select 0;
-	_uid = _this select 1;
-	_characterID = _this select 2;
-	_class = _this select 3;
-	//_dir = _this select 4;
-	_location = _this select 5;
-	_donotusekey = _this select 6;
-	_activatingPlayer = _this select 7;
-	_oid = _this select 8;
+   _uid = _this select 0;
+   _characterID = _this select 1;
+   _class = _this select 2;
+   //_dir = _this select 3;
+   _location = _this select 4;
+   _donotusekey = _this select 5;
+   _activatingPlayer = _this select 6;
+   _oid = _this select 7;	// extDB2
 
-	_done = false;
+   _done = false;
 	_retry = 0;
+	// extDB2
 	if (!isNil "_oid") then {
 
 		_retry = 100;
@@ -80,44 +89,55 @@ if (0 < count _result) then {
 
 	// TODO: Needs major overhaul for 1.1
 	while {_retry < 10} do {
-		
-		sleep 1;
 		// GET DB ID
+		// extDB2
+		//_key = format["CHILD:388:%1:",_uid];
 		_key = [_uid];
 		_query = ["objectReturnID",_key] call dayz_prepareDataForDB;
-		//diag_log ("HIVE: WRITE: "+ str(_query));
+		#ifdef OBJECT_DEBUG
+		diag_log ("HIVE: WRITE: "+ str(_query));
+		#endif
+		
+		// extDB2
+		//_result = _key call server_hiveReadWrite;
+		//_outcome = _result select 0;
 		_result = _query call server_hiveReadWrite;
 		_outcome = (count _result > 0);
+		//if (_outcome == "PASS") then {	// extDB2
 		if (_outcome) then {
+			//_oid = _result select 1;	// extDB2
 			_oid = (_result select 0) select 0;
-			//_object setVariable ["ObjectID", _oid, true];
-			//diag_log("CUSTOM: Selected " + str(_oid));
+			#ifdef OBJECT_DEBUG
+			diag_log("CUSTOM: Selected " + str(_oid));
+			#endif
+
 			_done = true;
 			_retry = 100;
 
 		} else {
-			diag_log("TIMEOUT: trying again to get id for vehicle: " + str(_uid));
+			diag_log("CUSTOM: trying again to get id for: " + str(_uid));
 			_done = false;
 			_retry = _retry + 1;
+			uiSleep 1;
 		};
 	};
 
-	// Remove marker
-	deleteVehicle _object;
-
-	if(!_done) exitWith { diag_log("TIMEOUT: failed to get id for vehicle: " + str(_uid)); };
+	if(!_done) exitWith { diag_log("CUSTOM: failed to get id for : " + str(_uid)); };
 
 	if(DZE_TRADER_SPAWNMODE) then {
-		_object_para = createVehicle ["ParachuteMediumWest", [0,0,0], [], 0, "CAN_COLLIDE"];
+		//_object_para = createVehicle ["ParachuteMediumWest", [0,0,0], [], 0, "CAN_COLLIDE"];
+		_object_para = "ParachuteMediumWest" createVehicle [0,0,0];
 		_object_para setPos [_location select 0, _location select 1,(_location select 2) + 65];
-		_object = createVehicle [_class, [0,0,0], [], 0, "CAN_COLLIDE"];
+		//_object = createVehicle [_class, [0,0,0], [], 0, "CAN_COLLIDE"];
+		_object = _class createVehicle [0,0,0];
 	} else {
-		_object = createVehicle [_class, _location, [], 0, "CAN_COLLIDE"];
+		//_object = createVehicle [_class, _location, [], 0, "CAN_COLLIDE"];
+		// Don't use setPos or CAN_COLLIDE here. It will spawn inside other vehicles
+		_object = _class createVehicle _location;
 	};
 
 	if(!_donotusekey) then {
 		// Lock vehicle
-		//_object setVariable ["MF_Tow_Cannot_Tow",true,true];
 		_object setvehiclelock "locked";
 	};
 
@@ -151,29 +171,25 @@ if (0 < count _result) then {
 
 	clearWeaponCargoGlobal  _object;
 	clearMagazineCargoGlobal  _object;
-	// _object setVehicleAmmo DZE_vehicleAmmo;
-
+	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_object];
 	_object setVariable ["ObjectID", _oid, true];
-	
 	_object setVariable ["lastUpdate",time];
-	
 	_object setVariable ["CharacterID", _characterID, true];
+	//_object setVelocity [0,0,1];
 
 	if(DZE_TRADER_SPAWNMODE) then {
 		_object attachTo [_object_para, [0,0,-1.6]];
-		sleep 1.0;
+		uiSleep 1;
 		WaitUntil{(([_object] call FNC_GetPos) select 2) < 0.1};
 		detach _object;
 		deleteVehicle _object_para;
 	};
-
-	PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_object];
-
+	
 	_object call fnc_veh_ResetEH;
 	
 	// for non JIP users this should make sure everyone has eventhandlers for vehicles.
 	PVDZE_veh_Init = _object;
 	publicVariable "PVDZE_veh_Init";
 	
-	diag_log ("PUBLISH: " + str(_activatingPlayer) + " Bought " + (_class) + " with ID " + str(_uid));
+	diag_log format["PUBLISH: %1(%2) bought %3 with ObjectUID %4",if (alive _activatingPlayer) then {name _activatingPlayer} else {"DeadPlayer"},getPlayerUID _activatingPlayer,_class,_uid];
 };

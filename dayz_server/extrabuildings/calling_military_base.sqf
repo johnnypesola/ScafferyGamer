@@ -1032,7 +1032,7 @@ clearWeaponCargoGlobal _thebox;
 clearMagazineCargoGlobal _thebox;
 _thebox setVariable ["ObjectID","1",true];
 _thebox setVariable ["permaLoot",true];
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_thebox];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_thebox];
 
 clearWeaponCargoGlobal _thebox;
 clearMagazineCargoGlobal _thebox;
@@ -1059,7 +1059,7 @@ _hidden_box_random_tools =[
 "ItemKnife",
 "ItemCrowbar",
 "ItemEtool",
-"ItemHatchet_DZE",
+"ItemHatchet",
 "Binocular_Vector",
 "ItemGPS",
 "NVGoggles",

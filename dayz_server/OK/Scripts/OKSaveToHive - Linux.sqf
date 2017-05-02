@@ -22,7 +22,7 @@ if (OKEpoch) then {
 	_uid = _worldspace call dayz_objectUID2;
 
 	diag_log format["CHILD:308:%1:%2:%3:%4:%5:%6:%7:%8:%9:",dayZ_instance, _class, 0, 0, _worldspace, [], [], 1, _uid];
-	PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor, _object];
+	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor, _object];
 
 	// Switched to spawn so we can wait a bit for the ID
 	[_object,_uid, 1, 0, [], 0, _class] spawn {

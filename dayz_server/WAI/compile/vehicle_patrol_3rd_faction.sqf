@@ -19,14 +19,15 @@ _pilot = _unitGroup createUnit ["Soldier1_DZ", [0,0,0], [], 1, "NONE"];
 [_pilot] joinSilent _unitGroup;
 ai_vehicle_units = (ai_vehicle_units + 1);
 
-_veh = createVehicle [_heli_class, [(_startingpos select 0),(_startingpos select 1), 0], [], 0, "CAN_COLLIDE"];
+_veh = createVehicle [_heli_class, [(_startingpos select 0),(_startingpos select 1), 0.2], [], 0, "CAN_COLLIDE"];
 _veh setFuel 1;
 _veh engineOn true;
 _veh setVehicleAmmo 1;
-_veh addEventHandler ["GetOut",{(_this select 0) setFuel 0;(_this select 0) setDamage 1;}];
+//_veh addEventHandler ["GetOut",{(_this select 0) setFuel 0;(_this select 0) setDamage 1; diag_log format ["Vehicle %1 [%2] destroyed due to crew got out!", _this select 0, typeOf (_this select 0)];}];
+//_veh addEventHandler ["GetOut",{(_this select 0) setFuel 0;(_this select 0) setDamage 1;}];
 _veh allowCrewInImmobile true; 
 _veh lock true;
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_veh];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_veh];
 
 _pilot assignAsDriver _veh;
 _pilot moveInDriver _veh;

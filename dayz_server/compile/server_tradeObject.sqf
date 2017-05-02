@@ -1,26 +1,42 @@
-private ["_player","_name","_traderid","_buyorsell","_data","_result","_key","_query","_outcome","_clientID"];
+private ["_player","_playerUID","_name","_traderid","_buyorsell","_data","_result","_key","_query","_outcome","_clientID","_price","_quantity","_container","_return","_classname","_traderCity","_currency","_message"];
 
 _player =		_this select 0;
 _traderID = 	_this select 1;
 _buyorsell = 	_this select 2;	//0 > Buy // 1 > Sell
 _classname =	_this select 3;
 _traderCity = 	_this select 4;
-_currency =	_this select 5;
-_qty =		_this select 6;
-_clientID = 	owner _player;
-_price = format ["%2x %1",_currency,_qty];
-_name = if (alive _player) then { name _player; } else { "Dead Player"; };
+_currency =		_this select 5;
+_price =		_this select 6;
 
-if (_buyorsell == 0) then { //Buy
-diag_log format["EPOCH SERVERTRADE: Player: %1 (%2) bought a %3 in/at %4 for %5", _name, (getPlayerUID _player), _classname, _traderCity, _price];
-} else { //SELL
-diag_log format["EPOCH SERVERTRADE: Player: %1 (%2) sold a %3 in/at %4 for %5",_name, (getPlayerUID _player), _classname, _traderCity, _price];
+_clientID = 	owner _player;
+_playerUID = 	getPlayerUID _player;
+_name = 		if (alive _player) then {name _player} else {"Dead Player"};
+
+if (count _this > 7) then {
+	_quantity = _this select 7;
+	_container = _this select 8;
+	_return = false;
+} else {
+	_quantity = 1;
+	_container = "gear";
+	_return = true;
 };
 
+if (typeName _currency  == "STRING") then {_price = format ["%1 %2",_price,_currency];};
+
+if (_buyorsell == 0) then { // Buy
+	_message = format["%1: %2 (%3) purchased %4x %5 into %6 at %7 for %8",localize "STR_EPOCH_PLAYER_289",_name,_playerUID,_quantity,_classname,_container,_traderCity,_price];
+} else { // Sell
+	_message = format["%1: %2 (%3) sold %4x %5 from %6 at %7 for %8",localize "STR_EPOCH_PLAYER_289",_name,_playerUID,_quantity,_classname,_container,_traderCity,_price];
+};
+
+diag_log _message;
 if (DZE_ConfigTrader) then {
 	_outcome = "PASS";
 } else {
 	//Send request
+	// extDB2
+	//_key = format["CHILD:398:%1:%2:",_traderID,_buyorsell];
 	if (_buyorsell == 1) then { 	// sell
 		_key = [_traderID];
 		_query = ["sellObject", _key] call dayz_prepareDataForDB;
@@ -33,11 +49,16 @@ if (DZE_ConfigTrader) then {
 		_result = call compile format ["%1",(_data select 0)];
 	};
 
+	// extDB2
+	//_data = "HiveEXT" callExtension _key;
+	//_result = call compile format ["%1",_data];
 	// diag_log ("TRADE: RES: "+ str(_result));
 	_outcome = _result select 0;
 };
 
-dayzTradeResult = _outcome;
-if(!isNull _player) then {
-	_clientID publicVariableClient "dayzTradeResult";
+if (_return) then {
+	dayzTradeResult = _outcome;
+	if (!isNull _player) then {
+		_clientID publicVariableClient "dayzTradeResult";
+	};
 };

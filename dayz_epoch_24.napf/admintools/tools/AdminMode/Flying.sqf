@@ -1,6 +1,4 @@
-// Malory's Modded Flying Script 
-private ["_flying"];
-_flying = _this select 0;
+if(isNil "flying2") then {flying2 = true;} else {flying2 = !flying2};
 
 forwardAndBackward = 4; 
 leftAndRight = 2;     
@@ -50,18 +48,12 @@ move_right =
     {
         _rightDirection = getdir (vehicle player);
         (vehicle player) setdir (_rightDirection) + leftAndRight;
-        player setVariable["lastPos",1];player setVariable["lastPos",[]];
+        player setVariable["lastPos",[]];
     };
 };
 
 move_up =
-{
-    if ((getPosATL (vehicle player) select 2) < distanceFromGround) then
-    {
-        //player setVariable["dayz_isSwimming",true,false];
-        //player playMoveNow "AswmPercMrunSnonWnonDf_AswmPercMstpSnonWnonDnon"
-    };
-    
+{    
 	_vehicle = (vehicle player);
 	_vel = velocity _vehicle;
 	_dir = direction _vehicle;
@@ -97,8 +89,14 @@ toggle_hover =
     };
 };
 
-if (_flying) then 
+if (flying2) then 
 {
+	// Tool use logger
+	if(logMinorTool) then {
+		usageLogger = format["%1 %2 -- has ENABLED flying",name player,getPlayerUID player];
+		[] spawn {publicVariable "usageLogger";};
+	};
+
     keyForward = (findDisplay 46) displayAddEventHandler ["KeyDown","if ((_this select 1) == 17) then {call move_forward;}"];     //W - Forward
     keyLeft = (findDisplay 46) displayAddEventHandler ["KeyDown","if ((_this select 1) == 30) then {call move_left;}"];         //A - Left
     keyBackward = (findDisplay 46) displayAddEventHandler ["KeyDown","if ((_this select 1) == 31) then {call move_backward;}"];     //S - Backward
@@ -106,9 +104,13 @@ if (_flying) then
     keyUp = (findDisplay 46) displayAddEventHandler ["KeyDown","if ((_this select 1) == 16) then {call move_up;}"];         //Q - Up
     keyDown = (findDisplay 46) displayAddEventHandler ["KeyDown","if ((_this select 1) == 44) then {call move_down;}"];         //Z - Down
     keyHover = (findDisplay 46) displayAddEventHandler ["KeyDown","if ((_this select 1) == 57) then {call toggle_hover;}"];     //SpaceBar - Toggle Hover
-}
-else
-{
+} else {
+	// Tool use logger
+	if(logMinorTool) then {
+		usageLogger = format["%1 %2 -- has DISABLED flying",name player,getPlayerUID player];
+		[] spawn {publicVariable "usageLogger";};
+	};
+
     (findDisplay 46) displayRemoveEventHandler ["KeyDown", keyForward];
     (findDisplay 46) displayRemoveEventHandler ["KeyDown", keyLeft];
     (findDisplay 46) displayRemoveEventHandler ["KeyDown", keyBackward];
@@ -118,11 +120,14 @@ else
     (findDisplay 46) displayRemoveEventHandler ["KeyDown", keyHover];
 };
 
-while {_flying} do
+while {flying2} do
 {
-    if (hovering) then
+    if (!isNil "hovering") then
     {
 		(vehicle player) setvelocity [0,0,0.2];
     };
 	Sleep 0.01;
 };
+
+hovering = nil;
+hoverPos = nil;

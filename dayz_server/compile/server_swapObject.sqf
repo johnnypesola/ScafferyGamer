@@ -1,13 +1,12 @@
-private ["_activatingplayerUID","_class","_uid","_charID","_object","_worldspace","_key","_query","_allowed","_obj","_objectID","_objectUID","_proceed","_activatingplayer"];
+private ["_class","_uid","_charID","_object","_worldspace","_key","_query","_allowed","_obj","_inv","_objectID","_objectUID","_proceed","_activatingplayer","_ownerpuid","_vect"];	// extDB2
 //[dayz_characterID,_tent,[_dir,_location],"TentStorage"]
 _charID =		_this select 0;
 _object = 		_this select 1;
 _worldspace = 	_this select 2;
 _class = 		_this select 3;
-_obj = 		_this select 4;
-_activatingplayer = 		_this select 5;
-_activatingplayerUID = 		(getPlayerUID _activatingplayer);
-
+_obj = 			_this select 4;
+_activatingplayer = _this select 5;
+_inv = if (count _this > 6) then {_this select 6} else {[]};
 _proceed = false;
 
 _objectID = "0";
@@ -42,12 +41,12 @@ if (!_allowed || !_proceed) exitWith {
 	if(!isNull(_object)) then {
 		deleteVehicle _object; 
 	};
-	diag_log ("Invalid object swap by playerUID:"+ str(_activatingplayerUID));
+	diag_log ("Invalid object swap by playerUID:" + (getPlayerUID _activatingplayer));
 };
 
 // Publish variables
 _object setVariable ["CharacterID",_charID,true];
-		
+	
 //_object setVariable ["ObjectUID",_objectUID,true];
 _object setVariable ["OEMPos",(_worldspace select 1),true];
 
@@ -56,7 +55,17 @@ _object setVariable ["OEMPos",(_worldspace select 1),true];
 //get UID
 _uid = _worldspace call dayz_objectUID2;
 
+//Get owner and up vector
+_ownerpuid = if (3 == count _worldspace) then {_worldspace select 2} else {'0'};
+_vect = if (4 == count _worldspace) then {_worldspace select 3} else {[]};
+
+// extDB2
 //Send request
+//_key = format["CHILD:308:%1:%2:%3:%4:%5:%6:%7:%8:%9:",dayZ_instance, _class, 0 , _charID, _worldspace, [], [], 0,_uid];
+//_key = format["CHILD:308:%1:%2:%3:%4:%5:%6:%7:%8:%9:",dayZ_instance, _class, 0 , _charID, _worldspace call AN_fnc_formatWorldspace, _inv, [], 0,_uid]; // Precise Base Building 1.0.5
+
+//diag_log ("HIVE: WRITE: "+ str(_key));
+//_key call server_hiveWrite;	// extDB2
 _key = [
 	dayZ_instance,
 	_class,
@@ -66,6 +75,8 @@ _key = [
 	((_worldspace select 1) select 1) call KK_fnc_floatToString,	// y
 	((_worldspace select 1) select 2) call KK_fnc_floatToString,	// z
 	(_worldspace select 0) call KK_fnc_floatToString,		// dir
+	_ownerpuid,
+	_vect,
 	[], // inv magazines
 	[], // inv weapons
 	[], // inv backpacks
@@ -80,14 +91,14 @@ _query call server_hiveWrite;
 _object setVariable ["lastUpdate",time];
 _object setVariable ["ObjectUID", _uid,true];
 // _object setVariable ["CharacterID",_charID,true];
-if (DZE_GodModeBase) then {
-	_object addEventHandler ["HandleDamage", {false}];
-}else{
-	_object addMPEventHandler ["MPKilled",{_this call object_handleServerKilled;}];
+if (DZE_GodModeBase && {!(_class in DZE_GodModeBaseExclude)}) then {
+	_object addEventHandler ["HandleDamage",{false}];
+} else {
+	_object addMPEventHandler ["MPKilled",{_this call vehicle_handleServerKilled;}];
 };
 // Test disabling simulation server side on buildables only.
 _object enableSimulation false;
 
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_object];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_object];
 
 diag_log ("PUBLISH: " + str(_activatingPlayer) + " upgraded " + (_class) + " with ID " + str(_uid));

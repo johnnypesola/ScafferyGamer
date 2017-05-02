@@ -106,11 +106,11 @@ OKWeps2 = [
 "Sa58P_EP1",
 "Sa58V_EP1",
 "M14_EP1",
-"RPK_74",
-"PK_DZ",
-"M249_DZ",
-"M240_DZ",
-"DMR_DZ"
+"RPK74_DZ",
+"Pecheneg",
+"M249",
+"M240",
+"DMR"
 ];
 
 OKWeps3 = [
@@ -144,33 +144,33 @@ OKWeps3 = [
 "M16A2GL",
 "M16A2GL",
 "M16A2GL",
-"Mk_48_DZ",
-"Mk_48_DZ",
-"Mk_48_DZ",
-"Mk_48_DZ",
-"Mk_48_DZ",
-"Mk_48_DZ",
-"Mk_48_DZ",
-"Mk_48_DZ",
-"Mk_48_DZ",
-"Pecheneg_DZ",
-"Pecheneg_DZ",
-"Pecheneg_DZ",
-"Pecheneg_DZ",
-"Pecheneg_DZ",
-"Pecheneg_DZ",
-"Pecheneg_DZ",
-"Pecheneg_DZ",
-"Pecheneg_DZ",
-"m240_scoped_EP1_DZE",
-"m240_scoped_EP1_DZE",
-"m240_scoped_EP1_DZE",
-"m240_scoped_EP1_DZE",
-"m240_scoped_EP1_DZE",
-"m240_scoped_EP1_DZE",
-"m240_scoped_EP1_DZE",
-"m240_scoped_EP1_DZE",
-"m240_scoped_EP1_DZE"
+"Mk_48",
+"Mk_48",
+"Mk_48",
+"Mk_48",
+"Mk_48",
+"Mk_48",
+"Mk_48",
+"Mk_48",
+"Mk_48",
+"Pecheneg",
+"Pecheneg",
+"Pecheneg",
+"Pecheneg",
+"Pecheneg",
+"Pecheneg",
+"Pecheneg",
+"Pecheneg",
+"Pecheneg",
+"m240_scoped_EP1",
+"m240_scoped_EP1",
+"m240_scoped_EP1",
+"m240_scoped_EP1",
+"m240_scoped_EP1",
+"m240_scoped_EP1",
+"m240_scoped_EP1",
+"m240_scoped_EP1",
+"m240_scoped_EP1"
 ];
 
 OKWeps4 = [
@@ -184,7 +184,7 @@ OKWeps4 = [
 "SCAR_H_LNG_Sniper",
 "SCAR_H_LNG_Sniper",
 "SCAR_H_LNG_Sniper",
-"M107_DZ",
+"m107",
 "BAF_LRR_scoped",
 "BAF_LRR_scoped",
 "M40A3",
@@ -199,7 +199,7 @@ OKWeps4 = [
 "M24",
 "M24",
 "M24",
-"KSVK_DZE",
+"ksvk",
 "SVD",
 "SVD",
 "SVD",
@@ -214,7 +214,7 @@ OKWeps4 = [
 /////////////////////////////////////////////////////////////
 // These are gear sets that will be randomly given to the AI
 // They are all the same, but can be customized.
-// "Binocular_Vector","NVGoggles","ItemMap","ItemCompass","ItemGPS","ItemWatch","ItemKnife","Itemtoolbox","ItemCrowbar","Itemetool","ItemHatchet_DZE"
+// "Binocular_Vector","NVGoggles","ItemMap","ItemCompass","ItemGPS","ItemWatch","ItemKnife","Itemtoolbox","ItemCrowbar","Itemetool","ItemHatchet"
 OKGear0 = [
 ["ItemBandage","ItemBandage","ItemPainkiller","ItemJerrycan","PartEngine","ItemMorphine","ItemGoldBar4oz"],
 ["ItemKnife","NVGoggles","ItemHatchet"]
@@ -237,11 +237,11 @@ OKGear3 = [
 
 OKGear4 = [
 ["ItemBandage","ItemBandage","ItemPainkiller","ItemMorphine","ItemEpinephrine","ItemPainkiller","ItemAntibiotic","ItemBloodbag","ItemGoldBar3oz"],
-["ItemKnife","ItemFlashlight","ItemCompass","Itemetool","ItemHatchet_DZE"]
+["ItemKnife","ItemFlashlight","ItemCompass","Itemetool","ItemHatchet"]
 ];
 
 ////////////////////////////////////////////////////////////
 // These are the backpacks that can be assigned to AI units.
 OKPacklist = [
-"DZ_Czech_Vest_Puch"
+"DZ_Czech_Vest_Pouch"
 ];

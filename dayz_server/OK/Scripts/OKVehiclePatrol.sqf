@@ -23,7 +23,8 @@ _patrol flyInHeight 100;
 _patrol addEventHandler ["GetOut",{(_this select 0) setFuel 0;[(_this select 0)] ExecVM OKAIPinata; (_this select 0) setDamage 1}];
 _patrol allowCrewInImmobile false; 
 _patrol lock false;
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_patrol];
+//dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_patrol];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_patrol];	// 1.0.6+
 
 diag_log format["[OK]: Blackhawk Mission %1 spawned as SAR.",_patrol];
 

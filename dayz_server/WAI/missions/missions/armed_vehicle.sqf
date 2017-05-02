@@ -11,7 +11,7 @@ _veh = createVehicle [_vehclass,_position, [], 0, "CAN_COLLIDE"];
 _vehdir = round(random 360);
 _veh setDir _vehdir;
 _veh setVariable ["ObjectID","1",true];
-PVDZE_serverObjectMonitor set [count PVDZE_serverObjectMonitor,_veh];
+dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_veh];
 diag_log format["WAI: Mission Armed Vehicle spawned a %1",_vehname];
 
 _objPosition = getPosATL _veh;
