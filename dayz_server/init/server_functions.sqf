@@ -162,7 +162,8 @@ server_hiveWrite = {
 	private "_data";
 	//diag_log ("ATTEMPT WRITE: " + _this);
 	// extDB2
-	_data = "extDB2" callExtension format ["%1:%2:%3", 1, DZE_DbSessionID, _this];
+	//_data = "extDB2" callExtension format ["%1:%2:%3", 1, DZE_DbSessionID, _this];
+	_data = "extDB2" callExtension (format ["%1:%2:", 1, DZE_DbSessionID] + _this);
 	//diag_log ("WRITE: " +str(_data));
 };
 
