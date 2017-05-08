@@ -193,7 +193,7 @@ ai_wep1 = [
 ["M14_CCO_DZ","20Rnd_762x51_DMR"], 
 ["M8_sharpshooter","30Rnd_556x45_Stanag"],
 ["Sa58P_EP1","30Rnd_762x39_AK47"],
-["FN_FAL","20Rnd_762x51_FNFAL"]
+["FNFAL_DZ","20Rnd_762x51_FNFAL"]
 ];
 
 

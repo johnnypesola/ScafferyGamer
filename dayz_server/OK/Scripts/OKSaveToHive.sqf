@@ -22,7 +22,7 @@ if (_ranFuel < .1) then {_ranFuel = .1;};
 //if (OKEpoch) then {
 
 	//The server is running DayZ Epoch, so we use the Epoch method.
-	_uid = _worldspace call dayz_objectUID3;
+	_uid = _worldspace call dayz_objectUID2;
 
 	_key = [
 		dayZ_instance,

@@ -7,13 +7,69 @@
 OKpistolList = ["Colt1911","glock17_EP1","M9","M9SD","Makarov","MakarovSD","revolver_EP1","UZI_EP1","UZI_SD_EP1"];
 
 // Sniper Rifles
-OKsniperList = ["SVD_CAMO","DMR","M40A3","m107","M110_NVG_EP1","SCAR_H_LNG_Sniper","SCAR_H_LNG_Sniper_SD","BAF_LRR_scoped"];
+OKsniperList = ["SVD_Gh_DZ","DMR_DZ","M40A3_DZ","M107_DZ","M110_NVG_EP1","SCAR_H_LNG_Sniper","SCAR_H_LNG_Sniper_SD","BAF_LRR_scoped"];
 
 // Light Machineguns
-OKmgList = ["M240_DZ","M249_DZ","Mk48_DZ","bizon_silenced","MP5SD","Pecheneg_DZ","PKM_DZ"];
+OKmgList = ["M240_DZ","M249_DZ","Mk48_DZ","Bizon_SD_DZ","MP5_SD_DZ","Pecheneg_DZ","PKM_DZ"];
 
 // Primary Rifles
-OKprimaryList = ["M16A4_ACG","BAF_L85A2_RIS_Holo","bizon_silenced","FN_FAL_ANPVS4","FN_FAL","G36A_camo","G36K_camo","M16A2GL","M4A1_AIM_SD_camo","M14_EP1","M4A1_HWS_GL_camo","M4A3_CCO_EP1","Sa58V_CCO_EP1","Sa58V_RCO_EP1","M79_EP1","M32_EP1","SCAR_H_CQC_CCO_SD","SCAR_H_STD_EGLM_Spect"];
+OKprimaryList = [
+	"M16A4_ACOG_DZ",
+	"M16A4_ACOG_DZ",
+	"M16A4_ACOG_DZ",
+	"M16A4_ACOG_DZ",
+	"L85_Holo_DZ",
+	"L85_Holo_DZ",
+	"L85_Holo_DZ",
+	"L85_Holo_DZ",
+	"Bizon_SD_DZ",
+	"Bizon_SD_DZ",
+	"Bizon_SD_DZ",
+	"Bizon_SD_DZ",
+	"FN_FAL_ANPVS4_DZE",
+	"FN_FAL_ANPVS4_DZE",
+	"FNFAL_DZ",
+	"FNFAL_DZ",
+	"FNFAL_DZ",
+	"FNFAL_DZ",
+	"G36A_Camo_DZ",
+	"G36A_Camo_DZ",
+	"G36A_Camo_DZ",
+	"G36K_Camo_DZ",
+	"M16A2_GL_DZ",
+	"M16A2_GL_DZ",
+	"M16A2_GL_DZ",
+	"M16A2_GL_DZ",
+	"M4A1_AIM_SD_camo",
+	"M4A1_AIM_SD_camo",
+	"M4A1_AIM_SD_camo",
+	"M4A1_AIM_SD_camo",
+	"M14_DZ",
+	"M14_DZ",
+	"M14_DZ",
+	"M4A1_HWS_GL_camo",
+	"M4A1_HWS_GL_camo",
+	"M4A1_HWS_GL_camo",
+	"M4A1_HWS_GL_camo",
+	"M4A3_CCO_EP1",
+	"M4A3_CCO_EP1",
+	"M4A3_CCO_EP1",
+	"M4A3_CCO_EP1",
+	"Sa58V_CCO_EP1",
+	"Sa58V_CCO_EP1",
+	"Sa58V_CCO_EP1",
+	"Sa58V_RCO_EP1",
+	"M79_EP1",
+	"M32_EP1",
+	"SCAR_H_CQC_CCO_SD",
+	"SCAR_H_CQC_CCO_SD",
+	"SCAR_H_CQC_CCO_SD",
+	"SCAR_H_CQC_CCO_SD",
+	"SCAR_H_STD_EGLM_Spect",
+	"SCAR_H_STD_EGLM_Spect",
+	"SCAR_H_STD_EGLM_Spect",
+	"SCAR_H_STD_EGLM_Spect"
+];
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // "supply" box
