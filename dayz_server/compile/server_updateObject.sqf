@@ -104,6 +104,7 @@ _object_inventory = {
 		if (_isNormal) then {
 			_inventory = [getWeaponCargo _object, getMagazineCargo _object, getBackpackCargo _object];
 		};
+		//diag_log format["DEBUG: %1 inv: %2", _objectID, _inventory];
 	};
 	
 	_previous = str(_object getVariable["lastInventory",[]]);

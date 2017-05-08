@@ -276,13 +276,18 @@ if (count _playerPos > 0) then {
 	_killsB,
 	_currentModel,
 	_humanity,
-	_coins
+	_coins,
+	_playerUID,
+	_bankCoins,
+	_globalCoins
 ] spawn {
-	private["_query", "_key","_characterID","_playerGear","_updatePos","_ws","_charPos",
+	private["_query", "_key","_characterID","_playerGear","_updatePos","_ws","_charPos","_globalCoins",
 		"_updateInv","_direction","_updateBackpack","_playerBackp","_updateMed","_medical","_isDead",
 		"_isUncon","_isInfect","_isInjured","_isInPain","_isCardiac","_isLowBlood","_isBloodTestDone",
-		"_kills","_headShots","_distanceFoot","_timeSince","_currentWpn","_currentAnim",
-		"_temp","_friendlies","_killsH","_killsB","_currentModel","_humanity","_empty","_prof","_coins"];
+		"_kills","_headShots","_distanceFoot","_timeSince","_currentWpn","_currentAnim","_playerUID",
+		"_temp","_friendlies","_killsH","_killsB","_currentModel","_humanity","_empty","_prof","_coins",
+		"_bankCoins"
+	];
 
 	//_prof = diag_tickTime;
 	_key = [];
@@ -310,6 +315,9 @@ if (count _playerPos > 0) then {
 	_currentModel = _this select 21;
 	_humanity = _this select 22;
 	_coins = _this select 23;
+	_playerUID = _this select 24;
+	_bankCoins = _this select 25;
+	_globalCoins = _this select 26;
 
 	_key = _key + [format["instance_id = %1", dayZ_instance]];
 
@@ -423,16 +431,21 @@ if (count _playerPos > 0) then {
 
 	//_character setVariable["write_lock", false, false];
 	//diag_log ("HIVE: WRITE: "+ str(_query) + " / " + _characterID);
-};
+	//diag_log format["HIVE: WRITE: playerUpdate:%1:", _characterID];
 
-if (Z_SingleCurrency) then { //update global coins
-	// extDB2
-	_key = [_playerUID,dayZ_instance,_globalCoins,_bankCoins];
-	_query = ["playerUpdateCoins", _key] call dayz_prepareDataForDB;
-	_query = call server_hiveWrite;
-	//_key = format["CHILD:205:%1:%2:%3:%4:",_playerUID,dayZ_instance,_globalCoins,_bankCoins];
-	//_key call server_hiveWrite;
-};
+	if (Z_SingleCurrency) then { //update global coins
+		// extDB2
+		_key = [_playerUID,dayZ_instance,_globalCoins,_bankCoins];
+		_query = ["playerUpdateCoins", _key] call dayz_prepareDataForDB;
+		_query = call server_hiveWrite;
+		//_key = format["CHILD:205:%1:%2:%3:%4:",_playerUID,dayZ_instance,_globalCoins,_bankCoins];
+		//_key call server_hiveWrite;
+	};
 
-// Force gear updates for nearby vehicles/tents
-{[_x,"gear"] call server_updateObject;} count nearestObjects [_charPos,DayZ_GearedObjects,10];
+	// Force gear updates for nearby vehicles/tents
+	//diag_log "HIVE: playerUpdate: updating gear in vehicles:";
+	//{
+	//	diag_log format["                 : %1", typeOf _x];
+	//} count nearestObjects [_charPos,DayZ_GearedObjects,10];
+	{[_x,"gear"] call server_updateObject;} count nearestObjects [_charPos,DayZ_GearedObjects,10];
+};
