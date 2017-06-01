@@ -39,6 +39,17 @@ class Category_574 {
 		buy[] = {4,"ItemSilverBar10oz"};
 		sell[] = {2,"ItemSilverBar10oz"};
 	};
+	// Scaffery
+	class M1014 { // sell only
+		type = "trade_weapons";
+		buy[] = {-1,"ItemGoldBar"};
+		sell[] = {2,"ItemGoldBar"};
+	};
+	class Remington870_FL_DZ { // sell only
+		type = "trade_weapons";
+		buy[] = {-1,"ItemGoldBar"};
+		sell[] = {1,"ItemGoldBar"};
+	};
 };
 
 class Category_620 {

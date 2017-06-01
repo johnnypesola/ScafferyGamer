@@ -54,6 +54,22 @@ class Category_486 {
 		buy[] = {2,"ItemGoldBar10oz"};
 		sell[] = {1,"ItemGoldBar10oz"};
 	};
+	// Scaffery
+	class M249_EP1_DZ { // sell only
+		type = "trade_weapons";
+		buy[] = {-1,"ItemGoldBar10oz"};
+		sell[] = {6,"ItemGoldBar"};
+	};
+	class m240_scoped_EP1_DZE { // sell only
+		type = "trade_weapons";
+		buy[] = {-1,"ItemGoldBar10oz"};
+		sell[] = {8,"ItemGoldBar"};
+	};
+	class Mk48_CCO_DZ { // sell only
+		type = "trade_weapons";
+		buy[] = {-1,"ItemGoldBar10oz"};
+		sell[] = {1,"ItemGoldBar10oz"};
+	};
 };
 
 class Category_616 {

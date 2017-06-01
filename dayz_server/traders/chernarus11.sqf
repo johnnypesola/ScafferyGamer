@@ -1,3 +1,5 @@
+Private["_traders"];
+
 [
 	["Profiteer4",[11449.5,11341,0],34.5259],
 	["RU_Villager3",[7996.1,2899.08,0.669153],86.8589],
@@ -24,5 +26,13 @@
 	["Woodlander3",[6317.99,7789.33,0],229.209],
 	["HouseWife1",[13468.4,5439.58,2.55675],268.259],
 	["Doctor",[4059.44,11660.4,0],24.2669],
-	["GUE_Woodlander2",[6321.04,7781.03,0],9.66389]
+	["GUE_Woodlander2",[6321.04,7781.03,0],9.66389],
+	["Soldier_M4A3_PMC",[1908.012,14435.136,0],-64.091377],
+	["Soldier_AA_PMC",[1613.0393,7808.0752,0],-83.499443],
+	["Soldier_PMC",[1040.3647,2869.8811,0],71.888855]
 ] call server_spawnTraders;
+
+_traders = nearestObjects [[1908.012,14435.136,0],["Soldier_M4A3_PMC"],1];
+if (count _traders > 0) then {
+	(_traders select 0) setCaptive true;	// Avoid AI shooting at this trader
+};

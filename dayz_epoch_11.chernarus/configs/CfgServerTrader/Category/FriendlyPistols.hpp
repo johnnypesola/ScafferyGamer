@@ -29,6 +29,13 @@ class Category_489 {
 		buy[] = {2,"ItemSilverBar10oz"};
 		sell[] = {1,"ItemSilverBar10oz"};
 	};
+	// Scaffery
+	class M9_SD_DZ { // sell only
+		type = "trade_weapons";
+		buy[] = {-1,"ItemGoldBar"};
+		sell[] = {1,"ItemGoldBar"};
+	};
+	
 };
 
 class Category_617 {

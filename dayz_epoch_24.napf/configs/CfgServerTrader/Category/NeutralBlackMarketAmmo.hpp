@@ -56,7 +56,12 @@ class Category_527 {
 	};
 	class 5Rnd_127x108_KSVK {
 		type = "trade_items";
-		buy[] = {2,"ItemSilverBar10oz"};
-		sell[] = {1,"ItemSilverBar10oz"};
+		buy[] = {2,"ItemGoldBar"};
+		sell[] = {1,"ItemGoldBar"};
+	};
+	class 50Rnd_127x107_DSHKM {
+		type = "trade_items";
+		buy[] = {5,"ItemGoldBar10oz"};
+		sell[] = {1,"ItemGoldBar10oz"};
 	};
 };

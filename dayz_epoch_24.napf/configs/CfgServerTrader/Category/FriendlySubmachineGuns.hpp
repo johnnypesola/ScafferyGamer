@@ -24,6 +24,11 @@ class Category_488 {
 		buy[] = {8,"ItemGoldBar"};
 		sell[] = {4,"ItemGoldBar"};
 	};
+	class MP5_SD_DZ {
+		type = "trade_weapons";
+		buy[] = {-1,"ItemGoldBar"};
+		sell[] = {2,"ItemGoldBar"};
+	};
 };
 
 class Category_618 {

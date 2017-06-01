@@ -39,6 +39,37 @@ class Category_487 {
 		buy[] = {1,"ItemGoldBar10oz"};
 		sell[] = {6,"ItemGoldBar"};
 	};
+	// Scaffery
+	class SVD_camo {
+		type = "trade_weapons";
+		buy[] = {1,"ItemGoldBar10oz"};
+		sell[] = {6,"ItemGoldBar"};
+	};
+	class SVD_Gh_DZ {
+		type = "trade_weapons";
+		buy[] = {1,"ItemGoldBar10oz"};
+		sell[] = {6,"ItemGoldBar"};
+	};
+	class M14_CCO_DZ {
+		type = "trade_weapons";
+		buy[] = {2,"ItemGoldBar10oz"};
+		sell[] = {1,"ItemGoldBar10oz"};
+	};
+	class Huntingrifle { // sell only
+		type = "trade_weapons";
+		buy[] = {-1,"ItemGoldBar"};
+		sell[] = {1,"ItemGoldBar"};
+	};
+	class M40A3 { // sell only
+		type = "trade_weapons";
+		buy[] = {-1,"ItemGoldBar10oz"};
+		sell[] = {6,"ItemGoldBar"};
+	};
+	class M24 { // sell only
+		type = "trade_weapons";
+		buy[] = {-1,"ItemGoldBar10oz"};
+		sell[] = {6,"ItemGoldBar"};
+	};
 };
 
 class Category_619 {

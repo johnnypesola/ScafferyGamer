@@ -36,8 +36,10 @@ class Category_627 {
 	};
 	class DMR_DZ {
 		type = "trade_weapons";
-		buy[] = {6,"ItemGoldBar10oz"};
-		sell[] = {3,"ItemGoldBar10oz"};
+		//buy[] = {6,"ItemGoldBar10oz"};
+		//sell[] = {3,"ItemGoldBar10oz"};
+		buy[] = {1,"ItemBriefcase100oz"};
+		sell[] = {1,"ItemBriefcase100oz"};
 	};
 	class BAF_LRR_scoped {
 		type = "trade_weapons";
@@ -53,5 +55,36 @@ class Category_627 {
 		type = "trade_weapons";
 		buy[] = {2,"ItemGoldBar10oz"};
 		sell[] = {1,"ItemGoldBar10oz"};
+	};
+	// Scaffery
+	class Mk48_CCO_DZ { // sell only
+		type = "trade_weapons";
+		buy[] = {-1,"ItemGoldBar10oz"};
+		sell[] = {1,"ItemGoldBar10oz"};
+	};
+	class M4A1_HWS_GL_SD_CAMO { // M4 CCO GL SD CAMO
+		type = "trade_weapons";
+		buy[] = {-1,"ItemGoldBar"};
+		sell[] = {8,"ItemGoldBar"};
+	};
+	class SCAR_H_STD_EGLM_Spect { // sell only
+		type = "trade_weapons";
+		buy[] = {-1,"ItemGoldBar10oz"};
+		sell[] = {1,"ItemGoldBar10oz"};
+	};
+	class SCAR_H_CQC_CCO_SD {
+		type = "trade_weapons";
+		buy[] = {5,"ItemGoldBar10oz"};
+		sell[] = {2,"ItemGoldBar10oz"};
+	};
+	class M32_EP1 { // sell only
+		type = "trade_weapons";
+		buy[] = {-1,"ItemGoldBar10oz"};
+		sell[] = {8,"ItemGoldBar10oz"};
+	};
+	class M79_EP1 { // sell only
+		type = "trade_weapons";
+		buy[] = {-1,"ItemGoldBar10oz"};
+		sell[] = {8,"ItemGoldBar10oz"};
 	};
 };

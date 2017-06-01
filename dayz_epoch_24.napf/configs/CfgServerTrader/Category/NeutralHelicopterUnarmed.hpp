@@ -39,4 +39,9 @@ class Category_519 {
 		buy[] = {2,"ItemBriefcase100oz"};
 		sell[] = {1,"ItemBriefcase100oz"};
 	};
+	class Ka60_PMC {
+		type = "trade_any_vehicle";
+		buy[] = {1,"ItemBriefcase100oz"};
+		sell[] = {1,"ItemBriefcase100oz"};
+	};
 };
