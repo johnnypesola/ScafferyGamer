@@ -1,5 +1,5 @@
 if (!isServer)exitWith{};
-private ["_wpnum","_radius","_gunner2","_gunner","_skillarray","_startingpos","_heli_class","_startPos","_helicopter","_unitGroup","_pilot","_skill","_position","_wp"];
+private ["_wpnum","_radius","_gunner2","_gunner","_skillarray","_startingpos","_heli_class","_startPos","_helicopter","_unitGroup","_pilot","_skill","_position","_wp","_groups"];
 _position = _this select 0;
 _startingpos = _this select 1;
 _radius = _this select 2;
@@ -7,6 +7,11 @@ _wpnum = _this select 3;
 _heli_class = _this select 4;
 _skill = _this select 5;
 
+if (count _this > 6) then {
+	_groups = _this select 6;
+} else {
+	_groups = [];
+};
 _skillarray = ["aimingAccuracy","aimingShake","aimingSpeed","endurance","spotDistance","spotTime","courage","reloadSpeed","commanding","general"];
 
 _unitGroup = createGroup east;
@@ -60,3 +65,8 @@ _helicopter addEventHandler ["killed", {[getPosATL (_this select 0)] call fn_gen
 _wp = _unitGroup addWaypoint [[(_position select 0),(_position select 1),0],100];
 _wp setWaypointType "CYCLE";
 _wp setWaypointCompletionRadius 200;
+
+diag_log format ["WAI: Spawned in %1 %2",1,_heli_class];
+
+// Add to groups list
+_groups set [count _groups, _unitGroup];

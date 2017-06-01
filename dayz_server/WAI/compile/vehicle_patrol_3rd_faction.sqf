@@ -1,5 +1,5 @@
 if (!isServer)exitWith{};
-private ["_heliTurrets","_wpnum","_radius","_gunner2","_skillarray","_startingpos","_heli_class","_startPos","_veh","_unitGroup","_pilot","_skill","_position","_wp","_groups"];
+private ["_heliTurrets","_wpnum","_radius","_gunner","_gunner2","_skillarray","_startingpos","_heli_class","_startPos","_veh","_unitGroup","_pilot","_skill","_position","_wp","_groups"];
 _position = _this select 0;
 _startingpos = _this select 1;
 _radius = _this select 2;
@@ -38,6 +38,16 @@ _gunner moveInTurret [_veh,[0]];
 [_gunner] joinSilent _unitGroup;
 {_gunner setSkill [_x,_skill]} forEach _skillarray;
 ai_vehicle_units = (ai_vehicle_units + 1);
+
+if (_heli_class == "BAF_Jackal2_L2A1_w") then {
+
+	_gunner2 = _unitGroup createUnit ["Bandit1_DZ", [0,0,0], [], 1, "NONE"];
+	_gunner2 assignAsGunner _veh;
+	_gunner2 moveInTurret [_veh,[1]];
+	[_gunner2] joinSilent _unitGroup;
+	{_gunner2 setSkill [_x,_skill]} forEach _skillarray;
+	ai_vehicle_units = (ai_vehicle_units + 1);
+};
 
 
 {_pilot setSkill [_x,1]} forEach _skillarray;

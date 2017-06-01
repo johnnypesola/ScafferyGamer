@@ -100,3 +100,4 @@ _unitGroup selectLeader ((units _unitGroup) select 0);
 [_unitGroup, _goalpos] call group_goalposition;
 
 diag_log format ["WAI: Spawned a group of %1 Neutrals at %2",_unitnumber,_position];
+_unitGroup

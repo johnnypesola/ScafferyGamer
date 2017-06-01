@@ -1,5 +1,5 @@
 if (!isServer)exitWith{};
-private ["_cleanheli","_drop","_helipos","_gunner2","_gunner","_playerPresent","_skillarray","_aicskill","_aiskin", "_aipack", "_aigear","_helipatrol","_gear","_skin","_backpack","_mags","_gun","_triggerdis","_startingpos","_aiweapon","_mission","_heli_class","_startPos","_helicopter","_unitGroup","_pilot","_skill","_paranumber","_position","_wp", "_wp1", "_helipos1"];
+private ["_cleanheli","_drop","_helipos","_gunner2","_gunner","_playerPresent","_skillarray","_aicskill","_aiskin", "_aipack", "_aigear","_helipatrol","_gear","_skin","_backpack","_mags","_gun","_triggerdis","_startingpos","_aiweapon","_mission","_heli_class","_startPos","_helicopter","_unitGroup","_pilot","_skill","_paranumber","_position","_wp", "_wp1", "_helipos1","_groups"];
 _position = _this select 0;
 _startingpos = _this select 1;
 _triggerdis = _this select 2;
@@ -16,6 +16,11 @@ if (count _this > 12) then {
 	_mission = _this select 12;
 } else {
 	_mission = False;
+};
+if (count _this > 13) then {
+	_groups = _this select 13;
+} else {
+	_groups = [];
 };
 //_delay = _this select 12;
 _aiweapon = [];
@@ -86,6 +91,9 @@ _wp setWaypointCompletionRadius 100;
 
 _drop = True;
 _helipos = getpos _helicopter;
+
+_groups set [count _groups, _unitGroup];
+
 while {(alive _helicopter) AND (_drop)} do {
 	private ["_magazine","_weapon","_weaponandmag","_chute","_para","_pgroup", "_gearmagazines", "_geartools"];
 	sleep 1;
@@ -171,6 +179,7 @@ while {(alive _helicopter) AND (_drop)} do {
 		_pgroup selectLeader ((units _pgroup) select 0);
 		diag_log format ["WAI: Spawned in %1 ai units for paradrop",_paranumber];
 		[_pgroup, _position,_mission] call group_waypoints;
+		_groups set [count _groups, _pgroup];
 	};
 };
 if (_helipatrol) then { 
@@ -202,6 +211,3 @@ if (_helipatrol) then {
 	};
 };
 
-
-	
-	

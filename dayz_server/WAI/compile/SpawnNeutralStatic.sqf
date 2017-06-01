@@ -1,4 +1,4 @@
-private ["_mission","_aipack","_class","_position2","_direction","_static","_position","_unitnumber","_skill","_gun","_mags","_backpack","_skin","_gear","_aiweapon","_aigear","_aiskin","_skillarray","_unitGroup","_weapon","_magazine","_weaponandmag","_gearmagazines","_geartools","_unit"];
+private ["_mission","_aipack","_class","_position2","_direction","_static","_position","_unitnumber","_skill","_gun","_mags","_backpack","_skin","_gear","_aiweapon","_aigear","_aiskin","_skillarray","_unitGroup","_weapon","_magazine","_weaponandmag","_gearmagazines","_geartools","_unit","_groups"];
 _position = _this select 0;
 _class = _this select 1;
 _skill = _this select 2;
@@ -14,6 +14,12 @@ if ((count _this == 9) OR (count _this == 5)) then {
 	if (count _this == 5) then {_mission = _this select 4;};
 } else {
 	_mission = false;
+};
+if ((count _this == 10) or (count _this == 6)) then {
+	if (count _this == 10) then { _groups = _this select 9;};
+	if (count _this == 6) then { _groups = _this select 5;};
+} else {
+	_groups = [];
 };
 _position2 = [];
 _aiweapon = [];
@@ -102,5 +108,6 @@ if (_mission) then {
 };
 } forEach _position;
 _unitGroup selectLeader ((units _unitGroup) select 0);
+_groups set [count _groups, _unitGroup];
 //_unit setVariable ["isHero", "1"];
 diag_log format ["WAI: Spawned in %1 %2",_unitnumber,_class];

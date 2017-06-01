@@ -19,6 +19,8 @@ if (count _this > 12) then {
 };
 if (count _this > 13) then {
 	_groups = _this select 13;
+} else {
+	_groups = [];
 };
 //_delay = _this select 12;
 _aiweapon = [];
