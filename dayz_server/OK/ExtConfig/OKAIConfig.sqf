@@ -12,7 +12,7 @@ OKBanditSkins1 = ["TK_INS_Bonesetter_EP1","TK_INS_Soldier_2_EP1","TK_INS_Soldier
 //OKBanditSkins2 = ["MVD_Soldier","RUS_Commander","RU_Soldier"];
 OKBanditSkins2 = ["Bandit1_DZ","BanditW1_DZ"];
 //OKBanditSkins3 = ["INS_Lopotev","INS_Bardak","INS_Commander","INS_Soldier_1","INS_Soldier_2","INS_Soldier_Medic"];
-OKBanditSkins3 = ["TK_Special_Forces_EP1","TK_INS_Soldier_AAT_EP1","TK_GUE_Bonesetter_EP1","TK_GUE_Soldier_3_EP1"];
+OKBanditSkins3 = ["TK_GUE_Soldier_Sniper_EP1","TK_INS_Soldier_AAT_EP1","TK_GUE_Bonesetter_EP1","TK_GUE_Soldier_3_EP1"];
 //OKBanditSkins4 = ["INS_Villager3","INS_Villager4","INS_Woodlander1","INS_Woodlander2","INS_Woodlander3","GUE_Commander","GUE_Soldier_Sniper"];
 OKBanditSkins4 = ["Bandit2_DZ", "BanditW2_DZ"];
 
