@@ -350,10 +350,10 @@ if (isNil "keyboard_keys") then {
 
     // custom
     [[DIK_F3], _scaff_viewdist ] call _addArray; // change view distance (scaffery)
-    [[DIK_F5], _scaff_toggleDebug ] call _addArray; // toggle debug monitor (scaffery)
+    [[DIK_F6], _scaff_toggleDebug ] call _addArray; // toggle debug monitor (scaffery)
 
     [[  DIK_F9,DIK_F10,DIK_F11,DIK_F12,
-        DIK_F8,DIK_F7,DIK_F6,DIK_F4,
+        DIK_F8,DIK_F7,DIK_F4,
         DIK_F2,DIK_9,
         DIK_8,DIK_7,DIK_6,DIK_5,DIK_4], _block] call _addArray;
 	if (dayz_groupSystem) then {

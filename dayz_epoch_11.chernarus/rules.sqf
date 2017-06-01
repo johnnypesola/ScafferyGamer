@@ -8,7 +8,8 @@ _messages = [
 	["Server Rules", "Duping, glitching or using any<br />exploit will result in a<br />permanent ban."],
 	["Server Rules", "No talking in side."],
 	["Server Rules", "Hackers will be banned permanently<br />Respect others"],
-	["News", "Scaffery Servers 1.0.6.1 are up!<br />Please visit or travel also<br />to Scaffery Napf Server ;-)<br />"]
+	["News", "Scaffery Servers 1.0.6.1 are up!<br />Please visit or travel also<br />to Scaffery Napf Server ;-)<br />"],
+	["Tips", "Press F3 to adjust view distance.<br />Press F5 to create/join group.<br />Press F6 to disable DebugMonitor.<br />"]
 ];
  
 _timeout = 5;
