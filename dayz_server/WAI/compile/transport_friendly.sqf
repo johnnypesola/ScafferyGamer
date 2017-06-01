@@ -29,6 +29,7 @@ _pilot assignAsDriver _veh;
 _pilot moveInDriver _veh;
 _pilot allowDamage false;
 _veh allowDamage false;
+_pilot setCaptive true; // Avoid Apache helo (or any other helos) attacking this boat.
 
 // Make driver take the seat when he is moved out of it.
 [_pilot, _veh] spawn {

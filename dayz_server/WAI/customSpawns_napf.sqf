@@ -271,6 +271,10 @@ Place your custom group spawns below
 	_thebox = createVehicle ["USOrdnanceBox",[16771.174, 19084.066, -7.0571899e-005], [], 0, "CAN_COLLIDE"];
 	clearWeaponCargoGlobal _thebox;
 	clearMagazineCargoGlobal _thebox;
+	_thebox setVariable ["ObjectID","1",true];
+	_thebox setVariable ["permaLoot",true];
+	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_thebox];
+
 
 	_hidden_box_number_of_gold = 2;
 	_hidden_box_random_items = [
