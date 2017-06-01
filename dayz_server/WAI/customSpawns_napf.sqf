@@ -200,6 +200,8 @@ Place your custom group spawns below
 	clearWeaponCargoGlobal _thebox;
 	clearMagazineCargoGlobal _thebox;
 
+	_thebox allowDamage false;
+
 	_hidden_box_number_of_gold = 5;
 	_hidden_box_random_items = [
 	"ItemBriefcase100oz"
@@ -275,6 +277,7 @@ Place your custom group spawns below
 	_thebox setVariable ["permaLoot",true];
 	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_thebox];
 
+	_thebox allowDamage false;
 
 	_hidden_box_number_of_gold = 2;
 	_hidden_box_random_items = [
