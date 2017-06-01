@@ -187,6 +187,8 @@
 		clearWeaponCargoGlobal  _prize_veh;
 		clearMagazineCargoGlobal  _prize_veh;
 
+		_prize_veh allowDamage false;
+
 		sleep 1.0;
 
 		_hidden_box_number_of_gold = 1;
