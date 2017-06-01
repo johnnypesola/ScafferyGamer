@@ -4,7 +4,8 @@ if (isServer) then {
 	pvs_processSetAccessCode = compile preprocessFile "\z\addons\dayz_code\eventHandlers\processSetAccessCode.sqf";
 	pvs_processAccessCode = compile preprocessFile "\z\addons\dayz_code\eventHandlers\processAccessCode.sqf";
 	server_spawnTraders = compile preprocessFile "\z\addons\dayz_server\compile\server_spawnTraders.sqf";
-	server_updateGroup = compile preprocessFileLineNumbers "\z\addons\dayz_code\groups\server_updateGroup.sqf";
+	//server_updateGroup = compile preprocessFileLineNumbers "\z\addons\dayz_code\groups\server_updateGroup.sqf";
+	server_updateGroup = compile preprocessFileLineNumbers "groups\server_updateGroup.sqf";
 };
 
 if (!isDedicated) then {
@@ -15,7 +16,10 @@ if (!isDedicated) then {
 	call compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_padlock.sqf";
 	call compile preprocessFileLineNumbers "\z\addons\dayz_code\util\compile.sqf";
 	call compile preprocessFileLineNumbers "\z\addons\dayz_code\loot\compile.sqf";
-	
+
+	// SCAFFERY:
+	s_player_kickCrewOption	= -1;
+
 	fn_dropItem = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_dropItem.sqf";
 	fn_dynamicTool = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_dynamicTool.sqf";
 	fn_nearWaterHole = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_nearWaterHole.sqf";
@@ -24,7 +28,8 @@ if (!isDedicated) then {
 	player_attackdelay = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\player_attackfsmdelay.sqf";
 	fnc_usec_damageActions = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_damageActions.sqf";		//Checks which actions for nearby casualty
 	fnc_inAngleSector = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_inAngleSector.sqf";		//Checks which actions for nearby casualty
-	fnc_usec_selfActions = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_selfActions.sqf";		//Checks which actions for self
+	//fnc_usec_selfActions = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_selfActions.sqf";		//Checks which actions for self
+	fnc_usec_selfActions = compile preprocessFileLineNumbers "custom\compile\fn_selfActions.sqf";		//Checks which actions for self
 	fnc_usec_unconscious = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_unconscious.sqf";
 	player_temp_calculation = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_temperatur.sqf";		//Temperatur System //TeeChange
 	player_weaponFiredNear = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\player_weaponFiredNear.sqf";
