@@ -447,5 +447,6 @@ if (count _playerPos > 0) then {
 	//{
 	//	diag_log format["                 : %1", typeOf _x];
 	//} count nearestObjects [_charPos,DayZ_GearedObjects,10];
-	{[_x,"gear"] call server_updateObject;} count nearestObjects [_charPos,DayZ_GearedObjects,10];
+	sleep 1;
+	{[_x,"gear"] call server_updateObject;} count nearestObjects [_charPos,DayZ_GearedObjects,15];
 };

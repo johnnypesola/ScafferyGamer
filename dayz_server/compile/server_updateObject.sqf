@@ -27,7 +27,7 @@ if ((typeName _objectID == "SCALAR") || (typeName _objectUID == "SCALAR")) then 
 };
 
 // Epoch Admin Tools
-if ((_object getVariable "MalSar") == 1) exitWith {};
+if ((_object getVariable ["MalSar", 0]) == 1) exitWith {};
 
 if (!((typeOf _object) in DZE_safeVehicle) && !locked _object) then {
 	//diag_log format["Object: %1, ObjectID: %2, ObjectUID: %3",_object,_objectID,_objectUID];
@@ -98,7 +98,7 @@ _object_inventory = {
 			_isNormal = false;
 			_inventory = _object getVariable ["doorfriends", []]; //We're replacing the inventory with UIDs for this item
 		};
-		
+
 		if (Z_SingleCurrency && {typeOf (_object) in DZE_MoneyStorageClasses}) then { _forceUpdate = true; };
 		
 		if (_isNormal) then {
@@ -118,7 +118,11 @@ _object_inventory = {
 			} else {
 				_coins = -1;
 			};
-			_key = [_objectUID, _inventory select 1, _inventory select 0, _inventory select 2, _coins];
+			if (_isNormal) then {
+				_key = [_objectUID, _inventory select 1, _inventory select 0, _inventory select 2, _coins];
+			} else {
+				_key = [_objectID, _inventory, [[],[]], [[],[]], _coins];
+			};
 			_query = ["objectInventoryByUID",_key] call dayz_prepareDataForDB;
 		} else {
 			// extDB2
@@ -129,7 +133,11 @@ _object_inventory = {
 			} else {
 				_coins = -1;
 			};
-			_key = [_objectID, _inventory select 1, _inventory select 0, _inventory select 2, _coins];
+			if (_isNormal) then {
+				_key = [_objectID, _inventory select 1, _inventory select 0, _inventory select 2, _coins];
+			} else {
+				_key = [_objectID, _inventory, [[],[]], [[],[]], _coins];
+			};
 			_query = ["objectInventoryByID",_key] call dayz_prepareDataForDB;
 		};
 		
