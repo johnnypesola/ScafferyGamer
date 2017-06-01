@@ -71,6 +71,13 @@ spawnShoremode = 1; // Random spawn locations  1 = on shores, 0 = inland
 EpochUseEvents = false; //Enable event scheduler. Define custom scripts in dayz_server\modules to run on a schedule.
 EpochEvents = [["any","any","any","any",30,"crash_spawner"],["any","any","any","any",0,"crash_spawner"],["any","any","any","any",15,"supply_drop"]];
 DZE_GemWorthArray = [["ItemTopaz",50000], ["ItemObsidian",100000], ["ItemSapphire",500000], ["ItemAmethyst",1000000], ["ItemEmerald",5000000], ["ItemCitrine",10000000], ["ItemRuby",50000000]]; // Array of gem prices, only works with config traders. Set DZE_GemWorthArray=[]; to disable return change in gems.
+DZE_GemOccurance = [["ItemTopaz",1000], ["ItemObsidian",50], ["ItemSapphire",25], ["ItemAmethyst",12], ["ItemEmerald",6], ["ItemCitrine",2], ["ItemRuby",1]]; //Sets how rare each gem is in the order shown when mining (whole numbers only)
+dayz_groupSystem = true; // Enable group system
+dayz_markGroup = 1; // Players can see their group members on the map 0=never, 1=always, 2=With GPS only
+dayz_markSelf = 1; // Players can see their own position on the map 0=never, 1=always, 2=With GPS only
+dayz_markBody = 1; // Players can see their corpse position on the map 0=never, 1=always, 2=With GPS only
+dayz_requireRadio = false; // Require players to have a radio on their toolbelt to create a group, be in a group and receive invites.
+MaxMineVeins = 2;
 // EPOCH CONFIG VARIABLES END //
 
 
