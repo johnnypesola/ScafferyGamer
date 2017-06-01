@@ -251,7 +251,7 @@ dayz_recordLogin = {
 	// Ferry:
 	// This should be a good point where to confirm arrival to server.
 	{
-		if ((_this select 0) == getPlayerUID _x) exitWith {_x setVariable ["readyToBoard", true, false];};
+		if ((_this select 0) == getPlayerUID _x && (_this select 2) == 0) exitWith {_x setVariable ["readyToBoard", true, false];};
 	} forEach playableUnits;
 
 	_name = if (typeName (_this select 3) == "ARRAY") then { toString (_this select 3) } else { _this select 3 };
@@ -579,6 +579,7 @@ if (DZE_Extras_WorldName == "napf") then {
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\traders.sqf";
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\boat_harbors.sqf";
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\ferry_terminal_napf.sqf";
+//	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\trader_extras_napf.sqf";
 };
 if (DZE_Extras_WorldName == "chernarus") then {
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\elektro.sqf";
@@ -587,6 +588,8 @@ if (DZE_Extras_WorldName == "chernarus") then {
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\neaf.sqf";
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\nwaf.sqf";
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\ferry_terminal_chernarus.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\milbase_chernarus.sqf";
+//	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\trader_extras_chernarus.sqf";
 };
 
 #include "spawn_config.sqf"

@@ -7,6 +7,10 @@ if (isNull _activatingPlayer) exitWith {
 	diag_log "FERRY: ERROR: Player object NULL attempted transport reception. Exiting...";
 };
 
+if (isNil "travel_boardPending") then {
+	travel_boardPending = [];
+};
+
 _playerUID = getPlayerUID _activatingPlayer;
 _playerName = name _activatingPlayer;
 
@@ -19,10 +23,11 @@ if ((count _result) == 0) exitWith {
 	diag_log format ["FERRY: Player %1 [%2] does not have a vehicle in transit.", _playerName, _playerUID];
 
 	// Check if is friend/passenger of existing transport
-	if (missionNamespace getVariable[format["transit_%1",_playerUID], false]) then {
+	if (_playerUID in travel_boardPending) then {
 		PV_travel_boardRcvdVeh = [2, objNull, 0, []];
 		(owner _activatingPlayer) publicVariableClient "PV_travel_boardRcvdVeh";
 		diag_log format ["FERRY: Notify client %1 (%2) to wait for ferry.", owner _activatingPlayer, name _activatingPlayer];
+		travel_boardPending = travel_boardPending - [_playerUID];
 	} else {
 
 		// Move player to terminal and end loading screen, otherwise keep player at debug position.
@@ -70,25 +75,6 @@ _storageMoney = 	_row select 15;
 
 diag_log format ["FERRY: DEBUG: Got row data: %1", _row];
 
-// Add all passengers to wait list
-if (_commander != "0") then {
-	missionNamespace setVariable [format["transit_%1", _commander], true];
-};
-for "_i" from 0 to (count _turrets)-1 do {
-	if ("ARRAY" == typeName (_turrets select _i)) then {
-		_subturrets = _turrets select _i;
-		for "_j" from 0 to (count _subturrets)-1 do {
-			missionNamespace setVariable [format["transit_%1", _subturrets select _j], true];
-		};
-	} else {
-		missionNamespace setVariable [format["transit_%1", _turrets select _i], true];
-	};
-};
-for "_i" from 0 to (count _cargo)-1 do {
-	missionNamespace setVariable [format["transit_%1", _cargo select _i], true];
-};
-
-
 if (_fromInstance == dayZ_instance) exitWith {
 
 	diag_log format["FERRY: Vehicle %1 was sent from this instance by %2 [%3], it will not be spawned in.", _class, _playerName, _playerUID]; 
@@ -96,6 +82,25 @@ if (_fromInstance == dayZ_instance) exitWith {
 	(owner _activatingPlayer) publicVariableClient "PV_travel_boardRcvdVeh";
 	diag_log format ["FERRY: Send client %1 (%2) to ferry terminal.", owner _activatingPlayer, _playerName];
 };
+
+// Add all passengers to wait list
+if (_commander != "0") then {
+	travel_boardPending = travel_boardPending + [_commander];
+};
+for "_i" from 0 to (count _turrets)-1 do {
+	if ("ARRAY" == typeName (_turrets select _i)) then {
+		_subturrets = _turrets select _i;
+		for "_j" from 0 to (count _subturrets)-1 do {
+			travel_boardPending = travel_boardPending + [_subturrets select _j];
+		};
+	} else {
+		travel_boardPending = travel_boardPending + [_turrets select _i];
+	};
+};
+for "_i" from 0 to (count _cargo)-1 do {
+	travel_boardPending = travel_boardPending + [_cargo select _i];
+};
+
 
 _canBeOverWater = 1;
 _pos = [server_ferryTerminalPos, 0, 300, 10, _canBeOverWater, 20, 0] call BIS_fnc_findSafePos; // Set position to somewhere safe in spawning zone
@@ -438,7 +443,8 @@ _query call server_hiveWrite;
 							_tries = _tries - 1;
 						};
 
-						missionNamespace setVariable [format["transit_%1", _commander], false];
+						travel_boardPending = travel_boardPending - [_commander];
+
 						_commander = "0";
 						_count = _count + 1;
 					};
@@ -467,7 +473,7 @@ _query call server_hiveWrite;
 										_tries = _tries - 1;
 									};
 
-									missionNamespace setVariable [format["transit_%1", _subturrets select _j], false];
+									travel_boardPending = travel_boardPending - [_subturrets select _j];
 									_subturrets set [_j, "0"];
 									_count = _count + 1;
 								};
@@ -492,7 +498,7 @@ _query call server_hiveWrite;
 									_tries = _tries - 1;
 								};
 
-								missionNamespace setVariable [format["transit_%1", _turrets select _i], false];
+								travel_boardPending = travel_boardPending - [_turrets select _i];
 								_turrets set [_i, "0"];
 								_count = _count + 1;
 							};
@@ -520,7 +526,7 @@ _query call server_hiveWrite;
 								_tries = _tries - 1;
 							};
 
-							missionNamespace setVariable [format["transit_%1", _cargo select _i], false];
+							travel_boardPending = travel_boardPending - [_cargo select _i];
 							_cargo set [_i, "0"];
 							_count = _count + 1;
 						};
@@ -537,4 +543,22 @@ _query call server_hiveWrite;
 			diag_log format["FERRY: Looking for players to vehicle %2 from ferry [ID %1] : got %3 out of %4.", _oid, typeOf _veh, _count, _total];
 		};
 	};
+
+	// CLEANUP: Remove all passengers from wait list
+	travel_boardPending = travel_boardPending - [_commander];
+
+	for "_i" from 0 to (count _turrets)-1 do {
+		if ("ARRAY" == typeName (_turrets select _i)) then {
+			_subturrets = _turrets select _i;
+			for "_j" from 0 to (count _subturrets)-1 do {
+				travel_boardPending = travel_boardPending - [_subturrets select _j];
+			};
+		} else {
+			travel_boardPending = travel_boardPending - [_turrets select _i];
+		};
+	};
+	for "_i" from 0 to (count _cargo)-1 do {
+		travel_boardPending = travel_boardPending - [_cargo select _i];
+	};
+
 };
