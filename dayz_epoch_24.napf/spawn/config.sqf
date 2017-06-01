@@ -12,21 +12,24 @@ class_selection = true; //Enable class selection dialog
 #define START_ITEMS4 "HandRoadFlare","ItemBandage",3,"ItemPainkiller"
 #define START_ITEMS5 "HandRoadFlare","ItemBandage",4,"ItemPainkiller"
 class_public = [ // These are visible to anyone on the server
-	[(localize "str_playerstats_bandit")+" Lvl1","Bandit1_DZ","BanditW1_DZ",[START_ITEMS1],["ItemToolbox","ItemMap"],"",[],[],0,-5000,-1,""],
-	[(localize "str_playerstats_bandit")+" Lvl2","Bandit1_DZ","BanditW1_DZ",[START_ITEMS1,"17Rnd_9x19_glock17",1],["G17_DZ","ItemToolbox","ItemMap"],"DZ_Assault_Pack_EP1",[],[],0,-20000,-1,""],
-	[(localize "str_playerstats_bandit")+" Lvl3","Bandit1_DZ","BanditW1_DZ",[START_ITEMS1,"17Rnd_9x19_glock17",2,"ItemMorphine"],["G17_DZ","ItemToolbox","ItemMap"],"DZ_TK_Assault_Pack_EP1",[],[],0,-50000,-1,""],
-	[(localize "str_playerstats_bandit")+" Lvl4","Bandit1_DZ","BanditW1_DZ",[START_ITEMS2,"17Rnd_9x19_glock17",3,"ItemMorphine"],["G17_DZ","ItemToolbox","ItemMap"],"DZ_TK_Assault_Pack_EP1",[],["ItemToolbox","ItemMap","ItemHatchet"],0,-100000,-1,""],
-	[(localize "str_playerstats_bandit")+" Lvl5","GUE_Commander_DZ","BanditW2_DZ",[START_ITEMS3,"17Rnd_9x19_glock17",4,"ItemMorphine","10Rnd_303British"],["G17_DZ","ItemToolbox","ItemMap"],"DZ_TK_Assault_Pack_EP1",["LeeEnfield_DZ"],["ItemToolbox","ItemMap","ItemHatchet"],0,-200000,-1,""],
-	[(localize "str_playerstats_bandit")+" Lvl6","GUE_Commander_DZ","BanditW2_DZ",[START_ITEMS4,"17Rnd_9x19_glock17",4,"ItemMorphine","10Rnd_303British",2],["G17_DZ","ItemToolbox","ItemMap"],"DZ_ALICE_Pack_EP1",["LeeEnfield_DZ"],["ItemToolbox","ItemMap","ItemHatchet"],0,-500000,-1,""],
-	[(localize "str_playerstats_bandit")+" Lvl7","GUE_Commander_DZ","BanditW2_DZ",[START_ITEMS5,"17Rnd_9x19_glock17",4,"ItemMorphine","10Rnd_303British",2],["G17_DZ","ItemToolbox","ItemMap"],"DZ_British_ACU",["LeeEnfield_DZ"],["ItemToolbox","ItemMap","ItemHatchet"],0,-900000,-1,""],
-	[(localize "str_playerstats_hero")+" Lvl1",if (class_epoch) then {"Soldier_Sniper_PMC_DZ"} else {"Survivor3_DZ"},"SurvivorW2_DZ",[START_ITEMS1],["ItemToolbox","ItemMap"],"",[],[],0,5000,-1,""],
-	[(localize "str_playerstats_hero")+" Lvl2",if (class_epoch) then {"Soldier_Sniper_PMC_DZ"} else {"Survivor3_DZ"},"SurvivorW2_DZ",[START_ITEMS1,"6Rnd_45ACP",1],["Revolver_DZ","ItemToolbox","ItemMap"],"DZ_Assault_Pack_EP1",[],[],0,20000,-1,""],
-	[(localize "str_playerstats_hero")+" Lvl3",if (class_epoch) then {"Soldier_Sniper_PMC_DZ"} else {"Survivor3_DZ"},"SurvivorW2_DZ",[START_ITEMS1,"6Rnd_45ACP",2,"ItemMorphine"],["Revolver_DZ","ItemToolbox","ItemMap"],"DZ_TK_Assault_Pack_EP1",[],[],0,50000,-1,""],
-	[(localize "str_playerstats_hero")+" Lvl4",if (class_epoch) then {"Soldier_Sniper_PMC_DZ"} else {"Survivor3_DZ"},"SurvivorW2_DZ",[START_ITEMS2,"6Rnd_45ACP",3,"ItemMorphine"],["Revolver_DZ","ItemToolbox","ItemMap","ItemHatchet"],"DZ_TK_Assault_Pack_EP1",[],[],0,100000,-1,""],
-	[(localize "str_playerstats_hero")+" Lvl5",if (class_epoch) then {"Soldier1_DZ"} else {"Survivor3_DZ"},"SurvivorWurban_DZ",[START_ITEMS3,"6Rnd_45ACP",4,"ItemMorphine","10Rnd_303British"],["LeeEnfield_DZ","Revolver_DZ","ItemToolbox","ItemMap","ItemHatchet"],"DZ_TK_Assault_Pack_EP1",[],[],0,200000,-1,""],
-	[(localize "str_playerstats_hero")+" Lvl6",if (class_epoch) then {"Soldier1_DZ"} else {"Survivor3_DZ"},"SurvivorWurban_DZ",[START_ITEMS4,"6Rnd_45ACP",4,"ItemMorphine","10Rnd_303British",2],["LeeEnfield_DZ","Revolver_DZ","ItemToolbox","ItemMap","ItemHatchet"],"DZ_ALICE_Pack_EP1",[],[],0,500000,-1,""],
-	[(localize "str_playerstats_hero")+" Lvl7",if (class_epoch) then {"Rocket_DZ"} else {"Survivor3_DZ"},"SurvivorWcombat_DZ",[START_ITEMS5,"6Rnd_45ACP",4,"ItemMorphine","10Rnd_303British",2],["LeeEnfield_DZ","Revolver_DZ","ItemToolbox","ItemMap","ItemHatchet"],"DZ_British_ACU",[],[],0,900000,-1,""],
-	[localize "str_playerstats_survivor","Survivor2_DZ","SurvivorW2_DZ",[START_ITEMS1],[],"",[],[],0,0,0]
+	[(localize "str_playerstats_bandit")+" Lvl1","Bandit1_DZ","BanditW1_DZ",[START_ITEMS1],["ItemToolbox","ItemMap","ItemRadio"],"",[],[],0,-5000,-1,""],
+	[(localize "str_playerstats_bandit")+" Lvl2","Bandit1_DZ","BanditW1_DZ",[START_ITEMS1,"17Rnd_9x19_glock17",1],["G17_DZ","ItemToolbox","ItemMap","ItemRadio"],"DZ_Assault_Pack_EP1",[],[],0,-20000,-1,""],
+	[(localize "str_playerstats_bandit")+" Lvl3","Bandit1_DZ","BanditW1_DZ",[START_ITEMS1,"17Rnd_9x19_glock17",2,"ItemMorphine"],["G17_DZ","ItemToolbox","ItemMap","ItemRadio"],"DZ_TK_Assault_Pack_EP1",[],[],0,-50000,-1,""],
+	[(localize "str_playerstats_bandit")+" Lvl4","Bandit1_DZ","BanditW1_DZ",[START_ITEMS2,"17Rnd_9x19_glock17",3,"ItemMorphine"],["G17_DZ","ItemToolbox","ItemMap","ItemHatchet","ItemRadio"],"DZ_TK_Assault_Pack_EP1",[],[],0,-100000,-1,""],
+	[(localize "str_playerstats_bandit")+" Lvl5","GUE_Commander_DZ","BanditW2_DZ",[START_ITEMS3,"17Rnd_9x19_glock17",4,"ItemMorphine","10Rnd_303British"],["LeeEnfield_DZ","G17_DZ","ItemToolbox","ItemMap","ItemHatchet","ItemRadio"],"DZ_TK_Assault_Pack_EP1",[],[],0,-200000,-1,""],
+	[(localize "str_playerstats_bandit")+" Lvl6","GUE_Commander_DZ","BanditW2_DZ",[START_ITEMS4,"17Rnd_9x19_glock17",4,"ItemMorphine","10Rnd_303British",2],["LeeEnfield_DZ","G17_DZ","ItemToolbox","ItemMap","ItemHatchet","ItemRadio"],"DZ_ALICE_Pack_EP1",[],[],0,-500000,-1,""],
+	[(localize "str_playerstats_bandit")+" Lvl7","GUE_Commander_DZ","BanditW2_DZ",[START_ITEMS5,"17Rnd_9x19_glock17",4,"ItemMorphine","10Rnd_303British",2],["LeeEnfield_DZ","G17_DZ","ItemToolbox","ItemMap","ItemHatchet","ItemRadio"],"DZ_British_ACU",[],[],0,-900000,-1,""],
+	[(localize "str_playerstats_hero")+" Lvl1",if (class_epoch) then {"Soldier_Sniper_PMC_DZ"} else {"Survivor3_DZ"},"SurvivorW2_DZ",[START_ITEMS1],["ItemToolbox","ItemMap","ItemRadio"],"",[],[],0,5000,-1,""],
+	[(localize "str_playerstats_hero")+" Lvl2",if (class_epoch) then {"Soldier_Sniper_PMC_DZ"} else {"Survivor3_DZ"},"SurvivorW2_DZ",[START_ITEMS1,"6Rnd_45ACP",1],["Revolver_DZ","ItemToolbox","ItemMap","ItemRadio"],"DZ_Assault_Pack_EP1",[],[],0,20000,-1,""],
+	[(localize "str_playerstats_hero")+" Lvl3",if (class_epoch) then {"Soldier_Sniper_PMC_DZ"} else {"Survivor3_DZ"},"SurvivorW2_DZ",[START_ITEMS1,"6Rnd_45ACP",2,"ItemMorphine"],["Revolver_DZ","ItemToolbox","ItemMap","ItemRadio"],"DZ_TK_Assault_Pack_EP1",[],[],0,50000,-1,""],
+	[(localize "str_playerstats_hero")+" Lvl4",if (class_epoch) then {"Soldier_Sniper_PMC_DZ"} else {"Survivor3_DZ"},"SurvivorW2_DZ",[START_ITEMS2,"6Rnd_45ACP",3,"ItemMorphine"],["Revolver_DZ","ItemToolbox","ItemMap","ItemHatchet","ItemRadio"],"DZ_TK_Assault_Pack_EP1",[],[],0,100000,-1,""],
+	[(localize "str_playerstats_hero")+" Lvl5",if (class_epoch) then {"Soldier1_DZ"} else {"Survivor3_DZ"},"SurvivorWurban_DZ",[START_ITEMS3,"6Rnd_45ACP",4,"ItemMorphine","10Rnd_303British"],["LeeEnfield_DZ","Revolver_DZ","ItemToolbox","ItemMap","ItemHatchet","ItemRadio"],"DZ_TK_Assault_Pack_EP1",[],[],0,200000,-1,""],
+	[(localize "str_playerstats_hero")+" Lvl6",if (class_epoch) then {"Soldier1_DZ"} else {"Survivor3_DZ"},"SurvivorWurban_DZ",[START_ITEMS4,"6Rnd_45ACP",4,"ItemMorphine","10Rnd_303British",2],["LeeEnfield_DZ","Revolver_DZ","ItemToolbox","ItemMap","ItemHatchet","ItemRadio"],"DZ_ALICE_Pack_EP1",[],[],0,500000,-1,""],
+	[(localize "str_playerstats_hero")+" Lvl7",if (class_epoch) then {"Rocket_DZ"} else {"Survivor3_DZ"},"SurvivorWcombat_DZ",[START_ITEMS5,"6Rnd_45ACP",4,"ItemMorphine","10Rnd_303British",2],["LeeEnfield_DZ","Revolver_DZ","ItemToolbox","ItemMap","ItemHatchet","ItemRadio"],"DZ_British_ACU",[],[],0,900000,-1,""],
+
+	["Engineer "+(localize "str_playerstats_survivor"),"Survivor2_DZ","SurvivorW2_DZ",[START_ITEMS1,"PartWheel"],["ItemToolbox","ItemCrowbar"],"",[],[],0,0,0],
+	["Medic"+(localize "str_playerstats_survivor"),"Survivor2_DZ","SurvivorW2_DZ",[START_ITEMS5,"ItemBloodBag","ItemPainkiller","ItemMorphine"],[],"",[],[],0,0,0],
+	["Hunter"+(localize "str_playerstats_survivor"),"Survivor2_DZ","SurvivorW2_DZ",[START_ITEMS1,"FoodBeefCooked","FishCookedTrout"],["ItemKnife","ItemMap","ItemCompass","ItemFishingPole"],"",[],[],0,0,0]
 ];
 
 halo_selection = false; // Enable HALO selection dialog
@@ -34,7 +37,7 @@ halo_force = false; // Skip HALO selection dialog and force HALO spawn.
 halo_type = "AN2_DZ"; // Type of plane. Tested with C130J_US_EP1_DZ, AN2_DZ, MV22_DZ. Use "" to disable the plane and use regular HALO.
 
 spawn_selection = true; // Enable spawn selection dialog
-spawn_bodyCheck = 2000; // If a player has a body within this distance of a spawn that spawn will be blocked. Set to -1 to disable.
+spawn_bodyCheck = -1; // If a player has a body within this distance of a spawn that spawn will be blocked. Set to -1 to disable.
 spawn_nearGroup = true; // Allow players to spawn near their group. BodyCheck can override.
 spawn_nearPlot = false; // Allow players to spawn near their plot. BodyCheck can override.
 spawn_radius = 1000; // Distance around spawn to find a safe pos. Lower is closer to exact coordinates. Do not set too low or BIS_fnc_findSafePos may fail.
