@@ -4,7 +4,7 @@
 2: PVDZE_maintainArea = [player,2,[Object, _objectID, _objectUID]];
 */
 
-private ["_player","_option","_obj","_name","_objectsInfo","_UID","_ID","_key","query"];
+private ["_player","_option","_obj","_name","_objectsInfo","_UID","_ID","_key","_query"];
 
 _player = _this select 0;
 _option = _this select 1;
