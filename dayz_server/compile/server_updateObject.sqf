@@ -77,7 +77,7 @@ _object_position = {
 
 	#ifdef OBJECT_DEBUG
 		//diag_log ("HIVE: WRITE: "+ str(_key));	// extDB2
-		diag_log ("HIVE: WRITE: "+ str(_query));
+		//diag_log ("HIVE: WRITE: "+ str(_query));
 	#endif
 };
 

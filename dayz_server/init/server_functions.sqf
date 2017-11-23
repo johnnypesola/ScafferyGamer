@@ -171,7 +171,7 @@ server_hiveReadWrite = {
 	//private ["_key","_resultArray","_data"];	// extDB2
 	private["_parameters","_query","_result","_resultBig","_pipe"];
 	_parameters = _this;
-	_query = format ["%1:%2:%3", 0, DZE_DbSessionID, _parameters];
+	_query = format ["%1:%2:%3", 0, DZE_DbSessionID] + _parameters;
 	//diag_log format["HIVE WRITE: '%1'", _query];
 	_result = call compile ("extDB2" callExtension _query);
 	switch (_result select 0) do
@@ -533,11 +533,13 @@ dayz_prepareDataForDB = {
 
 	if (_numItems > 0) then {
 		_item = _columns select 0;
-		_message = format["%1", _item];
+		if (typeName _item != "STRING") then {_item = str(_item)};
+		_message = _item;
 		_message = _opName + ":" + _message;
 		for "_i" from 1 to _numItems - 1 do {
 			_item = _columns select _i;
-			_message = _message + format["%1%2", _delim, _item];
+			if (typeName _item != "STRING") then {_item = str(_item)};
+			_message = _message + _delim + _item;
 		};
 	} else {
 		_message = _opName;
