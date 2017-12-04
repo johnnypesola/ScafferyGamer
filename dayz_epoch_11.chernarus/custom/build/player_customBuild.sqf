@@ -398,7 +398,7 @@ if (_canBuild select 0) then {
 				};
 			} forEach _item;
 
-			if(_num_removed == _num_provided) then {
+			if(_num_removed <= _num_provided) then {
 				["Working",0,[20,10,5,0]] call dayz_NutritionSystem;
 				call player_forceSave;
 				format[localize "str_build_01",_text] call dayz_rollingMessages;
