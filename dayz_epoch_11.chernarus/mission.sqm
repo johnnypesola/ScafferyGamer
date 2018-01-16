@@ -13,6 +13,7 @@ class Mission
 		"dayz_equip",
 		"cacharacters_pmc",
 		"ca_modules_functions",
+		"zero_buildings",
 		"dayz_epoch",
 		"glt_m300t",
 		"pook_h13",
@@ -31,7 +32,7 @@ class Mission
 	class Intel
 	{
 		briefingName="DayZ Epoch Chernarus";
-		briefingDescription="Version 1.0.6.1";
+		briefingDescription="Version 1.0.6.2";
 		startWeather=0;
 		forecastWeather=0;
 		year=2008;

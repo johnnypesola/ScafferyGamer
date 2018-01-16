@@ -1,4 +1,4 @@
-private ["_object","_worldspace","_location","_dir","_class","_uid","_dam","_hitpoints","_selection","_array","_damage","_fuel","_key","_query","_totaldam","_spawnDMG","_characterID","_result","_oid"];
+private ["_object","_worldspace","_location","_dir","_class","_uid","_dam","_hitpoints","_selection","_array","_damage","_fuel","_key","_query","_totaldam","_spawnDMG","_characterID","_result","_outcome","_oid"];
 //[_veh,[_dir,_location],"V3S_Civ",true]
 #include "\z\addons\dayz_server\compile\server_toggle_debug.hpp"
 
@@ -18,45 +18,28 @@ diag_log ("PUBLISH: Attempt " + str(_object));
 
 _dir = 		_worldspace select 0;
 _location = _worldspace select 1;
-
-//Generate UID test using time
-// _uid = str( round (dateToNumber date)) + str(round time);
 _uid = _worldspace call dayz_objectUID2;
-//_uid = format["%1%2",(round time),_uid];
 
 if (_spawnDMG) then { 
 	_fuel = 0;
 	if (getNumber(configFile >> "CfgVehicles" >> _class >> "isBicycle") != 1) then {
-
-		// Create randomly damaged parts
-	
 		_totaldam = 0;
 		_hitpoints = _object call vehicle_getHitpoints;
 		{
-			// generate damage on all parts
 			_dam = call generate_new_damage;
-
 			_selection = getText(configFile >> "cfgVehicles" >> _class >> "HitPoints" >> _x >> "name");
-			
 			if (_dam > 0) then {
 				_array set [count _array,[_selection,_dam]];
 				_totaldam = _totaldam + _dam;
 			};
 		} count _hitpoints;	
-
-
-		// just set low base dmg - may change later
 		_damage = 0;
-
-		// New fuel min max 
 		_fuel = (random(DynamicVehicleFuelHigh-DynamicVehicleFuelLow)+DynamicVehicleFuelLow) / 100;
-
 	};
 };
 
 // extDB2
-//Send request
-//_key = format["CHILD:308:%1:%2:%3:%4:%5:%6:%7:%8:%9:",dayZ_instance, _class, _damage , _characterID, _worldspace, [], _array, _fuel,_uid];
+//_key = str formatText["CHILD:308:%1:%2:%3:%4:%5:%6:%7:%8:%9:",dayZ_instance, _class, _damage , _characterID, _worldspace, [], _array, _fuel,_uid];
 //#ifdef OBJECT_DEBUG
 //diag_log ("HIVE: WRITE: "+ str(_key)); 
 //#endif
@@ -159,7 +142,6 @@ dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_object];
 	_object setVariable ["CharacterID", _characterID, true];
 	_object setDamage _damage;
 
-	// Set Hits after ObjectID is set
 	{
 		_selection = _x select 0;
 		_dam = _x select 1;
@@ -173,7 +155,6 @@ dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_object];
 
 	_object call fnc_veh_ResetEH;
 
-	// testing - should make sure everyone has eventhandlers for vehicles was unused...
 	PVDZE_veh_Init = _object;
 	publicVariable "PVDZE_veh_Init";
 

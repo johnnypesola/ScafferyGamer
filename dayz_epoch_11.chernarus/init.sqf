@@ -56,12 +56,12 @@ DZE_BackpackAntiTheft = true; // Prevent stealing from backpacks in trader zones
 DZE_BuildOnRoads = false; // Allow building on roads
 DZE_PlayerZed = true; // Enable spawning as a player zombie when players die with infected status
 DZE_R3F_WEIGHT = true; // Enable R3F weight. Players carrying too much will be overburdened and forced to move slowly.
-DZE_slowZombies = false; // Force zombies to always walk
 DZE_StaticConstructionCount = 1; // Steps required to build. If greater than 0 this applies to all objects.
 DZE_GodModeBase = false; // Make player built base objects indestructible
 DZE_requireplot = 1; // Require a plot pole to build  0 = Off, 1 = On
 DZE_PlotPole = [30,45]; // Radius owned by plot pole [Regular objects,Other plotpoles]. Difference between them is the minimum buffer between bases.
 DZE_BuildingLimit = 200; // Max number of built objects allowed in DZE_PlotPole radius
+DZE_SafeZonePosArray = [[[6325,7807,0],100],[[4063,11664,0],100],[[11447,11364,0],100],[[1606,7803,0],100],[[12944,12766,0],100],[[12060,12638,0],100]]; // Format is [[[3D POS],RADIUS],[[3D POS],RADIUS]]; Stops loot and zed spawn, salvage and players being killed if their vehicle is destroyed in these zones. //TODO: Add the custom safezones here!
 DZE_SelfTransfuse = true; // Allow players to bloodbag themselves
 DZE_selfTransfuse_Values = [12000,15,120]; // [blood amount given, infection chance %, cooldown in seconds]
 MaxDynamicDebris = 500; // Max number of random road blocks to spawn around the map
@@ -80,7 +80,6 @@ dayz_requireRadio = false; // Require players to have a radio on their toolbelt 
 MaxMineVeins = 2;
 // EPOCH CONFIG VARIABLES END //
 
-
 diag_log 'dayz_preloadFinished reset';
 dayz_preloadFinished=nil;
 onPreloadStarted "diag_log [diag_tickTime,'onPreloadStarted']; dayz_preloadFinished = false;";
@@ -88,8 +87,7 @@ onPreloadFinished "diag_log [diag_tickTime,'onPreloadFinished']; dayz_preloadFin
 with uiNameSpace do {RscDMSLoad=nil;}; // autologon at next logon
 
 if (!isDedicated) then {
-	enableSaving [false, false];
-	startLoadingScreen ["","RscDisplayLoadCustom"];
+	enableSaving [false, false];	startLoadingScreen ["","RscDisplayLoadCustom"];
 	progressLoadingScreen 0;
 	dayz_loadScreenMsg = localize 'str_login_missionFile';
 	progress_monitor = [] execVM "\z\addons\dayz_code\system\progress_monitor.sqf";
@@ -119,7 +117,6 @@ call compile preprocessFileLineNumbers "server_traders.sqf";
 
 
 call compile preprocessFileLineNumbers "\z\addons\dayz_code\system\mission\chernarus11.sqf"; //Add trader city objects locally on every machine early
-if (dayz_POIs && (toLower worldName == "chernarus")) then {call compile preprocessFileLineNumbers "\z\addons\dayz_code\system\mission\chernarus\poi\init.sqf";}; //Add POI objects locally on every machine early
 initialized = true;
 
 setTerrainGrid 25;
@@ -129,6 +126,7 @@ if (dayz_REsec == 1) then {call compile preprocessFileLineNumbers "\z\addons\day
 execVM "\z\addons\dayz_code\system\DynamicWeatherEffects.sqf";
 
 if (isServer) then {
+	if (dayz_POIs && (toLower worldName == "chernarus")) then {call compile preprocessFileLineNumbers "\z\addons\dayz_code\system\mission\chernarus\poi\init.sqf";};
 	call compile preprocessFileLineNumbers "\z\addons\dayz_server\system\dynamic_vehicle.sqf";
 	call compile preprocessFileLineNumbers "\z\addons\dayz_server\system\server_monitor.sqf";
 	execVM "\z\addons\dayz_server\traders\chernarus11.sqf"; //Add trader agents
@@ -141,6 +139,10 @@ if (isServer) then {
 };
 
 if (!isDedicated) then {
+	if (toLower worldName == "chernarus") then {
+		execVM "\z\addons\dayz_code\system\mission\chernarus\hideGlitchObjects.sqf";
+	};
+
 	//Enables Plant lib fixes
 	//execVM "\z\addons\dayz_code\system\antihack.sqf";
 
@@ -151,13 +153,6 @@ if (!isDedicated) then {
 		dayz_antihack = 0;
 	};
 
-
-	if (toLower(worldName) == "chernarus") then {
-		diag_log "WARNING: Clearing annoying benches from Chernarus";
-		([4654,9595,0] nearestObject 145259) setDamage 1;
-		([4654,9595,0] nearestObject 145260) setDamage 1;
-	};
-	
 	if (dayz_townGenerator) then { execVM "\z\addons\dayz_code\compile\client_plantSpawner.sqf"; };
 
 	// ESS v3

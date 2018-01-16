@@ -1,7 +1,7 @@
 // [_object,_type] spawn server_updateObject;
 #include "\z\addons\dayz_server\compile\server_toggle_debug.hpp"
 if (isNil "sm_done") exitWith {};
-private ["_objectID","_objectUID","_object_position","_isNotOk","_object","_type","_recorddmg","_forced","_lastUpdate","_needUpdate","_object_inventory","_object_damage","_objWallDamage","_object_killed","_object_maintenance","_object_variables","_totalDmg"];
+private ["_class","_objectID","_objectUID","_object_position","_isNotOk","_object","_type","_recorddmg","_forced","_lastUpdate","_needUpdate","_object_inventory","_object_damage","_objWallDamage","_object_killed","_object_maintenance","_object_variables","_totalDmg"];
 
 _object = _this select 0;
 _type = _this select 1;
@@ -15,9 +15,9 @@ _objectUID = "0";
 if ((isNil "_object") || {isNull _object}) exitWith {diag_log "server_updateObject.sqf _object null or nil, could not update object"};
 _objectID = _object getVariable ["ObjectID","0"];
 _objectUID = _object getVariable ["ObjectUID","0"];
+_class = typeOf _object;
 
-
-if ((typeName _objectID == "SCALAR") || (typeName _objectUID == "SCALAR")) then { 
+if (typeName _objectID != "STRING" or (typeName _objectUID != "STRING")) then {
 	#ifdef OBJECT_DEBUG
 		diag_log (format["Non-string Object: ID %1 UID %2", _objectID, _objectUID]);
 	#endif
@@ -29,7 +29,7 @@ if ((typeName _objectID == "SCALAR") || (typeName _objectUID == "SCALAR")) then 
 // Epoch Admin Tools
 if ((_object getVariable ["MalSar", 0]) == 1) exitWith {};
 
-if (!((typeOf _object) in DZE_safeVehicle) && !locked _object) then {
+if (!(_class in DZE_safeVehicle) && !locked _object) then {
 	//diag_log format["Object: %1, ObjectID: %2, ObjectUID: %3",_object,_objectID,_objectUID];
 	if (!(_objectID in dayz_serverIDMonitor) && isNil {_objectUID}) then { 
 		//force fail
@@ -39,7 +39,7 @@ if (!((typeOf _object) in DZE_safeVehicle) && !locked _object) then {
 	if ((isNil {_objectID}) && (isNil {_objectUID})) then {
 		_object_position = getPosATL _object;
 		#ifdef OBJECT_DEBUG
-			diag_log format["Object %1 with invalid ID at pos %2",typeOf _object,_object_position];
+			diag_log format["Object %1 with invalid ID at pos %2",_class,_object_position];
 		#endif
 		_isNotOk = true;
 	};
@@ -59,8 +59,8 @@ _object_position = {
 	//_worldspace = [round (direction _object),_position];
 	//_worldspace = [getDir _object, _position] call AN_fnc_formatWorldspace; // Precise Base Building 1.0.5	// extDB2
 	_worldspace = [getDir _object, _position];
-	_fuel = if (_object isKindOf "AllVehicles") then {fuel _object} else {0};
-	
+	_fuel = if (_class isKindOf "AllVehicles") then {fuel _object} else {0};
+
 	// extDB2
 	//_key = format["CHILD:305:%1:%2:%3:",_objectID,_worldspace,_fuel];
 	//_key call server_hiveWrite;	
@@ -82,25 +82,22 @@ _object_position = {
 };
 
 _object_inventory = {
-	private ["_inventory","_key","_query","_isNormal","_coins","_forceUpdate"];	// extDB2
-	_forceUpdate = false;
-	if (_object isKindOf "TrapItems") then {
+	private ["_inventory","_key","_query","_isNormal","_coins"];
+	if (_class isKindOf "TrapItems") then {
 		_inventory = [["armed",_object getVariable ["armed",false]]];
 	} else {
 		_isNormal = true;
 		
-		if (DZE_permanentPlot && (typeOf (_object) == "Plastic_Pole_EP1_DZ")) then {
+		if (DZE_permanentPlot && (_class == "Plastic_Pole_EP1_DZ")) then {
 			_isNormal = false;
 			_inventory = _object getVariable ["plotfriends", []]; //We're replacing the inventory with UIDs for this item
 		};
 		
-		if (DZE_doorManagement && (typeOf (_object) in DZE_DoorsLocked)) then {
+		if (DZE_doorManagement && (_class in DZE_DoorsLocked)) then {
 			_isNormal = false;
 			_inventory = _object getVariable ["doorfriends", []]; //We're replacing the inventory with UIDs for this item
 		};
 
-		if (Z_SingleCurrency && {typeOf (_object) in DZE_MoneyStorageClasses}) then { _forceUpdate = true; };
-		
 		if (_isNormal) then {
 			_inventory = [getWeaponCargo _object, getMagazineCargo _object, getBackpackCargo _object];
 		};
@@ -108,7 +105,7 @@ _object_inventory = {
 	};
 	
 	_previous = str(_object getVariable["lastInventory",[]]);
-	if ((str _inventory != _previous) || {_forceUpdate}) then {
+	if (str _inventory != _previous) then {
 		_object setVariable["lastInventory",_inventory];
 		if (_objectID == "0") then {
 			// extDB2
@@ -161,7 +158,7 @@ _object_damage = {
 	
 	{
 		_hit = [_object,_x] call object_getHit;
-		_selection = getText (configFile >> "CfgVehicles" >> (typeOf _object) >> "HitPoints" >> _x >> "name");
+		_selection = getText (configFile >> "CfgVehicles" >> _class >> "HitPoints" >> _x >> "name");
 		if (_hit > 0) then {
 			_allFixed = false;
 			_array set [count _array,[_selection,_hit]];
@@ -233,8 +230,32 @@ _objWallDamage = {
 };
 
 _object_killed = {
-	private ["_key","_query"];	// extDB2
-	diag_log format["Vehicle/Object %1 [%2] was killed. Deleting from database...", _object, typeOf _object];
+	private ["_clientKey","_exitReason","_index","_key","_query","_playerUID"];	// extDB2
+
+	if (count _this != 6) exitWith {
+		diag_log "Server_UpdateObject error: wrong parameter format";
+	};
+
+	_playerUID = _this select 4;
+	_clientKey = _this select 5;
+	_index = dayz_serverPUIDArray find _playerUID;
+
+	_exitReason = switch true do {
+		//Can't use owner because player may already be dead, can't use distance because player may be far from vehicle wreck
+		case (_clientKey == dayz_serverKey): {""};
+		case (_index < 0): {
+			format["Server_UpdateObject error: PUID NOT FOUND ON SERVER. PV ARRAY: %1",_this]
+		};
+		case ((dayz_serverClientKeys select _index) select 1 != _clientKey): {
+			format["Server_UpdateObject error: CLIENT AUTH KEY INCORRECT OR UNRECOGNIZED. PV ARRAY: %1",_this]
+		};
+		case (alive _object && {!(_class isKindOf "TentStorage_base" or _class isKindOf "IC_Tent")}): {
+			format["Server_UpdateObject error: object kill request on living object. PV ARRAY: %1",_this]
+		};
+		default {""};
+	};
+
+	if (_exitReason != "") exitWith {diag_log _exitReason};
 	_object setDamage 1;
 	
 	if (_objectID == "0") then {
@@ -251,12 +272,15 @@ _object_killed = {
 	//_key call server_hiveWrite;	// extDB2
 	_query call server_hiveWrite;
 
-	#ifdef OBJECT_DEBUG
-	//diag_log format["DELETE: Deleted by KEY: %1",_key];	// extDB2
-	diag_log format["DELETE: Deleted by KEY: %1",_query];
-	#endif
-	
-	if (((typeOf _object) in DayZ_removableObjects) or ((typeOf _object) in DZE_isRemovable)) then {[_objectID,_objectUID,"__SERVER__"] call server_deleteObj;};
+	if (_playerUID == "SERVER") then {
+		#ifdef OBJECT_DEBUG
+		diag_log format["DELETE: Server requested destroy on object %1 ID:%2 UID:%3",_class,_objectID,_objectUID];
+		#endif
+	} else {
+		diag_log format["DELETE: PUID(%1) requested destroy on object %2 ID:%3 UID:%4",_playerUID,_class,_objectID,_objectUID];
+	};
+
+	if (_class in DayZ_removableObjects or (_class in DZE_isRemovable)) then {[_objectID,_objectUID] call server_deleteObjDirect;};
 };
 
 _object_maintenance = {
@@ -266,6 +290,8 @@ _object_maintenance = {
 	_accessArray = _object getVariable ["dayz_padlockCombination",[]];
 	_variables set [count _variables, ["ownerArray", _ownerArray]];
 	_variables set [count _variables, ["padlockCombination", _accessArray]];
+
+	_object setDamage 0;
 
 	if (_objectID == "0") then {
 		//_key = format["CHILD:309:%1:%2:",_objectUID,_ownerArray];
@@ -338,12 +364,16 @@ switch (_type) do {
 		call _object_damage;
 	};
 	case "killed": {
-		call _object_killed;
+		_this call _object_killed;
 	};
 	case "accessCode"; case "buildLock" : {
 		call _object_variables;
 	};
 	case "objWallDamage": {
 		call _objWallDamage;
+	};
+	case "coins": {
+		_object setVariable ["lastInventory",["forceUpdate"]];
+		call _object_inventory;
 	};
 };

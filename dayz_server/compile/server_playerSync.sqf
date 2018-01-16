@@ -1,8 +1,10 @@
+#include "\z\addons\dayz_server\compile\server_toggle_debug.hpp"
+
 private ["_distanceFoot","_playerPos","_lastPos","_playerGear","_medical","_currentModel","_currentAnim",
 "_currentWpn","_muzzles","_array","_coins","_key","_globalCoins","_bankCoins","_playerBackp","_exitReason",
 "_backpack","_kills","_killsB","_killsH","_headShots","_humanity","_lastTime","_timeGross","_timeSince",
 "_timeLeft","_config","_onLadder","_isTerminal","_modelChk","_temp","_currentState","_character",
-"_magazines","_characterID","_charPos","_isInVehicle","_name","_inDebug","_newPos","_count","_maxDist","_relocate","_playerUID","_empty","_query"];	// extDB2
+"_magazines","_characterID","_charPos","_isInVehicle","_name","_inDebug","_newPos","_count","_maxDist","_relocate","_playerUID","_statsDiff","_empty","_query"];	// extDB2
 //[player,array]
 
 _character = _this select 0;
@@ -45,27 +47,23 @@ _ws = "cherno";			// extDB2
 _friendlies = [];		// extDB2
 	
 //all getVariable immediately
-_globalCoins = _character getVariable ["GlobalMoney", -1];
-_bankCoins = _character getVariable ["MoneySpecial", -1];
+_globalCoins = _character getVariable [Z_globalVariable, -1];
+_bankCoins = _character getVariable [Z_BankVariable, -1];
 _coins = _character getVariable [Z_MoneyVariable, -1]; //should getting coins fail set the variable to an invalid value to prevent overwritting the in the DB
 _lastPos = _character getVariable ["lastPos",_charPos];
 _direction = round (direction _character);	// extDB2
 _usec_Dead = _character getVariable ["USEC_isDead",false];
-_lastTime = 	_character getVariable ["lastTime",diag_ticktime];
+_lastTime = 	_character getVariable ["lastTime",-1];
 _modelChk = 	_character getVariable ["model_CHK",""];
 _temp = round (_character getVariable ["temperature",100]);
 _lastMagazines = _character getVariable ["ServerMagArray",[[],""]];
-/*
-	Check previous stats against what client had when they logged in
-	this helps prevent JIP issues, where a new player wouldn't have received
-	the old players updates. Only valid for stats where clients could have
-	be recording results from their local objects (such as agent zombies)
-*/
-_kills = 		["zombieKills",_character] call server_getDiff;
-_killsB = 		["banditKills",_character] call server_getDiff;
-_killsH = 		["humanKills",_character] call server_getDiff;
-_headShots = 	["headShots",_character] call server_getDiff;
-_humanity = 	["humanity",_character] call server_getDiff2;
+//Get difference between current stats and stats at last sync
+_statsDiff = [_character,_playerUID] call server_getStatsDiff;
+_humanity = _statsDiff select 0;
+_kills = _statsDiff select 1;
+_headShots = _statsDiff select 2;
+_killsH = _statsDiff select 3;
+_killsB = _statsDiff select 4;
 
 _charPosLen = count _charPos;
 
@@ -107,7 +105,6 @@ if (!isNil "_magazines") then {
 //Check if update is requested
 if !((_charPos select 0 == 0) && (_charPos select 1 == 0)) then {
 	//Position is not zero
-	//diag_log ("getting position..."); sleep 0.05;
 	_playerPos = [round (direction _character),_charPos];
 	if (count _lastPos > 2 && {_charPosLen > 2}) then {
 		if (!_isInVehicle) then {_distanceFoot = round (_charPos distance _lastPos);};
@@ -121,7 +118,6 @@ if !((_charPos select 0 == 0) && (_charPos select 1 == 0)) then {
 		};
 		_updatePos = true;
 	};
-	//diag_log ("position = " + str(_playerPos)); sleep 0.05;
 };
 _character setVariable ["posForceUpdate",false,true];
 
@@ -131,17 +127,23 @@ _playerBackp = [typeOf _backpack,getWeaponCargo _backpack,getMagazineCargo _back
 _updateBackpack = true;		// extDB2
 
 if (!_usec_Dead) then {
-	//diag_log ("medical check..."); sleep 0.05;
 	_medical = _character call player_sumMedical;
-	//diag_log ("medical result..." + str(_medical)); sleep 0.05;
 	_updateMed = true;	// extDB2
 };
 _character setVariable ["medForceUpdate",false,true];
 
-_character addScore _kills;		
-_timeGross = 	(diag_ticktime - _lastTime);
-_timeSince = 	floor (_timeGross / 60);
-_timeLeft =		(_timeGross - (_timeSince * 60));
++_character addScore _kills;
++/*
++       Assess how much time has passed, for recording total time on server
++       Note "lastTime" is -1 after clothes change
++*/
++if (_lastTime == -1) then {
++       _character setVariable ["lastTime",diag_tickTime,false];
++} else {
++       _timeGross = (diag_tickTime - _lastTime);
++       _timeSince = floor (_timeGross / 60);
++       _timeLeft = (_timeGross - (_timeSince * 60));
++};
 /*
 	Get character state details
 */
@@ -427,6 +429,9 @@ if (count _playerPos > 0) then {
 	//Wait for HIVE to be free
 	// Send request in background
 	_query = [format["playerUpdate:%1", _characterID call strip_quotes], _key, ","] call dayz_prepareDataForDB;
+#ifdef PLAYER_DEBUG
+	diag_log str formatText["INFO - %2(UID:%4,CID:%3) PlayerSync, %1",_key,_name,_characterID,_playerUID];
+#endif
 	_query call server_hiveWrite;
 
 	//_character setVariable["write_lock", false, false];
