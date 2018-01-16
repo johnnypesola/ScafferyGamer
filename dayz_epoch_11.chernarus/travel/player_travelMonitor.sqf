@@ -58,16 +58,16 @@ if (isServer) then {
 
 			diag_log "Travel: Waiting for player to enter game...";
 			waitUntil {!isNil "PVCDZ_plr_Login2"};
-			if (6 == count PVCDZ_plr_Login2) then {	// Adapted to ESS v3
-				if (PVCDZ_plr_Login2 select 5) then {
+			if (7 == count PVCDZ_plr_Login2) then {	// Adapted to ESS v3
+				if (PVCDZ_plr_Login2 select 6) then {
 					PV_travel_receiveVeh = [player];
 					publicVariableServer "PV_travel_receiveVeh";
 					diag_log "Travel: Requesting vehicle spawn-in...";
 				} else {
 					diag_log "Travel: Instance is the same so will not bring in vehicle.";
 				};
-			} else { if (3 == count PVCDZ_plr_Login2) then { // Without ESS v3
-				if (PVCDZ_plr_Login2 select 2) then {
+			} else { if (4 == count PVCDZ_plr_Login2) then { // Without ESS v3
+				if (PVCDZ_plr_Login2 select 3) then {
 					PV_travel_receiveVeh = [player];
 					publicVariableServer "PV_travel_receiveVeh";
 					diag_log "Travel: Requesting vehicle spawn-in...";

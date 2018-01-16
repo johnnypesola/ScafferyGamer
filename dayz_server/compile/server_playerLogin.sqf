@@ -30,6 +30,9 @@ if ((_playerID == "") or (isNil "_playerID")) exitWith {
 	diag_log ("LOGIN FAILED: Player [" + _playerName + "] has no login ID");
 };
 
+//SCAFFERY: Server security A2Guard entry point
+diag_log format["INFO - Player: %1(UID:%3/CID:%4) Status: %2",(_playerObj call fa_plr2str),"ENTERING...",_playerID,0];
+
 _endMission = false;
 _timeleft = 0;
 {
@@ -74,7 +77,8 @@ if ((_primary select 0) == "ERROR") exitWith {
 _newPlayer = _primary select 1;
 _isNew = count _primary < 10; //_result select 1;
 _charID = _primary select 2;
-//diag_log ("LOGIN RESULT: " + str(_primary));
+//diag_log ("LOGIN RESULT: " + str(_primary));	// DEBUG
+
 /* PROCESS */
 _hiveVer = 0;
 
@@ -96,7 +100,7 @@ if (!_isNew) then {
 	_group = _primary select 5;
 	_playerCoins = _primary select 6;
 	_BankCoins = _primary select 7;
-	_hiveVer = _primary select 8;	
+	_hiveVer = _primary select 8;
 	if (isNil "_model") then {
 		_model = "Survivor2_DZ";
 	} else {
@@ -139,7 +143,7 @@ if (_endMission) exitwith {
 	
 	//Log For GhostMode
 	diag_log format["INFO - Player:%1(UID:%2/CID%3) Status: LOGIN CANCELLED, GHOSTMODE. Time remianing: %4",_playerName,_playerID,_charID,_remaining];
-
+	
 	PVCDZ_plr_Ghost = [_remaining];
 	(owner _playerObj) publicVariableClient "PVCDZ_plr_Ghost";
 };
@@ -172,8 +176,6 @@ if (toLower worldName == "chernarus") then {
 		[[9084,8654,0],244480]
 	];
 };
-
-
 
 //Sync active group invites to JIP player
 if (count dayz_activeInvites > 0) then {

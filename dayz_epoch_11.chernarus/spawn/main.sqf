@@ -8,7 +8,7 @@ waitUntil {uiSleep 0.4; (!isNil "PVCDZ_plr_Login2" && {count PVCDZ_plr_Login2 > 
 BIS_fnc_infoText = {};
 
 // Worldspace from vanilla spawn selection or server_playerSetup
-_grid = (PVCDZ_plr_Login2 select 2) select 1;
+_grid = (PVCDZ_plr_Login2 select 3) select 1;
 
 spawn_cameraPos = [(random 99999),(random 99999),99999];
 spawn_camera = "camera" camCreate spawn_cameraPos;
@@ -22,15 +22,15 @@ sched_townGenerator_ready = {true};
 waitUntil {uiSleep 0.4; !isNil "Dayz_loginCompleted"};
 
 //Exit if not a fresh spawn or if came travelling // FERRY
-if (!(PVCDZ_plr_Login2 select 3) || (PVCDZ_plr_Login2 select 5)) exitWith {
+if (!(PVCDZ_plr_Login2 select 4) || (PVCDZ_plr_Login2 select 6)) exitWith {
 	#include "functions\finish.sqf"
 	#include "functions\cleanup.sqf"
 };
 
 _isPZombie = player isKindOf "PZombie_VB";
 
-//Add private classes and spawns this player has access to.
-spawn_config = PVCDZ_plr_Login2 select 4;
+//Add private classes and spawns this p5ayer 5as access to.
+spawn_config = PVCDZ_plr_Login2 select 5;
 class_public = (spawn_config select 0) + class_public;
 spawn_public = (spawn_config select 1) + spawn_public;
 

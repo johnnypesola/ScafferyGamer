@@ -3,7 +3,7 @@ private ["_board","_menu","_veh","_rcvdVeh","_pos"];
 go_random_spawn = {
 	private ["_counter","_position","_isNear","_isZero","_mkr","_findSpot","_isIsland","_pos","_IslandMap","_w"];
 	if (!isDedicated) then {endLoadingScreen;};
-	_IslandMap = (toLower worldName in ["caribou","cmr_ovaron","dayznogova","dingor","dzhg","fallujah","fapovo","fdf_isle1_a","isladuala","lingor","mbg_celle2","namalsk","napf","oring","panthera2","sara","sauerland","smd_sahrani_a2","tasmania2010","tavi","trinity","utes"]);
+	_IslandMap = (toLower worldName in ["caribou","cmr_ovaron","dayznogova","dingor","dzhg","fallujah","fapovo","fdf_isle1_a","isladuala","lingor","mbg_celle2","namalsk","napf","oring","panthera2","ruegen","sara","sauerland","smd_sahrani_a2","tasmania2010","tavi","trinity","utes"]);
 
 	//spawn into random
 	_findSpot = true;

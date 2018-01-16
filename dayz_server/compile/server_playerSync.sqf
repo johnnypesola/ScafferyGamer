@@ -132,18 +132,18 @@ if (!_usec_Dead) then {
 };
 _character setVariable ["medForceUpdate",false,true];
 
-+_character addScore _kills;
-+/*
-+       Assess how much time has passed, for recording total time on server
-+       Note "lastTime" is -1 after clothes change
-+*/
-+if (_lastTime == -1) then {
-+       _character setVariable ["lastTime",diag_tickTime,false];
-+} else {
-+       _timeGross = (diag_tickTime - _lastTime);
-+       _timeSince = floor (_timeGross / 60);
-+       _timeLeft = (_timeGross - (_timeSince * 60));
-+};
+_character addScore _kills;
+/*
+       Assess how much time has passed, for recording total time on server
+       Note "lastTime" is -1 after clothes change
+*/
+if (_lastTime == -1) then {
+       _character setVariable ["lastTime",diag_tickTime,false];
+} else {
+       _timeGross = (diag_tickTime - _lastTime);
+       _timeSince = floor (_timeGross / 60);
+       _timeLeft = (_timeGross - (_timeSince * 60));
+};
 /*
 	Get character state details
 */
@@ -281,14 +281,15 @@ if (count _playerPos > 0) then {
 	_coins,
 	_playerUID,
 	_bankCoins,
-	_globalCoins
+	_globalCoins,
+	_name
 ] spawn {
 	private["_query", "_key","_characterID","_playerGear","_updatePos","_ws","_charPos","_globalCoins",
 		"_updateInv","_direction","_updateBackpack","_playerBackp","_updateMed","_medical","_isDead",
 		"_isUncon","_isInfect","_isInjured","_isInPain","_isCardiac","_isLowBlood","_isBloodTestDone",
 		"_kills","_headShots","_distanceFoot","_timeSince","_currentWpn","_currentAnim","_playerUID",
 		"_temp","_friendlies","_killsH","_killsB","_currentModel","_humanity","_empty","_prof","_coins",
-		"_bankCoins"
+		"_bankCoins","_name"
 	];
 
 	//_prof = diag_tickTime;
@@ -320,6 +321,7 @@ if (count _playerPos > 0) then {
 	_playerUID = _this select 24;
 	_bankCoins = _this select 25;
 	_globalCoins = _this select 26;
+	_name = _this select 27;
 
 	_key = _key + [format["instance_id = %1", dayZ_instance]];
 

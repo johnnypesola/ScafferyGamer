@@ -407,7 +407,7 @@ if (_canBuild select 0) then {
 				_tmpbuilt setVariable ["CharacterID",dayz_characterID,true];
 
 				_tmpbuilt setVariable ["ownerPUID",dayz_playerUID,true];
-				PVDZ_obj_Publish = [dayz_characterID,_tmpbuilt,[_dir,_location,dayz_playerUID],[]];
+				PVDZ_obj_Publish = [dayz_characterID,_tmpbuilt,[_dir,_location,dayz_playerUID],[],player,dayz_authKey];
 				publicVariableServer "PVDZ_obj_Publish";
 
 			} else {

@@ -16,12 +16,14 @@ if (!isDedicated) then {
 	call compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_padlock.sqf";
 	call compile preprocessFileLineNumbers "\z\addons\dayz_code\util\compile.sqf";
 	call compile preprocessFileLineNumbers "\z\addons\dayz_code\loot\compile.sqf";
-
+	
 	// SCAFFERY:
 	s_player_kickCrewOption	= -1;
 
 	fn_dropItem = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_dropItem.sqf";
 	fn_dynamicTool = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_dynamicTool.sqf";
+	fn_exitSwim = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_exitSwim.sqf";
+	fn_loopAction = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_loopAction.sqf";
 	fn_nearWaterHole = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_nearWaterHole.sqf";
 	player_zombieCheck = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\player_zombieCheck.sqf";	//Run on a players computer, checks if the player is near a zombie
 	player_zombieAttack = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\player_zombieAttack.sqf";	//Run on a players computer, causes a nearby zombie to attack them
@@ -82,7 +84,6 @@ if (!isDedicated) then {
 	player_addToolbelt = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_addToolbelt.sqf";
 	player_addtoBack = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_addtoBack.sqf";
 	player_reloadMag = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_reloadMags.sqf";
-	player_createstash = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_createstash.sqf";
 	player_consume = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_consume.sqf";
 	player_emptyContainer = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_emptyContainer.sqf";
 	player_useMeds = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_useMeds.sqf";
@@ -105,12 +106,12 @@ if (!isDedicated) then {
 	FNC_find_plots = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_find_plots.sqf";
 
 	player_buildVanilla = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_buildVanilla.sqf";
+	player_buildPlaceables = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_buildPlaceables.sqf";
 	fn_buildCamera = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_buildCamera.sqf";
 	object_build = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\object_build.sqf";
 	object_upgradeFireplace = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\object_upgradeFireplace.sqf";
 	player_wearClothes = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_wearClothes.sqf";
 	player_dropWeapon = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_dropWeapon.sqf";
-	//player_setTrap = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_setTrap.sqf";
 	object_pickup = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\object_pickup.sqf";
 	//player_sleep = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_sleep.sqf";
 	player_combineMag = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_combineMags.sqf";
@@ -162,7 +163,7 @@ if (!isDedicated) then {
 	player_checkRecipe = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_checkRecipe.sqf";	
 		
 	// EPOCH ADDITIONS
-	dayz_autoRunOff = {dayz_autoRun = false; terminate dayz_autoRunThread; player playActionNow "Stop";};
+	dayz_autoRunOff = {dayz_autoRun = false; terminate dayz_autoRunThread; if (speed player > 0) then {player playActionNow "Stop"};};
 	dog_findTargetAgent = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\dog_findTargetAgent.sqf";
 	dze_deathMessage = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\dze_deathMessage.sqf";
 	dze_filterCheats = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\player_filterCheats.sqf";
@@ -191,7 +192,6 @@ if (!isDedicated) then {
 	player_loadCrate = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_loadCrate.sqf";
 	player_lockVault = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\player_lockVault.sqf";
 	player_packVault = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\player_packVault.sqf";
-	player_removeItems = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_removeItems.sqf";
 	player_removeNearby = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\object_removeNearby.sqf";
 	player_removeObject = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\remove.sqf";
 	player_surrender = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_surrender.sqf";
@@ -342,10 +342,10 @@ if (!isDedicated) then {
 			};
 									
 			case "Working": {
-				if (_calorieCount > 0) then { dayz_nutrition = dayz_nutrition - (_calorieCount / ((DZE_NutritionDivisor select 0) min 0.1)); };
-				if (_thirstCount > 0) then { dayz_thirst = dayz_thirst + (_thirstCount / ((DZE_NutritionDivisor select 1) min 0.1)); };
-				if (_hungerCount > 0) then { dayz_hunger = dayz_hunger + (_hungerCount / ((DZE_NutritionDivisor select 2) min 0.1)); };
-				if (_tempCount > 0) then { dayz_temperatur = dayz_temperatur + (_tempCount / ((DZE_NutritionDivisor select 3) min 0.1)); };
+				if (_calorieCount > 0) then { dayz_nutrition = dayz_nutrition - (_calorieCount / ((DZE_NutritionDivisor select 0) max 0.1)); };
+				if (_thirstCount > 0) then { dayz_thirst = dayz_thirst + (_thirstCount / ((DZE_NutritionDivisor select 1) max 0.1)); };
+				if (_hungerCount > 0) then { dayz_hunger = dayz_hunger + (_hungerCount / ((DZE_NutritionDivisor select 2) max 0.1)); };
+				if (_tempCount > 0) then { dayz_temperatur = dayz_temperatur + (_tempCount / ((DZE_NutritionDivisor select 3) max 0.1)); };
 			};
 		
 		};
@@ -367,6 +367,7 @@ if (!isDedicated) then {
 		closeDialog 0;
 		if (gear_done) then {sleep 0.001;};
 		DZE_GearCheckBypass = true; //Bypass gear menu checks since dialog will always open on player's gear
+		skipGearSound = true; //Don't play sound when checking backpack mags ammo count
 		player action ["Gear", player];
 		if (gear_done) then {sleep 0.001;};
 		_dialog = findDisplay 106;
@@ -378,6 +379,7 @@ if (!isDedicated) then {
 			if (_i in [100,200,299]) then {
 				closeDialog 0;
 				DZE_GearCheckBypass = true; //Bypass gear menu checks since dialog will always open on player's gear
+				skipGearSound = true; //Don't play sound when checking backpack mags ammo count
 				player action ["Gear", player];
 			};
 			if (_i > 300) exitWith {};
@@ -391,6 +393,7 @@ if (!isDedicated) then {
 				sleep 0.001;
 			};
 		};
+		skipGearSound = false;
 		_dialog
 	};
 
@@ -545,8 +548,8 @@ if (!isDedicated) then {
 		disableSerialization;
 		_showText = {
 			private "_textLine";
-			4099999 cutRsc ["RSC_DZ_Messages","plain"];
-			_textLine = (uiNamespace getVariable "DZ_Messages") displayCtrl 4099998;
+			15 cutRsc ["RSC_DZ_Messages","plain"];
+			_textLine = (uiNamespace getVariable "DZ_Messages") displayCtrl 3;
 			_textLine ctrlSetStructuredText (parseText _this);
 			_textLine ctrlCommit 0;
 		};
@@ -602,8 +605,8 @@ if (!isDedicated) then {
 			death_3 = "";
 			death_4 = "";
 		};
-
-		death_1 = format["<t size='.8' align='left' color='#a81e13'>%1 </t><img align='left' image='%2'/><t size='.8' align='left' color='#3FB07D'> %3 (%4m)</t>",_playerName,_icon,_sourceName,_distance];
+		//Weapon images point left in A2
+		death_1 = format["<t size='.6' align='left' color='#ffffff'>%1 </t><img size='.8' align='left' image='%2'/><t size='.6' align='left' color='#ffffff'> %3 (%4m)</t>",_playerName,_icon,_sourceName,_distance];
 		death_1_time = diag_ticktime;
 		
 		//Prevent covering vehicle health bar HUD
@@ -627,6 +630,7 @@ BIS_fnc_findNestedElement =	compile preprocessFileLineNumbers "\z\addons\dayz_co
 BIS_fnc_param = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\BIS_fnc\fn_param.sqf";
 BIS_fnc_relativeDirTo = compile("private '_dir';_dir=_this call{" + (preprocessFileLineNumbers "ca\modules\Functions\geometry\fn_relativeDirTo.sqf")+"};if(_dir>180)then{_dir=_dir-360;};if(_dir<-180)then{_dir=_dir+360;};_dir");
 fnc_buildWeightedArray = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_buildWeightedArray.sqf";		//Checks which actions for nearby casualty
+fnc_getPos = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_getPos.sqf";
 fnc_spawnObjects = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_spawnObjects.sqf";
 object_getHit = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\object_getHit.sqf";			//gets the hit value for a HitPoint (i.e. HitLegs) against the selection (i.e. "legs"), returns the value
 object_setHit = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\object_setHit.sqf";			//process the hit as a NORMAL damage (useful for persistent vehicles)
@@ -655,10 +659,12 @@ player_medTransfuse = compile preprocessFileLineNumbers "\z\addons\dayz_code\med
 player_medMorphine = compile preprocessFileLineNumbers "\z\addons\dayz_code\medical\publicEH\medMorphine.sqf";
 player_medPainkiller = compile preprocessFileLineNumbers "\z\addons\dayz_code\medical\publicEH\medPainkiller.sqf";
 player_medAntiBiotics = compile preprocessFileLineNumbers "\z\addons\dayz_code\medical\publicEH\medAntibiotics.sqf";
-player_humanityChange = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\player_humanityChange.sqf";
+player_humanityChange = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\player_humanityChange.sqf"; //New
+player_humanityCheck = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\player_humanityCheck.sqf"; //Old
 player_projectileNear = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\player_projectileNear.sqf";
 player_bloodCalc = compile preprocessFileLineNumbers "\z\addons\dayz_code\medical\bloodCalc.sqf";
 fn_selectRandomLocation = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_selectRandomLocation.sqf";
+fn_addCargo = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_addCargo.sqf";
 fn_chance = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_selectRandomChance.sqf";
 fn_getModelName = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_getModelName.sqf";
 fn_niceSpot = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_niceSpot.sqf";
@@ -684,7 +690,6 @@ BIS_fnc_numberDigits = compile preprocessFileLineNumbers "\z\addons\dayz_code\co
 BIS_fnc_numberText = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_numberText.sqf";
 local_lockUnlock = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\local_lockUnlock.sqf"; //When vehicle is local to unit perform locking vehicle
 FNC_GetSetPos = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fnc_getSetPos.sqf";
-FNC_GetPos = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fnc_getPos.sqf";
 dayz_EjectPlayer = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\dze_ejectPlayer.sqf";
 dayz_groupInvite = compile preprocessFileLineNumbers "\z\addons\dayz_code\groups\handleInvite.sqf";
 
@@ -713,7 +718,7 @@ player_sumMedical = {
 		_character getVariable["USEC_inPain",false],
 		_character getVariable["USEC_isCardiac",false],
 		_character getVariable["USEC_lowBlood",false],
-		_character getVariable["USEC_BloodQty",12000],
+		_character getVariable["USEC_BloodQty",r_player_bloodTotal],
 		_wounds,
 		[_legs,_arms],
 		_character getVariable["unconsciousTime",0],
@@ -855,6 +860,16 @@ dayz_engineSwitch = {
 	};
 };
 
+DZE_SafeZonePosCheck = {
+	private ["_position","_skipPos"];
+	_position = _this select 0;
+	_skipPos = false;
+
+	{
+		if ((_position distance (_x select 0)) < (if (count _this > 1) then {_this select 1} else {_x select 1})) exitWith {_skipPos = true;};
+	} forEach DZE_SafeZonePosArray;
+	_skipPos;
+};
 // Fix anti TP for admin
 [] spawn {
 	waitUntil {!isNil "sched_antiTP"};

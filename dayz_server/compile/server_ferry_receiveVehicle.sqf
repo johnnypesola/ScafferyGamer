@@ -336,7 +336,7 @@ dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_veh];
 	diag_log ("PUBLISH: Created " + (_class) + " with ID " + str(_uid));
 };
 
-// Unload vehicle from ferry... TODO: MUST check on server (re)start if vehicle exists in intermediate table, if it does, then delete it!
+// Unload vehicle from ferry... MUST check on server (re)start if vehicle exists in intermediate table, if it does, then delete it!
 _key = [_playerUID];
 _query = ["unloadFromFerry", _key] call dayz_prepareDataForDB;
 _query call server_hiveWrite;

@@ -68,6 +68,12 @@ if (isNil "keyboard_keys") then {
 		call player_toggleSoundMute;
 		_handled = true;
 	};
+	_statusUI = {
+		profileNamespace setVariable ["statusUI",(if (profileNamespace getVariable ["statusUI",1] == 1) then {0} else {1})];
+		saveProfileNamespace;
+		call ui_changeDisplay;
+		_handled = true;
+	};
     _rifle = {
 		2 call dz_fn_switchWeapon;
         _handled = true;
@@ -128,9 +134,9 @@ if (isNil "keyboard_keys") then {
         };};
     };
     _forcesave = {
-        dayz_lastCheckBit = diag_ticktime;
-        call player_forceSave;
-		call dayz_EjectPlayer;
+		if (diag_tickTime - dayz_lastSave > 10) then {
+			call player_forceSave;
+		};
     };
     _forcesave2 = {
         if ((!isNull (findDisplay 106)) OR dialog) then {
@@ -148,9 +154,7 @@ if (isNil "keyboard_keys") then {
 		};
     };
     _interrupt = {
-		if (vehicle player == player) then { //allow med actions in moving vehicles
-			r_interrupt = true;
-		};
+		r_interrupt = true;
 		if (DZE_Surrender) then {call dze_surrender_off};
 		if (dayz_autoRun) then {call dayz_autoRunOff;};
     };
@@ -187,13 +191,6 @@ if (isNil "keyboard_keys") then {
             };
             _handled = true;
         };
-        // tents and stash construction
-        _object = player getVariable ["constructionObject", objNull];
-        if (!isNull _object) then {
-            _dir = getDir _object - 3;
-            _object setDir _dir;
-            _handled = true;
-        };
         dayz_dodge = true;
     };
     _build_right = {
@@ -210,35 +207,29 @@ if (isNil "keyboard_keys") then {
             };
             _handled = true;
         };
-        // tents and stash construction
-        _object = player getVariable ["constructionObject", objNull];
-        if (!isNull _object) then {
-            _dir = getDir _object + 3;
-            _object setDir _dir;
-            _handled = true;
-        };
         dayz_dodge = true;
     };
 
     _build_camOnOff = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_buildCamera.sqf";
 
     _build_str8OnOff = {
+		r_interrupt = true;
+		
         if (0 != count Dayz_constructionContext) then {
             Dayz_constructionContext set [ 5, !(Dayz_constructionContext select 5) ];
             _handled = true;
-            r_interrupt = true;
         };
 		
 		if (animationState player in ["bunnyhopunarmed","bunnyhoprifle"]) then {
 			//Fixes invisible weapon switch glitch if double tapping vault with no weapon in hands
 			_handled = true;
 		};
-		if (player isKindOf  "PZombie_VB") then {
+		if (player isKindOf "PZombie_VB") then {
 			_handled = true; // do not allow player zombies to vault or jump
 		} else {
-			_nearbyObjects = nearestObjects[getPosATL player, dayz_disallowedVault, 8];
+			_nearbyObjects = nearestObjects [getPosATL player, dayz_disallowedVault, 8];
 			if (count _nearbyObjects > 0) then {
-				if ((diag_tickTime - dayz_lastCheckBit > 4)) then {
+				if (diag_tickTime - dayz_lastCheckBit > 4) then {
 					[objNull, player, rSwitchMove,"GetOver"] call RE;
 					player playActionNow "GetOver";
 					dayz_lastCheckBit = diag_tickTime;
@@ -278,7 +269,9 @@ if (isNil "keyboard_keys") then {
 	
     _addArray = {
         {
-            keyboard_keys set [_x, _this select 1];
+			if (_x <= 999999) then {
+				keyboard_keys set [_x, _this select 1];
+			};
         } forEach (_this select 0);
     };
 
@@ -338,7 +331,9 @@ if (isNil "keyboard_keys") then {
     [actionKeys "Diary", _journal] call _addArray;
     [actionKeys "NetworkStats", _journal] call _addArray;
 	[[DIK_F1], _muteSound] call _addArray;
-    //[[DIK_F4, DIK_TAB, DIK_DELETE], _forcesave] call _addArray;
+	[[DIK_F3], _statusUI] call _addArray;
+	[[DIK_F4], {if (diag_tickTime - dayz_lastSave > 10) then {call player_forceSave;};_handled = true;}] call _addArray;
+    [[DIK_TAB,DIK_DELETE], _forcesave] call _addArray;
     //[[DIK_F4, DIK_RMENU, DIK_LMENU,DIK_LSHIFT,DIK_RSHIFT,DIK_ESCAPE], _forcesave2] call _addArray;
     [actionKeys "LeanLeft", _build_left ] call _addArray;
     [actionKeys "LeanRight", _build_right ] call _addArray;
@@ -349,11 +344,11 @@ if (isNil "keyboard_keys") then {
     [actionKeys "ForceCommandingMode", {DZE_5 = true;_handled = true;}] call _addArray;
 
     // custom
-    [[DIK_F3], _scaff_viewdist ] call _addArray; // change view distance (scaffery)
-    [[DIK_F6], _scaff_toggleDebug ] call _addArray; // toggle debug monitor (scaffery)
+    [[DIK_F6], _scaff_viewdist ] call _addArray; // change view distance (scaffery)
+    [[DIK_F7], _scaff_toggleDebug ] call _addArray; // toggle debug monitor (scaffery)
 
     [[  DIK_F9,DIK_F10,DIK_F11,DIK_F12,
-        DIK_F8,DIK_F7,DIK_F4,
+        DIK_F8,
         DIK_F2,DIK_9,
         DIK_8,DIK_7,DIK_6,DIK_5,DIK_4], _block] call _addArray;
 	if (dayz_groupSystem) then {
@@ -361,8 +356,9 @@ if (isNil "keyboard_keys") then {
 		[[DIK_LWIN,DIK_RWIN], {dayz_groupNameTags = !dayz_groupNameTags;_handled = true;}] call _addArray;
 		[actionKeys "TacticalView", _block] call _addArray;
 	};
+	[actionKeys "DSInterface", _block] call _addArray;
+	[[DIK_P], {if (_shiftState) then {_handled = true;};}] call _addArray;
 	diag_log "keyboard_keys reset";
-	if (!isNil "bis_fnc_halo_keydown_eh") then {bis_fnc_halo_keydown_eh = (finddisplay 46) displayaddeventhandler ["keydown","_this call bis_fnc_halo_keydown;"];}; // halo in progress
 };
 
 if (r_player_unconsciousInputDisabled) exitWith {true};

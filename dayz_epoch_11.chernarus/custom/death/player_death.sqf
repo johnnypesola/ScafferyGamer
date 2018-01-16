@@ -1,4 +1,4 @@
-private ["_ammo","_body","_distance","_infected","_playerID","_sourceName","_sourceWeapon","_sourceVehicleType","_isBandit","_punishment","_humanityHit","_myKills","_kills","_killsV","_display","_myGroup","_camera","_deathPos","_animState","_animStateArray","_animCheck","_source","_method","_realSource","_skin","_skinOk","_result"]; // Preserve skin script
+private ["_ammo","_body","_distance","_infected","_killed","_playerID","_sourceName","_sourceWeapon","_sourceVehicleType","_isBandit","_punishment","_humanityHit","_myKills","_kills","_killsV","_display","_myGroup","_camera","_deathPos","_animState","_animStateArray","_animCheck","_source","_method","_realSource","_skin","_skinOk","_result"]; // Preserve skin script
 
 if (deathHandled) exitWith {};
 deathHandled = true;
@@ -7,9 +7,13 @@ deathHandled = true;
 if (typeName (_this select 0) == "ARRAY") then {
 	_body = (_this select 0) select 0;
 	_source = (_this select 0) select 1;
+	diag_log format["Player_Death called from 'killed' event handler %1",_this];
+	_killed = true;
 } else {
 	_body = player;
 	_source = _this select 0;
+	diag_log format["Player_Death called from script %1",_this];
+	_killed = false;
 };
 
 // Preserve skin script
@@ -32,14 +36,21 @@ _camera camSetDir 0;
 _camera camSetFOV 1;
 _camera cameraEffect ["Internal","TOP"];
 _camera camSetTarget _deathPos;
-_camera camSetPos [_deathPos select 0, (_deathPos select 1) + 2, 5];
+_camera camSetPos [_deathPos select 0, (_deathPos select 1) + 2, (_deathPos select 2) + 5];
 _camera camCommit 0;
 
-//SetDamage immediately so Arma registers the player as dead and respawns them into new unit
-player setDamage 1;
+if (!_killed) then {
+	//Kill only if killed event handler has not already fired (respawnDelay=0 in description.ext)
+	player setDamage 1;
+};
 
 if (dayz_onBack != "") then {
-	_body addWeapon dayz_onBack;
+	if (dayz_onBack in weapons _body) then {
+		//Prevent duplicate weapon error
+		[dayz_onBack,2,1,[_deathPos select 0,_deathPos select 1,0]] call fn_dropItem;
+	} else {
+		_body addWeapon dayz_onBack;
+	};
 };
 
 //Get killer information immediately. Weapon, distance or vehicle can change in seconds.
@@ -58,7 +69,7 @@ _ammo = if (count _this > 2) then {_this select 2} else {""};
 
 if (!isNull _source) then {
 	if (!isNull _body) then {
-		_distance = round (_body distance _source);
+		_distance = round (_deathPos distance _source);
 	};
 	
 	_sourceVehicleType = typeOf (vehicle _source);
@@ -79,7 +90,7 @@ if (!isNull _source) then {
 
 //Send Death Notice
 diag_log format["Player_Death: Body:%1 BodyName:%2 Infected:%3 SourceName:%4 SourceWeapon:%5 Distance:%6 Method:%7",_body,dayz_playerName,_infected,_sourceName,_sourceWeapon,_distance,_method];
-PVDZ_plr_Death = [dayz_characterID,0,_body,_playerID,toArray dayz_playerName,_infected,toArray _sourceName,toArray _sourceWeapon,_distance,_method]; //Send name as array to avoid publicVariable value restrictions
+PVDZ_plr_Death = [dayz_characterID,0,_body,_playerID,toArray dayz_playerName,_infected,toArray _sourceName,_sourceWeapon,_distance,_method]; //Send name as array to avoid publicVariable value restrictions
 publicVariableServer "PVDZ_plr_Death";
 
 _body setVariable ["deathType", if (_method == "suicide") then {"shot"} else {_method}, true];
@@ -161,7 +172,7 @@ _myGroup = group _body;
 [_body] joinSilent dayz_firstGroup;
 deleteGroup _myGroup;
 
-80000 cutText ["","PLAIN"]; //Clear group tags
+8 cutText ["","PLAIN"]; //Clear group tags
 3 cutRsc ["default", "PLAIN",3];
 4 cutRsc ["default", "PLAIN",3];
 
@@ -183,7 +194,7 @@ if ((_body == (vehicle _body)) && {_animState != "deadstate" && {_animCheck != "
 	_deathPos = _this select 2;
 	
 	waitUntil {camCommitted _camera};
-	_camera camSetPos [_deathPos select 0, (_deathPos select 1) + 2, 15];
+	_camera camSetPos [_deathPos select 0, (_deathPos select 1) + 2, (_deathPos select 2) + 15];
 	_camera camCommit 4;
 	uiSleep 5;
 	

@@ -84,6 +84,7 @@ if ("ARRAY" == typeName _result) then {
 	dayzSetDate = _date;
 	publicVariable "dayzSetDate";
 };
+
 //Stream in objects
 /* STREAM OBJECTS */
 //Send the key

@@ -34,7 +34,7 @@ if (_ranFuel < .1) then {_ranFuel = .1;};
 		((_worldspace select 1) select 2) call KK_fnc_floatToString,	// z
 		(_worldspace select 0) call KK_fnc_floatToString,		// dir
 		'0', // owner playeruid
-		[], // up vector
+		[[0,0,0],[0,0,0]], // up vector
 		[], // inv magazines
 		[], // inv weapons
 		[], // inv backpacks
