@@ -289,7 +289,7 @@ if (count _playerPos > 0) then {
 		"_isUncon","_isInfect","_isInjured","_isInPain","_isCardiac","_isLowBlood","_isBloodTestDone",
 		"_kills","_headShots","_distanceFoot","_timeSince","_currentWpn","_currentAnim","_playerUID",
 		"_temp","_friendlies","_killsH","_killsB","_currentModel","_humanity","_empty","_prof","_coins",
-		"_bankCoins","_name"
+		"_bankCoins","_name","_isRhFactorPos"
 	];
 
 	//_prof = diag_tickTime;
@@ -363,7 +363,11 @@ if (count _playerPos > 0) then {
 		_isInPain = if (_medical select 4) then {1} else {0};
 		_isCardiac = if (_medical select 5) then {1} else {0};
 		_isLowBlood = if (_medical select 6) then {1} else {0};
-		_isRhFactorPos = if (_medical select 12) then {1} else {0};
+                if (typeName(_medical select 12) == "BOOL") then {
+			_isRhFactorPos = if (_medical select 12) then {1} else {0};
+		} else {
+			_isRhFactorPos = 2;
+		};
 		_isBloodTestDone = if (_medical select 14) then {1} else {0};
 		_key = _key + [
 			format["med_dead = %1", _isDead],
@@ -379,10 +383,12 @@ if (count _playerPos > 0) then {
 			format["med_hit_arms = %1", (_medical select 9) select 1],
 			format["med_unconscious_time = %1", _medical select 10],
 			format["med_blood_type = '%1'", (_medical select 11) call strip_quotes],	// new in 1.0.6
-			format["med_rh_factor = '%1'", _isRhFactorPos],	// new in 1.0.6
 			format["med_messing = '%1'", (str (_medical select 13)) call strip_quotes],
 			format["med_blood_testdone = %1", _isBloodTestDone]	// new in 1.0.6
 		];
+		if (_isRhFactorPos < 2) then {
+			_key = _key + [format["med_rh_factor = %1", _isRhFactorPos]],	// new in 1.0.6
+		};
 	};
 	if (_kills > 0) then {
 		_key = _key + [format["kills_z = kills_z + %1", _kills]];

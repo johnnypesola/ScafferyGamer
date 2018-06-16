@@ -7,7 +7,7 @@ if (player distance respawn_west_original < 100) then {
 	_nearestCity = nearestLocations [_grid, ["NameCityCapital","NameCity","NameVillage","NameLocal"],1000];
 	Dayz_logonTown = "Wilderness";
 	if (count _nearestCity > 0) then {Dayz_logonTown = text (_nearestCity select 0)};
-	[toUpper worldName,Dayz_logonTown,format[localize "str_player_06",dayz_Survived]] spawn {
+	[toUpper worldName,Dayz_logonTown,format[localize "str_player_06",(dayz_Survived select 0)]] spawn {
 		uiSleep 5;
 		BIS_fnc_infoText = compile preprocessFileLineNumbers "ca\modules_e\functions\GUI\fn_infoText.sqf";
 		_this spawn BIS_fnc_infoText;

@@ -662,7 +662,7 @@ if (true) then
   _vehicle_579 = _this;
   _this setDir 0.1;
   _this setPos [7240.4561, 3190.2446, 0.35948306];
-  _this setVariable ["MalSar", "1", true];
+  _this setVariable ["MalSar", 1, true];
 };
 
 _thebox = createVehicle ["BAF_VehicleBox",[7240.4561, 3186.2446, -0.00015258789], [], 0, "CAN_COLLIDE"];

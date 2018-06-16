@@ -492,9 +492,9 @@ server_loadPlayer = {
 		_worldspace = [_result select 4, [_result select 1, _result select 2, _result select 3]];
 		_inventory = [_result select 6, _result select 5, _result select 7];
 		_backpack = [_result select 8, _result select 10, _result select 9];
-		_survival = [_result select 11, _result select 12, _result select 13];
-		_CharacterCoins = _result select 14;
-		_model = _result select 15;
+		_survival = [_result select 11, _result select 12, _result select 13, _result select 14];
+		_CharacterCoins = _result select 15;
+		_model = _result select 16;
 		_hiveVer = 0.96;
 
 		_primary = ["PASS", _newPlayer, _charID, _worldspace, _inventory, _backpack, _survival, _CharacterCoins, _model, _playerGroup, _playerCoins, _BankCoins, _hiveVer];

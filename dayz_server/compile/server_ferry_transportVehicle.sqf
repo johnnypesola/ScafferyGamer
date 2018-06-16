@@ -123,8 +123,7 @@ diag_log format ["FERRY: Vehicle %1 loaded onto ferry. Player %2 [%3] and crew m
 [
 	_object getVariable ["ObjectID", "0"],
 	_object getVariable ["ObjectUID", "0"],
-	_playerUID
-] call server_deleteObj;
+] call server_deleteObjDirect;
 
 
 // From this point and onwards, keep passengers inside ;-)
