@@ -122,7 +122,7 @@ diag_log format ["FERRY: Vehicle %1 loaded onto ferry. Player %2 [%3] and crew m
 // Delete the vehicle from the database
 [
 	_object getVariable ["ObjectID", "0"],
-	_object getVariable ["ObjectUID", "0"],
+	_object getVariable ["ObjectUID", "0"]
 ] call server_deleteObjDirect;
 
 

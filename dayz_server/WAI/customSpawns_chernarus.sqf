@@ -151,7 +151,7 @@
 		sleep 0.1;
 
 		for "_i" from 0 to (floor(random 3)+1) do {
-			_pos = _positions select _i;
+			_pos = _positions call BIS_fnc_selectRandom;
 			[_pos,   			// Position to patrol
 			_pos,   		// Position to spawn at
 			200,               	// Radius of patrol

@@ -9,7 +9,7 @@ _distance = _player distance _ct;
 
 /********** Exit sequences **********/
 if(isNull _ct || _ctType != "Old_bike_TK_CIV_EP1" || (_ct getVariable ["MalSar",0] != 1)) exitWith {cutText ["Target is not a player built bike.", "PLAIN DOWN"];};
-if(dayz_combat == 1) exitWith {cutText ["You are in Combat and cannot pack a bike.", "PLAIN DOWN"];};
+if(player getVariable["combattimeout",0] >= diag_tickTime) exitWith {cutText ["You are in Combat and cannot pack a bike.", "PLAIN DOWN"];};
 if(!(_canDo)) exitWith {cutText ["You are in a vehicle or already performing an action","PLAIN DOWN"];};
 if(_distance > 3) exitWith {cutText ["You must be within 3 meters of the bike to pack it","PLAIN DOWN"];};
 /********** End Exit sequences **********/

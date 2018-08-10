@@ -39,8 +39,8 @@ if (WAIWorldName == "chernarus") then {
 			[
 				[_pos select 0, _pos select 1, 0.01],
 				round((random 6) / 10) + 1,	// number of units
-				0.5,	// Difficulty
-				[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,4,3,1] call BIS_fnc_selectRandom, // Gun set number
+				1.0,	// Difficulty
+				[6,6,6,6,6,6,4,3,1] call BIS_fnc_selectRandom, // Gun set number
 				3,	// Number of magazines
 				"DZ_Patrol_Pack_EP1",	// Backpack
 				"Survivor2_DZ",	// Skin
@@ -61,7 +61,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[5165.8394, 4469.9219, 0.01], //AiAirbase1
 		2,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -75,7 +75,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[4723.9019, 4811.4233, 0.01], //AiAirbase2
 		1,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -89,7 +89,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[3885.1987, 4560.3779, 0.01], //AiAirbase3
 		2,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		3,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -103,7 +103,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[18221.836, 2147.1143, 0.01], //AiSouthAirstrip
 		2,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -117,7 +117,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[18092.02, 2543.2104, 0.01], //AiSouthAirstripMilBaseNorth
 		2,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -131,7 +131,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[16366.377, 18359.223, 0.01], //AiSuhrenfeld1
 		2,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -145,7 +145,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[16461.492, 18379.238, 0.01], //AiSuhrenfeld2
 		1,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		3,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -159,7 +159,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[17148.594, 18730.047, 0.01], //AiSuhrenfeld3
 		1,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -173,7 +173,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[8574.9023, 16139.772, 0.01], //AiLenzburg1
 		1,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -187,7 +187,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[9228.5068, 15794.415, 0.01], //AiLenzburgInd1
 		1,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -201,7 +201,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[9015.4033, 16250.197, 0.01], //AiLenzburg2
 		1,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -215,7 +215,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[8963.5459, 16625.605, 0.01], //AiLenzburg3
 		1,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -229,7 +229,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[14304.469, 16954.207, 0.01], //AiAirport1
 		2,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -243,7 +243,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[14411.985, 16851.197, 0.01], //AiAirport2
 		1,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -257,7 +257,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[14756.067, 13699.046, 0.01], //AiLuzernInd2
 		1,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -271,7 +271,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[14586.058, 14231.967, 0.01], //AiLuzern1
 		1,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -285,7 +285,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[15773.251, 13246.546, 0.01], //AiEmmenPort
 		1,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -299,7 +299,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[6475.2368, 9775.0908, 0.01], //AiMunchenstein1
 		1,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -313,7 +313,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[6600.7964, 9486.6035, 0.01], //AiMunchenstein2
 		1,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.
@@ -327,7 +327,7 @@ if (WAIWorldName == "chernarus") then {
 		false, 
 		[[7356.041, 14796.133, 0.01], //AiTruebInd
 		1,			//Number Of units
-		0.5,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+		1.0,			//Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 		6,		      //Primary gun set number. "Random" for random weapon set.
 		3,						  //Number of magazines
 		"DZ_Patrol_Pack_EP1",						  //Backpack "" for random or classname here.

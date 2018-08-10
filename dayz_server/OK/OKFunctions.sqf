@@ -78,7 +78,7 @@ OKFindPos = {
 		_findRun = true;
 		while {_findRun} do
 		{
-			_pos = [_centerPos,0,7600,0,0,30,0] call BIS_fnc_findSafePos;
+			_pos = [_centerPos,0,7600,15,0,0.15,0] call BIS_fnc_findSafePos;
 			
 			//Apparently you can't compare two arrays and must compare values
 			_posX = _pos select 0;

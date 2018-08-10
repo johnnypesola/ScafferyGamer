@@ -234,11 +234,7 @@ if (_randomSpot) then {
 		diag_log format["%1: Error, failed to find a suitable spawn spot for player. area:%2",__FILE__, _mkr];
 	};
 	_worldspace = [0,_position];
-<<<<<<< HEAD
-
-=======
 	
->>>>>>> DayZ Epoch 1.0.6.2 update
 	//Fresh spawn, clear animationState so anim from last sync does not play on login
 	_state = ["","reset"];
 };

@@ -73,8 +73,8 @@ diag_log ("HIVE: WRITE: "+ str(_query));
 _result = _query call server_hiveReadWrite;
 
 // Switched to spawn so we can wait a bit for the ID
-[_object,_uid,_characterID,_class,_dir,_location,_donotusekey,_activatingPlayer] spawn {
-   private ["_object","_uid","_characterID","_done","_retry","_key","_result","_outcome","_oid","_class","_location","_donotusekey","_activatingPlayer","_countr","_objectID","_objectUID","_dir","_newobject","_weapons","_magazines","_backpacks","_objWpnTypes","_objWpnQty"];
+[_object,_uid,_characterID,_class,_dir,_location,_donotusekey,_activatingPlayer,_playerUID] spawn {
+   private ["_object","_uid","_characterID","_done","_retry","_key","_result","_outcome","_oid","_class","_location","_donotusekey","_activatingPlayer","_countr","_objectID","_objectUID","_dir","_newobject","_weapons","_magazines","_backpacks","_objWpnTypes","_objWpnQty","_playerUID"];
 
 	_object = _this select 0;
 	_objectID 	= _object getVariable ["ObjectID","0"];
@@ -87,6 +87,7 @@ _result = _query call server_hiveReadWrite;
 	_location = getPosATL _object;
 	_donotusekey = _this select 6;
 	_activatingPlayer = _this select 7;
+	_playerUID = _this select 8;
 
 	_oid = "0";
 

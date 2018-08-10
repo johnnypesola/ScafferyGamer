@@ -205,9 +205,9 @@ OKWeps4 = [
 "SVD_Gh_DZ",
 "SVD_Gh_DZ",
 "SVD_Gh_DZ",
-"SVD_des_EP1",
-"SVD_des_EP1",
-"SVD_des_EP1"
+"SVD_PSO1_DZ",
+"SVD_PSO1_DZ",
+"SVD_PSO1_DZ"
 ];
 
 /////////////////////////////////////////////////////////////

@@ -70,19 +70,20 @@ if (0 < count _result) then {
 	//_object setVariable ["ObjectID", _oid, true];
 };
 // Switched to spawn so we can wait a bit for the ID
-[_uid,_characterID,_class,_dir,_location,_donotusekey,_activatingPlayer, _oid] spawn {
-   private ["_object","_uid","_characterID","_done","_retry","_key","_result","_outcome","_oid","_class","_location","_object_para","_donotusekey","_activatingPlayer"];
+[_uid,_characterID,_class,_dir,_location,_donotusekey,_activatingPlayer,_oid,_playerUID] spawn {
+	private ["_object","_uid","_characterID","_done","_retry","_key","_result","_outcome","_oid","_class","_location","_object_para","_donotusekey","_activatingPlayer","_playerUID"];
 
-   _uid = _this select 0;
-   _characterID = _this select 1;
-   _class = _this select 2;
-   //_dir = _this select 3;
-   _location = _this select 4;
-   _donotusekey = _this select 5;
-   _activatingPlayer = _this select 6;
-   _oid = _this select 7;	// extDB2
+	_uid = _this select 0;
+	_characterID = _this select 1;
+	_class = _this select 2;
+	//_dir = _this select 3;
+	_location = _this select 4;
+	_donotusekey = _this select 5;
+	_activatingPlayer = _this select 6;
+	_oid = _this select 7;	// extDB2
+	_playerUID = _this select 8;
 
-   _done = false;
+	_done = false;
 	_retry = 0;
 	// extDB2
 	if (!isNil "_oid") then {
@@ -193,11 +194,11 @@ if (0 < count _result) then {
 		};
 
 	};
-	
+
 	_object call fnc_veh_ResetEH;
-	
+
 	PVDZE_veh_Init = _object;
 	publicVariable "PVDZE_veh_Init";
-	
+
 	diag_log format["PUBLISH: %1(%2) bought %3 with UID %4 @%5",(_activatingPlayer call fa_plr2str),_playerUID,_class,_uid,(_location call fa_coor2str)];
 };

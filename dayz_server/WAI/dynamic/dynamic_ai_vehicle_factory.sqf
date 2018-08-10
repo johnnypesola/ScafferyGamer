@@ -46,7 +46,7 @@ while { !(_stopConditionArgs call _stopCondition) } do {
 
 		_vehicleData = 		_vehicleList select _i;
 		_vehicle = 		_vehicleData select 9;
-		if (!isNull "_vehicle") then {
+		if (!isNull _vehicle) then {
 
 			if (!alive _vehicle) then {
 

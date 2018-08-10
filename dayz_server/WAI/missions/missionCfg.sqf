@@ -153,7 +153,7 @@ ammo_box_guns = [
 "RPK_DZ",
 "BAF_LRR_scoped",
 "DMR",
-"SVD_Camo",
+"SVD_PSO1_Gh_DZ",
 "SCAR_H_LNG_Sniper_SD",
 "M110_NVG_EP1",
 "Sa58V_RCO_EP1",
@@ -237,7 +237,7 @@ treasure_box_random_guns = [
 "VSS_vintorez",
 "M240_DZ",
 "Pecheneg_DZ",
-"SVD_CAMO",
+"SVD_PSO1_Gh_DZ",
 "M4A1_AIM_SD_camo",
 "BAF_LRR_scoped",
 "M110_NVG_EP1"

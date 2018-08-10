@@ -209,7 +209,7 @@ ai_wep2 = [
 /// 3 ///
 ai_wep3 = [ 
 ["Huntingrifle","5x_22_LR_17_HMR"], 
-["SVD_Camo","10Rnd_762x54_SVD"], 
+["SVD_PSO1_Gh_DZ","10Rnd_762x54_SVD"], 
 ["VSS_Vintorez","20Rnd_9x39_SP5_VSS"], 
 ["M40A3","5Rnd_762x51_M24"],
 ["M24","5Rnd_762x51_M24"]
@@ -228,7 +228,7 @@ ai_wep4 = [
 
 /// 5 ///
 ai_wep5 = [ 
-["SVD_Camo","10Rnd_762x54_SVD"], 
+["SVD_PSO1_Gh_DZ","10Rnd_762x54_SVD"], 
 ["M40A3_DZ","5Rnd_762x51_M24"],
 ["BAF_LRR_scoped","5Rnd_86x70_L115A1"],
 ["m107_DZ","10Rnd_127x99_M107"]

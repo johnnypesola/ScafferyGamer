@@ -86,13 +86,13 @@ class Category_487 {
 	};
 	class SVD_des_EP1 { // desert camo
 		type = "trade_weapons";
-		buy[] = {1,"ItemGoldBar10oz"};
+		buy[] = {-1,"ItemGoldBar10oz"}; // Sell only
 		sell[] = {6,"ItemGoldBar"};
 	};
 	// Scaffery
 	class SVD_camo {
 		type = "trade_weapons";
-		buy[] = {1,"ItemGoldBar10oz"};
+		buy[] = {-1,"ItemGoldBar10oz"};	// Sell only
 		sell[] = {6,"ItemGoldBar"};
 	};
 	class Huntingrifle { // sell only

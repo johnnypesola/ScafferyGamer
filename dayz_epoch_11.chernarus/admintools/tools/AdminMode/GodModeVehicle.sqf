@@ -13,6 +13,8 @@ if(vehicleGod2) then {
 	};
 };
 
+previousVehicle = objNull;
+
 while{alive (vehicle player) && vehicleGod2} do
 {
 	// Wait until player gets in a vehicle or god mode is turned off
@@ -20,7 +22,9 @@ while{alive (vehicle player) && vehicleGod2} do
 
 	// Enable god mode only if it hasn't been turned off
 	if(vehicleGod2) then {
-		_playerVehicle = (vehicle player);
+		_playerVehicle = vehicle player;
+		previousVehicle = _playerVehicle;
+		
 		_playerVehicle setfuel 1;
 		_playerVehicle setdammage 0;
 		
@@ -28,36 +32,33 @@ while{alive (vehicle player) && vehicleGod2} do
 		_playerVehicle addEventHandler ["handleDamage", {false}];
 		_playerVehicle allowDamage false;
 	 
-		fnc_usec_damageVehicle ={};
-		vehicle_handleDamage ={};
-		vehicle_handleKilled ={};
+		fnc_veh_handleDam = {};
+		fnc_veh_handleKilled = {};
 	};
 
 	// Wait until player leaves vehicle or god mode is turned off
 	waitUntil{Sleep 1; ((player == (vehicle player)) || !vehicleGod2)};
 
 	// Disable god mode for a vehicle only if it was on
-	if(!isNil "_playerVehicle") then {
-		_playerVehicle removeAllEventHandlers "handleDamage";
-		_playerVehicle addEventHandler ["handleDamage", {_this select 2}];
-		_playerVehicle allowDamage true;
-		
-		fnc_usec_damageVehicle = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_damageHandlerVehicle.sqf";
-		vehicle_handleDamage = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\vehicle_handleDamage.sqf";
-		vehicle_handleKilled = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\vehicle_handleKilled.sqf";
-		_playerVehicle = "";
+	if((!isNil "previousVehicle") && (typeName previousVehicle == "OBJECT") && (!isNull previousVehicle)) then {
+		previousVehicle removeAllEventHandlers "handleDamage";
+		previousVehicle addEventHandler ["handleDamage", {_this select 2}];
+		previousVehicle allowDamage true;
+
+		fnc_veh_handleDam = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\veh_handleDam.sqf";
+		fnc_veh_handleKilled = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\veh_handleKilled.sqf";
+		previousVehicle = objNull;
 	};
 };
 
 // Disable god mode for a vehicle only if it was on
-if(!isNil "_playerVehicle") then {
-    _playerVehicle removeAllEventHandlers "handleDamage";
-    _playerVehicle addEventHandler ["handleDamage", {_this select 2}];
-    _playerVehicle allowDamage true;
+if((!isNil "previousVehicle") && (typeName previousVehicle == "OBJECT") && (!isNull previousVehicle)) then {
+    previousVehicle removeAllEventHandlers "handleDamage";
+    previousVehicle addEventHandler ["handleDamage", {_this select 2}];
+    previousVehicle allowDamage true;
 
-    fnc_usec_damageVehicle = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_damageHandlerVehicle.sqf";
-    vehicle_handleDamage = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\vehicle_handleDamage.sqf";
-    vehicle_handleKilled = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\vehicle_handleKilled.sqf";
+    fnc_veh_handleDam = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\veh_handleDam.sqf";
+    fnc_veh_handleKilled = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\veh_handleKilled.sqf";
 };
 	// Tool use logger
 	if(logMajorTool) then {

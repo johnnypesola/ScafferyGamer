@@ -170,7 +170,7 @@ for "_i" from 1 to _numberofguns do {
 		"RPK_74",
 		"BAF_LRR_scoped",
 		"DMR",
-		"SVD_CAMO",
+		"SVD_PSO1_Gh_DZ",
 		"SCAR_H_LNG_Sniper_SD",
 		"M110_NVG_EP1",
 		"Sa58V_RCO_EP1",
