@@ -19,12 +19,267 @@ Custom group spawns Eg.
 Place your custom group spawns below
 */
 
+keep_respawning = false;
+
+pick_n_positions = {
+	private ["_input_list", "_cloned_list", "_item", "_nof_groups","_result_array","_item2"];
+	_input_list = _this select 0;
+	_nof_groups = _this select 1;
+	_cloned_list = +_input_list;
+	_result_array = [];
+	for "_i" from 1 to _nof_groups do {
+		_item = _cloned_list call BIS_fnc_selectRandom;
+		for "_j" from 0 to (count _cloned_list)-1 do {
+			_item2 = _cloned_list select _j;
+			if ([_item2, _item] call BIS_fnc_areEqual) then {
+				_cloned_list set [_j, -1]; 
+			};
+		};
+		// Remove picked element from cloned list
+		_cloned_list = _cloned_list - [-1];
+		_result_array set [count _result_array, _item];
+	};
+	_result_array
+};
+
+add_launchers = {
+	private ["_group","_unit","_launcherClass","_launcherAmmoClass"];
+	_group = _this select 0;
+	_launcherClass = _this select 1;
+	_launcherAmmoClass = _this select 2;
+	// These guys might have some AT weapons + ammo.
+	{
+		_unit = _x;
+		if ((random 1) > .5) exitWith {	// 50% chance
+			_unit addWeapon _launcherClass;
+			_unit addMagazine _launcherAmmoClass;
+		};
+	} forEach units _group;
+};
+
+spawn_reinforcement_patrol = {
+	private ["_starting_point","_group_alive","_group","_groups","_actual_point","_faction","_target_point","_timeout","_nofUnits","_unit"];
+	_group_alive = false;
+	_faction = _this select 0;
+	_starting_point = _this select 1;
+	_target_point = _this select 2;
+	_timeout = _this select 3;
+	_nofUnits = 3;
+	if (count _this == 5) then {
+		_groups = _this select 4;
+	} else {
+		_groups = [];
+	};
+	_group = grpNull;
+
+	while {keep_respawning} do {
+
+		_actual_point = [_starting_point,0,900,10,0,1,0,[],_starting_point] call BIS_fnc_findSafePos;
+		_actual_point set [2, 0];
+
+		if (_faction == "us") then {
+			// Respawn patrol
+			_group = [
+				_actual_point,    //position
+				_nofUnits,        //Number Of units
+				0.75,             //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+				4,                //Primary gun set number. "Random" for random weapon set.
+				4,                //Number of magazines
+				"",               //Backpack "" for random or classname here.
+				"Soldier1_DZ",    //Skin "" for random or classname here.
+				5,                //Gearset number. "Random" for random gear set.
+				_groups,
+				_target_point,
+				false
+			] call spawn_3rd_faction_group;
+			[_group, "MAAWS", "MAAWS_HEAT"] call add_launchers; 
+
+		} else {
+			// Respawn patrol
+			_group = [
+				_actual_point,    //position
+				_nofUnits,        //Number Of units
+				0.75,             //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+				4,                //Primary gun set number. "Random" for random weapon set.
+				4,                //Number of magazines
+				"",               //Backpack "" for random or classname here.
+				"Bandit2_DZ",     //Skin "" for random or classname here.
+				5,                //Gearset number. "Random" for random gear set.
+				false,
+				_target_point,
+				false
+			] call spawn_neutral_group;
+			[_group, "M136", "M136"] call add_launchers; 
+		};
+
+		_group_alive = true;
+
+		while {_group_alive} do {
+			_group_alive = ({alive _x} count units _group) > 0;
+			if (!keep_respawning) exitWith {
+				diag_log format ["WAI: Stopping respawning of units..."];
+			};
+			for "_i" from 1 to 10 do {
+				if (!keep_respawning) exitWith {
+					diag_log format ["WAI: Stopping respawning of units..."];
+				};
+				sleep 1;
+			};
+		};
+		for "_i" from 1 to (_timeout) do {
+			if (!keep_respawning) exitWith {
+				diag_log format ["WAI: Stopping respawning of units..."];
+			};
+			sleep 1;
+		};
+	};
+};
+
+spawn_snipers = {
+	private ["_starting_point","_groups","_faction","_target_point","_units"];
+	_faction = _this select 0;
+	_starting_point = _this select 1;
+	_target_point = _this select 2;
+	_units = _this select 3;
+	if (count _this == 5) then {
+		_groups = _this select 4;
+	} else {
+		_groups = [];
+	};
+	if (_faction == "us") then {
+		// Respawn patrol
+		[
+			_starting_point,  //position
+			_units,           //Number Of units
+			0.75,             //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+			7,                //Primary gun set number. "Random" for random weapon set.
+			4,                //Number of magazines
+			"",               //Backpack "" for random or classname here.
+			"GUE_Soldier_Sniper_DZ",    //Skin "" for random or classname here.
+			5,                //Gearset number. "Random" for random gear set.
+			_groups,
+			_target_point,
+			false
+		] call spawn_3rd_faction_sniper_group;
+	} else {
+		// Respawn patrol
+		[
+			_starting_point,  //position
+			_units,           //Number Of units
+			0.75,             //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
+			7,                //Primary gun set number. "Random" for random weapon set.
+			4,                //Number of magazines
+			"",               //Backpack "" for random or classname here.
+			"GUE_Soldier_Sniper_DZ",     //Skin "" for random or classname here.
+			5,                //Gearset number. "Random" for random gear set.
+			_target_point,
+			false
+		] call spawn_neutral_sniper_group;
+	};
+};
+
+spawn_usable_static_gunners = {
+	private ["_positions","_groups","_faction","_guntype"];
+	_faction = _this select 0;
+	_positions = _this select 1;
+	_guntype = _this select 2;
+	if (count _this == 4) then {
+		_groups = _this select 3;
+	} else {
+		_groups = [];
+	};
+	if (_faction == "us") then {
+		// US gunner 1
+		[
+			[_positions select 0], //position
+			_guntype,         //Classname of turret
+			0.5,              //Skill level 0-1. Has no effect if using custom skills
+			"Soldier1_DZ",    //Skin "" for random or classname here.
+			1,                //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
+			2,                //Number of magazines. (not needed if ai_static_useweapon = False)
+			"",               //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
+			5,                //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
+			-1,               // Use scalar to indicate gun persistence
+			_groups
+		] call spawn_3rd_faction_static;
+		// US gunner 2
+		[
+			[_positions select 1], //position
+			_guntype,         //Classname of turret
+			0.5,              //Skill level 0-1. Has no effect if using custom skills
+			"Soldier1_DZ",    //Skin "" for random or classname here.
+			1,                //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
+			2,                //Number of magazines. (not needed if ai_static_useweapon = False)
+			"",               //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
+			5,                //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
+			-1,               // Use scalar to indicate gun persistence
+			_groups
+		] call spawn_3rd_faction_static;
+	} else {
+		// Bandit gunner 1
+		[
+			[_positions select 0], //position
+			_guntype,         //Classname of turret
+			0.5,              //Skill level 0-1. Has no effect if using custom skills
+			"Bandit2_DZ",     //Skin "" for random or classname here.
+			1,                //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
+			2,                //Number of magazines. (not needed if ai_static_useweapon = False)
+			"",               //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
+			5,                //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
+			-1                // Use scalar to indicate gun persistence
+		] call spawn_neutral_static;
+		// Bandit gunner 2
+		[
+			[_positions select 1], //position
+			_guntype,         //Classname of turret
+			0.5,              //Skill level 0-1. Has no effect if using custom skills
+			"Bandit2_DZ",     //Skin "" for random or classname here.
+			1,                //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
+			2,                //Number of magazines. (not needed if ai_static_useweapon = False)
+			"",               //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
+			5,                //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
+			-1                // Use scalar to indicate gun persistence
+		] call spawn_neutral_static;
+	};
+};
 
 // ---- Napf military base #1 AI groups follow ----
 // ---- Napf military base #1 AI groups follow ----
 // ---- Napf military base #1 AI groups follow ----
 [] spawn {
-	Private ["_proceed", "_themags","_theweap","_thetool","_item","_thebox","_hidden_box_number_of_gold","_hidden_box_number_of_guns","_hidden_box_number_of_tools","_hidden_box_number_of_buildmats","_numberofguns","_numberoftools","_numberofitems","_numberofbuildmats","_hidden_box_random_items","_hidden_box_random_guns","_hidden_box_random_tools","_hidden_box_random_buildmats","_objects", "_rare_loot_items", "_result", "_positions","_pos", "_total_groups","_location","_prize_veh","_prize_veh_chute","_class","_units","_i"];
+	Private ["_proceed","_themags","_theweap","_thetool","_item","_thebox","_hidden_box_number_of_gold","_hidden_box_number_of_guns","_hidden_box_number_of_tools","_hidden_box_number_of_buildmats","_numberofguns","_numberoftools","_numberofitems","_numberofbuildmats","_hidden_box_random_items","_hidden_box_random_guns","_hidden_box_random_tools","_hidden_box_random_buildmats","_objects","_rare_loot_items","_result","_positions","_pos", "_total_groups","_location","_prize_veh","_prize_veh_chute","_class","_units","_i","_mg_list","_gunner_list","_respawn_patrol_starting_point","_target_point","_sniper_groups","_sniper_group","_pair","_gunner_list_pos","_grp"];
+
+	_respawn_patrol_starting_point = [16408.867, 18325.08, 3.7562463];
+	_target_point = [16745.498, 19048.521, 0.01];
+	_gunner_list_pos = 0;
+
+	// M2 gunner positions
+	_mg_list = [
+		[[16394.445, 18400.254, 8.9207115],[16386.613, 18393.176, 8.8817167]], 
+		[[16438.412, 18328.098, 5.9698877],[16417.037, 18296.625, 5.9706712]], 
+		[[16102.933, 18761.24, 6.6767454], [16093.552, 18749.891, 6.889411]], 
+		[[16466.064, 18405.842, 11.65085], [16455.637, 18414.383, 11.663869]], 
+		[[16478.484, 18395.828, 12.105547], [16490.365, 18385.664, 11.715808]], 
+		[[16542.553, 18225.869, 15.263895], [16544.762, 18227.645, 11.650205]], 
+		[[16613.752, 18233.564, 15.419233], [16615.773, 18235.254, 11.519668]], 
+		[[16895.002, 18368.586, 8.3367281], [16906.025, 18376.975, 4.8012056]], 
+		[[17107.875, 18799.629, 9.5566349], [17099.396, 18794.455, 9.049469]], 
+		[[16322.931, 18836.68, 5.7220459e-005], [16329.277, 18830.129, -0.96573746]], 
+		[[16112.576, 19474.26, 10.973132], [16113.663, 19468.738, 11.959474]], 
+		[[17754.354, 18946.91, -0.12465555], [17745.424, 18939.453, -0.13854066]]
+	];
+
+	_sniper_groups = [
+		// [[<Sniper pair position>], <target position>],
+		[[17926.191, 19030.486, -0.00067901611],[17762.195, 18968.633, -0.0003528595]],
+		[[17924.615, 19029.152, 3.8146973e-006],[16273.404, 18574.674, -0.0001449585]],
+		[[17277.861, 17090.695, -2.9563904e-005],[16868.787, 18313.459, -0.0012016296]],
+		[[16682.729, 17314.996, 8.2969666e-005],[16671.32, 18033.615, -3.4332275e-005]]
+	];
+
+	// Static gunners that will remain after killed
+	_gunner_list = [_mg_list, 7] call pick_n_positions;
+	_respawn_patrol_starting_point = [16408.867, 18325.08, 3.7562463];
 
 	waitUntil {sleep 5; {isPlayer _x && _x distance [16745.498, 19048.521, 0.01] <= 1000 } count playableunits > 0 };
 
@@ -34,9 +289,8 @@ Place your custom group spawns below
 	ai_patrol_radius_wp = 4;
 	_thebox = objNull;
 
-
 	// Guards 1
-	[[16745.498, 19048.521, 0.01], //position
+	_grp = [[16745.498, 19048.521, 0.01], //position
 	4,                    //Number Of units
 	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 	3,            //Primary gun set number. "Random" for random weapon set.
@@ -45,9 +299,11 @@ Place your custom group spawns below
 	"Bandit2_DZ",           //Skin "" for random or classname here.
 	5                  //Gearset number. "Random" for random gear set.
 	] call spawn_neutral_group;
+	[_grp,"M136","M136"] call add_launchers;
+
 
 	// Guards 4
-	[[16692.979, 19044.877, 0.01], //position
+	_grp = [[16692.979, 19044.877, 0.01], //position
 	3,                    //Number Of units
 	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 	4,            //Primary gun set number. "Random" for random weapon set.
@@ -56,9 +312,10 @@ Place your custom group spawns below
 	"Bandit2_DZ",           //Skin "" for random or classname here.
 	5                  //Gearset number. "Random" for random gear set.
 	] call spawn_neutral_group;
+	[_grp,"M136","M136"] call add_launchers;
 
 	// Guards 10
-	[[16743.932, 18991.537, 0.01], //position
+	_grp = [[16743.932, 18991.537, 0.01], //position
 	3,                    //Number Of units
 	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 	1,            //Primary gun set number. "Random" for random weapon set.
@@ -67,9 +324,10 @@ Place your custom group spawns below
 	"Bandit2_DZ",           //Skin "" for random or classname here.
 	5                  //Gearset number. "Random" for random gear set.
 	] call spawn_neutral_group;
+	[_grp,"M136","M136"] call add_launchers;
 
 	// Guards 13
-	[[16746.881, 19080.102, 0.01], //position
+	_grp = [[16746.881, 19080.102, 0.01], //position
 	3,                    //Number Of units
 	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 	4,            //Primary gun set number. "Random" for random weapon set.
@@ -78,9 +336,10 @@ Place your custom group spawns below
 	"Bandit2_DZ",           //Skin "" for random or classname here.
 	5                  //Gearset number. "Random" for random gear set.
 	] call spawn_neutral_group;
+	[_grp,"M136","M136"] call add_launchers;
 
 	// Guards 19
-	[[16773.252, 19117.428, 0.01], //position
+	_grp = [[16773.252, 19117.428, 0.01], //position
 	3,                    //Number Of units
 	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 	4,            //Primary gun set number. "Random" for random weapon set.
@@ -89,9 +348,10 @@ Place your custom group spawns below
 	"Bandit2_DZ",           //Skin "" for random or classname here.
 	5                  //Gearset number. "Random" for random gear set.
 	] call spawn_neutral_group;
+	[_grp,"M136","M136"] call add_launchers;
 
 	// Guards 22
-	[[16692.268, 19009.559, 0.01], //position
+	_grp = [[16692.268, 19009.559, 0.01], //position
 	3,                    //Number Of units
 	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 	1,            //Primary gun set number. "Random" for random weapon set.
@@ -100,6 +360,7 @@ Place your custom group spawns below
 	"Bandit2_DZ",           //Skin "" for random or classname here.
 	5                  //Gearset number. "Random" for random gear set.
 	] call spawn_neutral_group;
+	[_grp,"M136","M136"] call add_launchers;
 
 	ai_patrol_radius_wp = _wp;
 	ai_patrol_radius = _radius;
@@ -187,6 +448,11 @@ Place your custom group spawns below
 	] spawn vehicle_patrol;
 
 
+	// Spawn gunner pair
+	_pair = _gunner_list select _gunner_list_pos;
+	["bandits", _pair, "M2StaticMG"] call spawn_usable_static_gunners;
+	_gunner_list_pos = _gunner_list_pos + 1;
+
 	// LOOT
 
 	_thebox = createVehicle ["USOrdnanceBox",[16771.174, 19084.066, -7.0571899e-005], [], 0, "CAN_COLLIDE"];
@@ -236,6 +502,9 @@ Place your custom group spawns below
 	publicVariable "activeTier";
 
 
+	keep_respawning = true;
+	["bandits", _respawn_patrol_starting_point, _target_point, 600] spawn spawn_reinforcement_patrol;
+
 	// Loot monitor
 	_proceed = false;
 	while {!_proceed} do {
@@ -247,9 +516,14 @@ Place your custom group spawns below
 		};
 		sleep 5;
 	};
+	keep_respawning = false;	// Disable continuous patrol spawns
+
+	_sniper_group = _sniper_groups call BIS_fnc_selectRandom;
+	["bandits", _sniper_group select 0, _sniper_group select 1, 2] call spawn_snipers;
+	
 
 	// Announce respawn!
-	[nil,nil,rTitleText,"Reinforcements approaching Northern Military Base! ETA: 3 min", "PLAIN",3] call RE;
+	[nil,nil,rTitleText,"Reinforcements approaching Northern Military Base! ETA: 5 min", "PLAIN",3] call RE;
 	sleep 300;
 
 	// Delete old guns and search lights
@@ -316,7 +590,7 @@ Place your custom group spawns below
 	ai_patrol_radius_wp = 4;
 
 	// Guards 1
-	[[16745.498, 19048.521, 0.01], //position
+	_grp = [[16745.498, 19048.521, 0.01], //position
 	4,                    //Number Of units
 	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 	5,            //Primary gun set number. "Random" for random weapon set.
@@ -325,9 +599,10 @@ Place your custom group spawns below
 	"Bandit2_DZ",           //Skin "" for random or classname here.
 	5                  //Gearset number. "Random" for random gear set.
 	] call spawn_neutral_group;
+	[_grp,"M136","M136"] call add_launchers;
 
 	// Guards 4
-	[[16692.979, 19044.877, 0.01], //position
+	_grp = [[16692.979, 19044.877, 0.01], //position
 	3,                    //Number Of units
 	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 	4,            //Primary gun set number. "Random" for random weapon set.
@@ -336,9 +611,10 @@ Place your custom group spawns below
 	"Bandit2_DZ",           //Skin "" for random or classname here.
 	5                  //Gearset number. "Random" for random gear set.
 	] call spawn_neutral_group;
+	[_grp,"M136","M136"] call add_launchers;
 
 	// Guards 10
-	[[16743.932, 18991.537, 0.01], //position
+	_grp = [[16743.932, 18991.537, 0.01], //position
 	3,                    //Number Of units
 	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 	4,            //Primary gun set number. "Random" for random weapon set.
@@ -347,9 +623,10 @@ Place your custom group spawns below
 	"Bandit2_DZ",           //Skin "" for random or classname here.
 	5                  //Gearset number. "Random" for random gear set.
 	] call spawn_neutral_group;
+	[_grp,"M136","M136"] call add_launchers;
 
 	// Guards 13
-	[[16746.881, 19080.102, 0.01], //position
+	_grp = [[16746.881, 19080.102, 0.01], //position
 	3,                    //Number Of units
 	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 	4,            //Primary gun set number. "Random" for random weapon set.
@@ -358,9 +635,10 @@ Place your custom group spawns below
 	"Bandit2_DZ",           //Skin "" for random or classname here.
 	5                  //Gearset number. "Random" for random gear set.
 	] call spawn_neutral_group;
+	[_grp,"M136","M136"] call add_launchers;
 
 	// Guards 19
-	[[16773.252, 19117.428, 0.01], //position
+	_grp = [[16773.252, 19117.428, 0.01], //position
 	3,                    //Number Of units
 	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 	4,            //Primary gun set number. "Random" for random weapon set.
@@ -369,9 +647,10 @@ Place your custom group spawns below
 	"Bandit2_DZ",           //Skin "" for random or classname here.
 	5                  //Gearset number. "Random" for random gear set.
 	] call spawn_neutral_group;
+	[_grp,"M136","M136"] call add_launchers;
 
 	// Guards 22
-	[[16692.268, 19009.559, 0.01], //position
+	_grp = [[16692.268, 19009.559, 0.01], //position
 	3,                    //Number Of units
 	0.75,                     //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 	1,            //Primary gun set number. "Random" for random weapon set.
@@ -380,6 +659,7 @@ Place your custom group spawns below
 	"Bandit2_DZ",           //Skin "" for random or classname here.
 	5                  //Gearset number. "Random" for random gear set.
 	] call spawn_neutral_group;
+	[_grp,"M136","M136"] call add_launchers;
 
 	ai_patrol_radius_wp = _wp;
 	ai_patrol_radius = _radius;
@@ -478,7 +758,8 @@ Place your custom group spawns below
 	"DZ_British_ACU",                  //Backpack "" for random or classname here.
 	"Bandit2_DZ",                      //Skin "" for random or classname here.
 	4,                                 //Gearset number. "Random" for random gear set.
-	True                               //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
+	True,                              //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
+	["M136","M136"]
 	] spawn heli_para;
 
 	// Paradrop just outside northern base entrance
@@ -493,7 +774,8 @@ Place your custom group spawns below
 	"DZ_British_ACU",                  //Backpack "" for random or classname here.
 	"Bandit2_DZ",                      //Skin "" for random or classname here.
 	4,                                 //Gearset number. "Random" for random gear set.
-	True                               //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
+	True,                              //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
+	["M136","M136"]
 	] spawn heli_para;
 
 	// Northern Heli patrol
@@ -505,6 +787,12 @@ Place your custom group spawns below
 	1                           //Skill level of units 
 	] spawn heli_patrol;
 
+	// Spawn static gunner pairs that will remain after killed
+	for "_i" from _gunner_list_pos to _gunner_list_pos+1 do {
+		_pair = _gunner_list select _i;
+		["bandits", _pair, "M2StaticMG"] call spawn_usable_static_gunners;
+	};
+	_gunner_list_pos = _gunner_list_pos + 2;
 
 	_proceed = false;
 
@@ -518,7 +806,8 @@ Place your custom group spawns below
 		sleep 5;
 	};
 
-
+	keep_respawning = true;
+	["bandits", _respawn_patrol_starting_point, _target_point, 300] spawn spawn_reinforcement_patrol;
 
 	// [17845.1,19458.2,0.00160302] <- Temporary position
 	// [16686.3,19090.7,0.0014099] <- Original position
@@ -529,6 +818,13 @@ Place your custom group spawns below
 	_proceed = false;
 
 	while {!WAI_kentIsDead} do {sleep 5;};
+
+	keep_respawning = false;
+
+	_sniper_group = _sniper_groups call BIS_fnc_selectRandom;
+	["bandits", _sniper_group select 0, _sniper_group select 1, 2] call spawn_snipers;
+	_sniper_group = _sniper_groups call BIS_fnc_selectRandom;
+	["bandits", _sniper_group select 0, _sniper_group select 1, 2] call spawn_snipers;
 
 	[nil,nil,rTitleText,"Kent has been defeated! Still, something is not right... maybe better take cover somewhere safe...", "PLAIN",5] call RE;
 	sleep 300;
@@ -659,7 +955,7 @@ Place your custom group spawns below
 	"Soldier1_DZ",                      //Skin "" for random or classname here.
 	5,                                 //Gearset number. "Random" for random gear set.
 	True,                               //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
-	false,
+	["M136","M136"],
 	_total_groups
 	] spawn heli_para_3rd_faction;
 
@@ -673,11 +969,29 @@ Place your custom group spawns below
 	_total_groups
 	] spawn heli_patrol_3rd_faction;
 
+	keep_respawning = true;
+	["us", _respawn_patrol_starting_point, _target_point, 300] spawn spawn_reinforcement_patrol;
+
+	// [17845.1,19458.2,0.00160302] <- Temporary position
+	// [16686.3,19090.7,0.0014099] <- Original position
+
+	// Spawn static gunner pairs that will remain after killed
+	for "_i" from _gunner_list_pos to _gunner_list_pos+3 do {
+		_pair = _gunner_list select _i;
+		["us", _pair, "M2StaticMG"] call spawn_usable_static_gunners;
+	};
+	_gunner_list_pos = _gunner_list_pos + 4;
+
 	// Wait until all groups are destroyed
 	_proceed = false;
 	_units = [];
 	{ _units = _units + (units _x); } forEach _total_groups;
-	waitUntil {({alive _x} count _units) == 0};
+	while {not _proceed} do {
+		_proceed = ({alive _x} count _units) == 0;
+		sleep 30;
+	};
+
+	keep_respawning = false;
 
 	// Spawn prize vehicle at this position:
 	_class = [
@@ -732,6 +1046,15 @@ Place your custom group spawns below
 
 	// This shall not happen until forces are defeated!
 	[_prize_veh,[getDir _prize_veh,getPosATL _prize_veh],_class,false,"0"] call server_publishVeh;
+
+	_sniper_group = _sniper_groups call BIS_fnc_selectRandom;
+	["us", _sniper_group select 0, _sniper_group select 1, 2, _total_groups] call spawn_snipers;
+	_sniper_group = _sniper_groups call BIS_fnc_selectRandom;
+	["us", _sniper_group select 0, _sniper_group select 1, 2, _total_groups] call spawn_snipers;
+	_sniper_group = _sniper_groups call BIS_fnc_selectRandom;
+	["us", _sniper_group select 0, _sniper_group select 1, 2, _total_groups] call spawn_snipers;
+	_sniper_group = _sniper_groups call BIS_fnc_selectRandom;
+	["us", _sniper_group select 0, _sniper_group select 1, 2, _total_groups] call spawn_snipers;
 
 	[nil,nil,rTitleText,"Greedy bastards! You have now 120 seconds to leave. Mwahahaha...", "PLAIN",5] call RE;
 	sleep 30;
@@ -1231,7 +1554,8 @@ Place your paradrop spawns under this line
 "DZ_British_ACU",                  //Backpack "" for random or classname here.
 "Bandit2_DZ",                      //Skin "" for random or classname here.
 5,                                 //Gearset number. "Random" for random gear set.
-True                               //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
+True,                              //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
+["M136","M136"]
 ] spawn heli_para;
 
 // Paradrop just outside northern base entrance
@@ -1239,14 +1563,15 @@ True                               //True: Heli will stay at position and fight.
 [13000,19100,100],                 //Starting position of the heli
 300,                               //Radius from drop position a player has to be to spawn chopper
 "CH_47F_EP1_DZ",                   //Classname of chopper (Make sure it has 2 gunner seats!)
-5,                                //Number of units to be para dropped
+5,                                 //Number of units to be para dropped
 1,                                 //Skill level 0-1 or skill array number if using custom skills "Random" for random Skill array.
 4,                                 //Primary gun set number. "Random" for random weapon set.
 4,                                 //Number of magazines
 "DZ_British_ACU",                  //Backpack "" for random or classname here.
 "Bandit2_DZ",                      //Skin "" for random or classname here.
 5,                                 //Gearset number. "Random" for random gear set.
-True                               //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
+True,                              //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
+["M136","M136"]
 ] spawn heli_para;
 
 

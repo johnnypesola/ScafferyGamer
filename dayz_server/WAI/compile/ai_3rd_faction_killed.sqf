@@ -21,6 +21,28 @@ if (isPlayer _player) then {
 			_player setVariable ["humanity",(_humanity + ai_add_humanity),true];
 		};
 	};
+	// Remove launchers but leave it in extreme cases
+	if((random 1) > 0.02) then {
+		{
+			if (_x == "MAAWS") then {_unit removeWeapon _x;};
+		} forEach (weapons _unit);
+	};
+	// Remove M136 launchers, since they are forbidden anyway
+	{
+		if (_x == "M136") then {_unit removeWeapon _x;};
+	} forEach (weapons _unit);
+
+	// Remove launchers, leave some ammo every now and then
+	if((random 1) > 0.2) then {
+		{
+			if (_x == "MAAWS_HEAT") then {_unit removeMagazine _x;};
+		} forEach (magazines _unit);
+	};
+	// Remove M136 ammo, since it is forbidden anyway
+	{
+		if (_x == "M136") then {_unit removeMagazine _x;};
+	} forEach (magazines _unit);
+
 	if (ai_clear_body) then {
 		{_unit removeMagazine _x;} forEach (magazines _unit);
 		{_unit removeWeapon _x;} forEach (weapons _unit);

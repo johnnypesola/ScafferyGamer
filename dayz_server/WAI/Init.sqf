@@ -1,7 +1,10 @@
 spawn_group = 			compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\SpawnGroup.sqf";
 spawn_neutral_group = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\SpawnNeutralGroup.sqf";
 spawn_neutral_group2 = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\SpawnNeutralGroupNoPatrol.sqf";
+spawn_neutral_sniper_group =	compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\SpawnNeutralSniperGroup.sqf";
 spawn_hero_group = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\SpawnHeroGroup.sqf";
+spawn_3rd_faction_group =	compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\Spawn3rdFactionGroup.sqf";
+spawn_3rd_faction_sniper_group =compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\Spawn3rdFactionSniperGroup.sqf";
 group_waypoints = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\patrol.sqf";
 group_goalposition = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\goalposition.sqf";
 spawn_static = 			compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\compile\SpawnStatic.sqf";

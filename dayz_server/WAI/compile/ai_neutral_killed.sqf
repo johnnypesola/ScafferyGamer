@@ -21,6 +21,22 @@ if (isPlayer _player) then {
 			_player setVariable ["humanity",(_humanity + ai_add_humanity),true];
 		};
 	};
+	// Remove launchers
+	{
+		if (_x == "MAAWS" || _x == "M136") then {_unit removeWeapon _x;};
+	} forEach (weapons _unit);
+
+	// Leave some ammo in extremely rare cases
+	if((random 1) > 0.002) then {
+		{
+			if (_x == "MAAWS_HEAT") then {_unit removeMagazine _x;};
+		} forEach (magazines _unit);
+	};
+	// Remove all M136 ammo
+	{
+		if (_x == "M136") then {_unit removeMagazine _x;};
+	} forEach (magazines _unit);
+
 	if (ai_clear_body) then {
 		{_unit removeMagazine _x;} forEach (magazines _unit);
 		{_unit removeWeapon _x;} forEach (weapons _unit);

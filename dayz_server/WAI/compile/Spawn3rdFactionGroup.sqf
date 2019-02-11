@@ -1,4 +1,4 @@
-private ["_mission","_aipack","_aicskill","_position","_unitnumber","_skill","_gun","_mags","_backpack","_skin","_gear","_aiweapon","_aigear","_aiskin","_skillarray","_unitGroup","_weapon","_magazine","_weaponandmag","_gearmagazines","_geartools","_unit","_dyn_id","_specialWaypoint","_reveal","_wp","_playerUnit"];
+private ["_mission","_aipack","_aicskill","_position","_unitnumber","_skill","_gun","_mags","_backpack","_skin","_gear","_aiweapon","_aigear","_aiskin","_skillarray","_unitGroup","_weapon","_magazine","_weaponandmag","_gearmagazines","_geartools","_unit","_dyn_id","_reveal","_specialWaypoint"];
 _position = _this select 0;
 _unitnumber = _this select 1;
 _skill = _this select 2;
@@ -7,17 +7,12 @@ _mags = _this select 4;
 _backpack = _this select 5;
 _skin = _this select 6;
 _gear = _this select 7;
-if (count _this == 9) then {
-	_mission = _this select 8;
+if ((count _this >= 9)) then {
+	_groups = _this select 8;
 } else {
-	_mission = False;
+	_groups = [];
 };
-if (count _this == 10) then {
-	_dyn_id = _this select 9;
-} else {
-	_dyn_id = -1;
-};
-if (count _this == 11) then {
+if ((count _this) == 11) then {
 	_specialWaypoint = _this select 9;
 	_reveal = _this select 10;
 } else {
@@ -65,8 +60,13 @@ for "_x" from 1 to _unitnumber do {
 	} else {
 		_aiskin = _skin;
 	};
-	diag_log format["Creating neutral unit for group %1 with params: skin:%2, pos:%3, markers:%4, place_radius:%5, rank:%6", _unitGroup, _aiskin, _position, [], 10, "PRIVATE"];
+	diag_log format["Creating soldier unit for group %1 with params: skin:%2, pos:%3, markers:%4, place_radius:%5, rank:%6", _unitGroup, _aiskin, _position, [], 10, "PRIVATE"];
 	_unit = _unitGroup createUnit [_aiskin, [(_position select 0),(_position select 1),(_position select 2)], [], 10, "PRIVATE"];
+	//if (count _specialWaypoint > 0) then {
+	//	_unit setVariable ["origin", "infantrygroup:respawning_infantry_" + str(_x)];
+	//} else {
+	//	_unit setVariable ["origin", "infantrygroup:infantry_" + str(_x)];
+	//};
 	[_unit] joinSilent _unitGroup;
 	if (_backpack == "") then {
 		_aipack = ai_packs call BIS_fnc_selectRandom;
@@ -99,20 +99,10 @@ for "_x" from 1 to _unitnumber do {
 		{_unit setSkill [_x,_skill]} forEach _skillarray;
 	};
 	ai_ground_units = (ai_ground_units + 1);
-	_unit addEventHandler ["Killed",{[_this select 0, _this select 1, "ground"] call on_kill_neutral;}];
-	if (_mission) then {
-		_unit setVariable ["missionclean", "ground"];
-	};
-	if (_dyn_id >=10000) then {
-		_unit setVariable ["camp_id", _dyn_id];
-	} else {
-		if (_dyn_id >= 0) then {
-			_unit setVariable ["dynamic_id", _dyn_id];
-		};
-	};
+	_unit addEventHandler ["Killed",{[_this select 0, _this select 1, "ground"] call on_kill_3rd_faction;}];
 };
 _unitGroup selectLeader ((units _unitGroup) select 0);
-if (count _specialWaypoint == 0) then {
+if ((count _specialWaypoint) == 0) then {
 	[_unitGroup, _position, _mission] call group_waypoints;
 } else {
 	_wp = _unitGroup addWaypoint [[_specialWaypoint select 0, _specialWaypoint select 1, 0], 40];
@@ -131,5 +121,6 @@ if (_reveal) then {
 	} forEach playableUnits;
 };
 
-diag_log format ["WAI: Spawned a group of %1 Neutrals at %2",_unitnumber,_position];
+//_groups set [count _groups, _unitGroup];
+diag_log format ["WAI: Spawned a group of %1 Soldiers at %2",_unitnumber,_position];
 _unitGroup

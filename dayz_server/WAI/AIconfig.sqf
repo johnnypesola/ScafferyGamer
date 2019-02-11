@@ -253,6 +253,13 @@ ai_wep6 = [
 ["MP5_DZ","30Rnd_9x19_MP5"]
 ];
 
+/// 7 ///
+ai_wep7 = [ 
+["KSVK_DZE","5Rnd_127x108_KSVK"],
+["m107_DZ","10Rnd_127x99_M107"]
+];
+
+
 /// Arrays used in "Random" for weapons///
 ai_wep_random = [ai_wep0,ai_wep1,ai_wep2,ai_wep3,ai_wep4];
 

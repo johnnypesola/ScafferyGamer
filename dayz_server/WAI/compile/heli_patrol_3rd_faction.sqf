@@ -16,6 +16,7 @@ _skillarray = ["aimingAccuracy","aimingShake","aimingSpeed","endurance","spotDis
 
 _unitGroup = createGroup east;
 _pilot = _unitGroup createUnit ["Soldier1_DZ", [0,0,0], [], 1, "NONE"];
+//_pilot setVariable ["origin", _heli_class + ":pilot"];
 [_pilot] joinSilent _unitGroup;
 ai_air_units = (ai_air_units +1);
 
@@ -31,20 +32,25 @@ _pilot assignAsDriver _helicopter;
 _pilot moveInDriver _helicopter;
 
 _gunner = _unitGroup createUnit ["Soldier1_DZ", [0,0,0], [], 1, "NONE"];
+//_gunner setVariable ["origin", _heli_class + ":gunner"];
 _gunner assignAsGunner _helicopter;
 _gunner moveInTurret [_helicopter,[0]];
 [_gunner] joinSilent _unitGroup;
 ai_air_units = (ai_air_units +1);
 
-_gunner2 = _unitGroup createUnit ["Soldier1_DZ", [0,0,0], [], 1, "NONE"];
-_gunner2 assignAsGunner _helicopter;
-_gunner2 moveInTurret [_helicopter,[1]];
-[_gunner2] joinSilent _unitGroup;
-ai_air_units = (ai_air_units +1);
-
+if (!(_heli_class isKindOf "AH64D_EP1")) then {
+	_gunner2 = _unitGroup createUnit ["Soldier1_DZ", [0,0,0], [], 1, "NONE"];
+	//_gunner2 setVariable ["origin", _heli_class + ":gunner2"];
+	_gunner2 assignAsGunner _helicopter;
+	_gunner2 moveInTurret [_helicopter,[1]];
+	[_gunner2] joinSilent _unitGroup;
+	ai_air_units = (ai_air_units +1);
+};
 {_pilot setSkill [_x,1]} forEach _skillarray;
 {_gunner setSkill [_x,_skill]} forEach _skillarray;
-{_gunner2 setSkill [_x,_skill]} forEach _skillarray;
+if (!(_heli_class isKindOf "AH64D_EP1")) then {
+	{_gunner2 setSkill [_x,_skill]} forEach _skillarray;
+};
 {_x addweapon "Makarov";_x addmagazine "8Rnd_9x18_Makarov";_x addmagazine "8Rnd_9x18_Makarov";} forEach (units _unitgroup);
 {_x addEventHandler ["Killed",{[_this select 0, _this select 1, "air"] call on_kill_3rd_faction;}];} forEach (units _unitgroup);
 dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_helicopter];

@@ -1,5 +1,5 @@
 if (!isServer)exitWith{};
-private ["_cleanheli","_drop","_helipos","_gunner2","_gunner","_playerPresent","_skillarray","_aicskill","_aiskin", "_aipack", "_aigear","_helipatrol","_gear","_skin","_backpack","_mags","_gun","_triggerdis","_startingpos","_aiweapon","_mission","_heli_class","_startPos","_helicopter","_unitGroup","_pilot","_skill","_paranumber","_position","_wp", "_wp1", "_helipos1", "_groups"];
+private ["_cleanheli","_drop","_helipos","_gunner2","_gunner","_playerPresent","_skillarray","_aicskill","_aiskin", "_aipack", "_aigear","_helipatrol","_gear","_skin","_backpack","_mags","_gun","_triggerdis","_startingpos","_aiweapon","_mission","_heli_class","_startPos","_helicopter","_unitGroup","_pilot","_skill","_paranumber","_position","_wp", "_wp1", "_helipos1","_groups","_launcherClass","_launcherAmmoClass","_unit"];
 _position = _this select 0;
 _startingpos = _this select 1;
 _triggerdis = _this select 2;
@@ -13,9 +13,19 @@ _skin = _this select 9;
 _gear = _this select 10;
 _helipatrol = _this select 11;
 if (count _this > 12) then {
-	_mission = _this select 12;
+	if ("ARRAY" == typeName (_this select 12)) then {
+		_launcherClass = (_this select 12) select 0;
+		_launcherAmmoClass = (_this select 12) select 1;
+		_mission = False;
+	} else {
+		_mission = _this select 12;
+		_launcherClass = "";
+		_launcherAmmoClass = "";
+	};
 } else {
 	_mission = False;
+	_launcherClass = "";
+	_launcherAmmoClass = "";
 };
 if (count _this > 13) then {
 	_groups = _this select 13;
@@ -45,6 +55,7 @@ waitUntil
 diag_log format ["WAI: Spawning a %1 with %2 units to be paradropped at %3",_heli_class,_paranumber,_position];
 _unitGroup = createGroup east;
 _pilot = _unitGroup createUnit ["Soldier1_DZ", [0,0,0], [], 1, "NONE"];
+//_pilot setVariable ["origin", _heli_class + ":paratrooper:pilot"];
 [_pilot] joinSilent _unitGroup;
 ai_air_units = (ai_air_units +1);
 
@@ -59,12 +70,14 @@ _pilot assignAsDriver _helicopter;
 _pilot moveInDriver _helicopter;
 
 _gunner = _unitGroup createUnit ["Soldier1_DZ", [0,0,0], [], 1, "NONE"];
+//_gunner setVariable ["origin", _heli_class + ":paratrooper:gunner"];
 _gunner assignAsGunner _helicopter;
 _gunner moveInTurret [_helicopter,[0]];
 [_gunner] joinSilent _unitGroup;
 ai_air_units = (ai_air_units +1);
 
 _gunner2 = _unitGroup createUnit ["Soldier1_DZ", [0,0,0], [], 1, "NONE"];
+//_gunner2 setVariable ["origin", _heli_class + ":paratrooper:gunner2"];
 _gunner2 assignAsGunner _helicopter;
 _gunner2 moveInTurret [_helicopter,[1]];
 [_gunner2] joinSilent _unitGroup;
@@ -132,6 +145,7 @@ while {(alive _helicopter) AND (_drop)} do {
 				_aiskin = _skin
 			};
 			_para = _pgroup createUnit [_aiskin, [0,0,0], [], 1, "PRIVATE"];
+			//_para setVariable ["origin", _heli_class + ":paratrooper:soldier_" + str(_x)];
 
 			if (!isNil "_backpack") then {
 				diag_log format ["AI backpack type: %1", _backpack];
@@ -180,6 +194,15 @@ while {(alive _helicopter) AND (_drop)} do {
 		diag_log format ["WAI: Spawned in %1 ai units for paradrop",_paranumber];
 		[_pgroup, _position,_mission] call group_waypoints;
 		_groups set [count _groups, _pgroup];
+
+		// These guys might have some AT weapons + ammo.
+		{
+			_unit = _x;
+			if ((random 1) > .5) exitWith {	// 50% chance
+				_unit addWeapon _launcherClass;
+				_unit addMagazine _launcherAmmoClass;
+			};
+		} forEach units _pgroup;
 	};
 };
 if (_helipatrol) then { 
@@ -210,4 +233,3 @@ if (_helipatrol) then {
 		};
 	};
 };
-

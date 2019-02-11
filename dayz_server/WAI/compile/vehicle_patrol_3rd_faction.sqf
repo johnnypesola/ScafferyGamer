@@ -16,6 +16,7 @@ _skillarray = ["aimingAccuracy","aimingShake","aimingSpeed","endurance","spotDis
 
 _unitGroup = createGroup east;
 _pilot = _unitGroup createUnit ["Soldier1_DZ", [0,0,0], [], 1, "NONE"];
+_pilot setVariable ["origin", _heli_class + ":pilot"];
 [_pilot] joinSilent _unitGroup;
 ai_vehicle_units = (ai_vehicle_units + 1);
 
@@ -33,6 +34,7 @@ _pilot assignAsDriver _veh;
 _pilot moveInDriver _veh;
 
 _gunner = _unitGroup createUnit ["Soldier1_DZ", [0,0,0], [], 1, "NONE"];
+_gunner setVariable ["origin", _heli_class + ":gunner"];
 _gunner assignAsGunner _veh;
 _gunner moveInTurret [_veh,[0]];
 [_gunner] joinSilent _unitGroup;
@@ -42,6 +44,7 @@ ai_vehicle_units = (ai_vehicle_units + 1);
 if (_heli_class == "BAF_Jackal2_L2A1_w") then {
 
 	_gunner2 = _unitGroup createUnit ["Bandit1_DZ", [0,0,0], [], 1, "NONE"];
+	_gunner2 setVariable ["origin", _heli_class + ":gunner2"];
 	_gunner2 assignAsGunner _veh;
 	_gunner2 moveInTurret [_veh,[1]];
 	[_gunner2] joinSilent _unitGroup;

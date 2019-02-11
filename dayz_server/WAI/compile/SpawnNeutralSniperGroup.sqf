@@ -7,19 +7,9 @@ _mags = _this select 4;
 _backpack = _this select 5;
 _skin = _this select 6;
 _gear = _this select 7;
-if (count _this == 9) then {
-	_mission = _this select 8;
-} else {
-	_mission = False;
-};
 if (count _this == 10) then {
-	_dyn_id = _this select 9;
-} else {
-	_dyn_id = -1;
-};
-if (count _this == 11) then {
-	_specialWaypoint = _this select 9;
-	_reveal = _this select 10;
+	_specialWaypoint = _this select 8;
+	_reveal = _this select 9;
 } else {
 	_specialWaypoint = [];
 	_reveal = false;
@@ -44,6 +34,7 @@ for "_x" from 1 to _unitnumber do {
 		case 4 : {_aiweapon = ai_wep4;};
 		case 5 : {_aiweapon = ai_wep5;};
 		case 6 : {_aiweapon = ai_wep6;};
+		case 7 : {_aiweapon = ai_wep7;};
 		case "Random" : {_aiweapon = ai_wep_random call BIS_fnc_selectRandom;};
 	};
 	_weaponandmag = _aiweapon call BIS_fnc_selectRandom;
@@ -100,16 +91,6 @@ for "_x" from 1 to _unitnumber do {
 	};
 	ai_ground_units = (ai_ground_units + 1);
 	_unit addEventHandler ["Killed",{[_this select 0, _this select 1, "ground"] call on_kill_neutral;}];
-	if (_mission) then {
-		_unit setVariable ["missionclean", "ground"];
-	};
-	if (_dyn_id >=10000) then {
-		_unit setVariable ["camp_id", _dyn_id];
-	} else {
-		if (_dyn_id >= 0) then {
-			_unit setVariable ["dynamic_id", _dyn_id];
-		};
-	};
 };
 _unitGroup selectLeader ((units _unitGroup) select 0);
 if (count _specialWaypoint == 0) then {
@@ -117,8 +98,11 @@ if (count _specialWaypoint == 0) then {
 } else {
 	_wp = _unitGroup addWaypoint [[_specialWaypoint select 0, _specialWaypoint select 1, 0], 40];
 	_wp setWaypointType "SAD";
-	_wp setWaypointCompletionRadius 20;
-	_wp setWaypointSpeed "FULL";
+	_wp setWaypointCompletionRadius 10;
+	_wp setWaypointCombatMode "RED";
+	_wp setWaypointFormation "LINE";
+	_wp setWaypointSpeed "LIMITED";
+	_wp setWaypointBehaviour "STEALTH";
 };
 if (_reveal) then {
 	{
@@ -131,5 +115,5 @@ if (_reveal) then {
 	} forEach playableUnits;
 };
 
-diag_log format ["WAI: Spawned a group of %1 Neutrals at %2",_unitnumber,_position];
+diag_log format ["WAI: Spawned a group of %1 Neutral Snipers at %2",_unitnumber,_position];
 _unitGroup

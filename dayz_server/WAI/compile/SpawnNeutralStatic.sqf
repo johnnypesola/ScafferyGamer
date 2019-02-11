@@ -16,8 +16,14 @@ if ((count _this == 9) OR (count _this == 5)) then {
 	_mission = false;
 };
 if ((count _this == 10) or (count _this == 6)) then {
-	if (count _this == 10) then { _groups = _this select 9;};
-	if (count _this == 6) then { _groups = _this select 5;};
+	if (count _this == 10) then {
+		_mission = _this select 8;
+		_groups = _this select 9;
+	};
+	if (count _this == 6) then {
+		_mission = _this select 4;
+		_groups = _this select 5;
+	};
 } else {
 	_groups = [];
 };
@@ -97,14 +103,19 @@ if (ai_static_skills) then {
 };
 ai_emplacement_units = (ai_emplacement_units + 1);
 _unit addEventHandler ["Killed",{[_this select 0, _this select 1, "static"] call on_kill_neutral;}];
-_static addEventHandler ["GetOut",{(_this select 0) setDamage 1;}];
+// Add MG persistence
+if (typename _mission != "SCALAR") then {
+	_static addEventHandler ["GetOut",{(_this select 0) setDamage 1;}];
+};
 dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_static];
 _unit moveingunner _static;
-if (_mission) then {
-	_unit setVariable ["banditmissionclean", "static"];
-	[_static, True] spawn veh_monitor;
-} else {
-	[_static] spawn veh_monitor;
+if (typename _mission != "SCALAR") then {
+	if (_mission) then {
+		_unit setVariable ["banditmissionclean", "static"];
+		[_static, True] spawn veh_monitor;
+	} else {
+		[_static] spawn veh_monitor;
+	};
 };
 } forEach _position;
 _unitGroup selectLeader ((units _unitGroup) select 0);

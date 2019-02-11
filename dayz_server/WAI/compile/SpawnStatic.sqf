@@ -94,11 +94,13 @@ _unit addEventHandler ["Killed",{[_this select 0, _this select 1, "static"] call
 _static addEventHandler ["GetOut",{(_this select 0) setDamage 1;}];
 dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_static];
 _unit moveingunner _static;
-if (_mission) then {
-	_unit setVariable ["missionclean", "static"];
-	[_static, True] spawn veh_monitor;
-} else {
-	[_static] spawn veh_monitor;
+if (typename _mission != "SCALAR") then {
+	if (_mission) then {
+		_unit setVariable ["missionclean", "static"];
+		[_static, True] spawn veh_monitor;
+	} else {
+		[_static] spawn veh_monitor;
+	};
 };
 } forEach _position;
 _unitGroup selectLeader ((units _unitGroup) select 0);
