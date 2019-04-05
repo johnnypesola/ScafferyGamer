@@ -105,7 +105,6 @@ OKWeps2 = [
 "Sa58P_EP1",
 "Sa58V_EP1",
 "M14_CCO_DZ",
-"RPK74_DZ",
 "Pecheneg_DZ",
 "M249_EP1_DZ",
 "M240_DZ",

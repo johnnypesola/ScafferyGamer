@@ -103,7 +103,7 @@ OKFindPos = {
 OKFindPos2 = {
 	private["_centerPos","_findRun","_pos","_mapHardCenter","_hardX","_hardY","_posX","_posY","_fin"];
 	_centerPos = [_this select 0,_this select 1,0];
-    diag_log format["[OK] _centerpos is %1",_centerPos];
+	diag_log format["[OK] _centerpos is %1",_centerPos];
 	_mapHardCenter = true;
 		
 	//If we have a hardcoded center, then we need to loop for a location
@@ -240,6 +240,7 @@ OKGetWeapon = {
         case 3: {_aiweapon = OKWeps4;};
 	};
 	_weapon = _aiweapon call BIS_fnc_selectRandom;
+	diag_log format ["[OK]: getting magazines for weapon %1", _weapon];
 	_magazine = getArray (configFile >> "CfgWeapons" >> _weapon >> "magazines") select 0;
 	
 	_fin = [_weapon,_magazine];

@@ -150,7 +150,7 @@ ammo_box_guns = [
 "M240_DZ",
 "M249_DZ",
 "Pecheneg_DZ",
-"RPK_DZ",
+//"RPK_74",
 "BAF_LRR_scoped",
 "DMR",
 "SVD_PSO1_Gh_DZ",

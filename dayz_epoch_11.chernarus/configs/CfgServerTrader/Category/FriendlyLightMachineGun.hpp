@@ -64,9 +64,14 @@ class Category_486 {
 		buy[] = {-1,"ItemGoldBar"}; // Sell only
 		sell[] = {12,"ItemGoldBar"};
 	};
+	class RPK_74 {
+		type = "trade_weapons";
+		buy[] = {-2,"ItemGoldBar10oz"};	// Sell only, gun is broken
+		sell[] = {1,"ItemGoldBar10oz"};
+	};
 	class RPK_DZ {
 		type = "trade_weapons";
-		buy[] = {2,"ItemGoldBar10oz"};
+		buy[] = {-1,"ItemGoldBar10oz"}; // Sell only
 		sell[] = {1,"ItemGoldBar10oz"};
 	};
 	class RPK_Kobra_DZ {
@@ -81,7 +86,7 @@ class Category_486 {
 	};
 	class RPK74_DZ {
 		type = "trade_weapons";
-		buy[] = {1,"ItemGoldBar10oz"};
+		buy[] = {-1,"ItemGoldBar10oz"}; // Sell only
 		sell[] = {5,"ItemGoldBar"};
 	};
 	class RPK74_Kobra_DZ {

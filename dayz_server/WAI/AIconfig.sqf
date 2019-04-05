@@ -217,10 +217,9 @@ ai_wep3 = [
 
 /// 4 ///
 ai_wep4 = [
-["RPK74_DZ","75Rnd_545x39_RPK"], 
-["RPK_DZ","75Rnd_762x39_RPK"], 
 ["Mk48_CCO_DZ","100Rnd_762x51_M240"], 
 ["M249_EP1_DZ","200Rnd_556x45_M249"], 
+//["RPK_74","75Rnd_545x39_RPK"], 
 ["Pecheneg_DZ","100Rnd_762x54_PK"], 
 ["M240_DZ","100Rnd_762x51_M240"],
 ["MG36_camo","100Rnd_556x45_BetaCMag"]
