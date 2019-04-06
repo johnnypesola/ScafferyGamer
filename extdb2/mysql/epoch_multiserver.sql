@@ -95,6 +95,7 @@ CREATE TABLE `object_data_intermediate` (
   `fuel` double(13,5) NOT NULL DEFAULT '1.00000',
   `damage` double(13,5) NOT NULL DEFAULT '0.00000',
   `storage_coins` bigint(20) NOT NULL DEFAULT '0',
+  `upgrade_lvl` text NOT NULL,
   PRIMARY KEY (`object_id`),
   KEY `player_uid` (`player_uid`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -124,6 +125,7 @@ CREATE TABLE `object_data_cherno` (
   `fuel` double(13,5) NOT NULL DEFAULT '1.00000',
   `damage` double(13,5) NOT NULL DEFAULT '0.00000',
   `storage_coins` bigint(20) NOT NULL DEFAULT '0',
+  `upgrade_lvl` text NOT NULL,
   PRIMARY KEY (`object_id`),
   KEY `object_uid` (`object_uid`) USING BTREE,
   KEY `instance` (`instance`) USING BTREE
@@ -154,6 +156,7 @@ CREATE TABLE `object_data_napf` (
   `fuel` double(13,5) NOT NULL DEFAULT '1.00000',
   `damage` double(13,5) NOT NULL DEFAULT '0.00000',
   `storage_coins` bigint(20) NOT NULL DEFAULT '0',
+  `upgrade_lvl` text NOT NULL,
   PRIMARY KEY (`object_id`),
   KEY `object_uid` (`object_uid`) USING BTREE,
   KEY `instance` (`instance`) USING BTREE
