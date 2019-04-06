@@ -14,4 +14,14 @@ class Category_718 {
 		buy[] = {1,"ItemGoldBar10oz"};
 		sell[] = {1,"ItemGoldBar"};
 	};
+	class 100Rnd_127x99_M2 {
+		type = "trade_items";
+		buy[] = {1,"ItemBriefcase100oz"};
+		sell[] = {2,"ItemGoldBar10oz"};
+	};
+	class 2000Rnd_762x51_M134 {
+		type = "trade_items";
+		buy[] = {5,"ItemGoldBar10oz"};
+		sell[] = {1,"ItemGoldBar10oz"};
+	};
 };

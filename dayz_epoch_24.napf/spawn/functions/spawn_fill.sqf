@@ -1,13 +1,14 @@
-private ["_block","_blockGroup","_blockPlot","_bodies","_body","_grid","_hlevel","_humanity","_index","_inGroup","_lb","_level","_name","_uid"];
+private ["_block","_blockGroup","_blockPlot","_bodies","_body","_grid","_hlevel","_humanity","_index","_inGroup","_lb","_level","_name","_uid","_startTime"];
 disableSerialization;
 #include "scripts.sqf"
 
+_startTime = diag_tickTime;
 _block = [];
 _blockGroup = false;
 _blockPlot = false;
 _lb = (findDisplay 88890) displayCtrl 8888;
 _humanity = player getVariable ["humanity",0];
-_inGroup = count units group player > 1;
+waitUntil {_inGroup = count units group player > 1; uiSleep 0.2; (_inGroup || diag_tickTime - _startTime > 2.0)};
 _uid = getPlayerUID player;
 spawn_plot = objNull;
 
@@ -43,11 +44,6 @@ if (spawn_bodyCheck > 0) then {
 				_block set [count _block,(_x select 0)];
 			};
 		} forEach spawn_public;
-		if (_inGroup && spawn_nearGroup) then {
-			_grid = getPosATL leader group player;
-			if (surfaceIsWater _grid) then {_grid = ATLToASL _grid;};
-			if (_body distance _grid < spawn_bodyCheck) then {_blockGroup = true;};
-		};
 		if (!isNull spawn_plot) then {
 			_grid = getPosATL spawn_plot;
 			if (surfaceIsWater _grid) then {_grid = ATLToASL _grid;};
@@ -90,6 +86,8 @@ lbClear _lb;
 		}];
 	};
 } forEach spawn_public;
+
+diag_log format["DEBUG: _inGroup: %1, spawn_nearGroup: %2, _blockGroup: %3", _inGroup, spawn_nearGroup, _blockGroup];
 
 if (_inGroup && spawn_nearGroup && !_blockGroup) then {
 	_index = _lb lbAdd (localize "STR_ESS_GROUP");

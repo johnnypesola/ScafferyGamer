@@ -76,7 +76,7 @@ class Category_527 {
 	};
 	class 50Rnd_127x107_DSHKM {
 		type = "trade_items";
-		buy[] = {5,"ItemGoldBar10oz"};
+		buy[] = {2,"ItemGoldBar10oz"};
 		sell[] = {1,"ItemGoldBar10oz"};
 	};
 };
