@@ -50,4 +50,19 @@ if (isPlayer _player) then {
 	if (ai_ahare_info) then {
 		{if (((position _x) distance (position _unit)) <= ai_share_distance) then {_x reveal [_player, 4.0];}} forEach allUnits;
 	};
+} else {
+	// Remove launchers
+	{
+		if (_x == "MAAWS" || _x == "M136") then {_unit removeWeapon _x;};
+	} forEach (weapons _unit);
+
+	// Remove all launcher ammo as well
+	{
+		if (_x == "MAAWS_HEAT" || _x == "M136") then {_unit removeMagazine _x;};
+	} forEach (magazines _unit);
+
+	if (ai_clear_body) then {
+		{_unit removeMagazine _x;} forEach (magazines _unit);
+		{_unit removeWeapon _x;} forEach (weapons _unit);
+	};
 };
