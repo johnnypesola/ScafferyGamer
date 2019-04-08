@@ -50,6 +50,7 @@ _key = [
 	[], // inv backpacks
 	[], // hitpoints
 	1,  // fuel
+	[], // upgrade level
 	_uid
 ];
 _query = ["objectPublish", _key] call dayz_prepareDataForDB;
@@ -181,6 +182,7 @@ if (0 < count _result) then {
 	_object setVariable ["ObjectID", _oid, true];
 	_object setVariable ["lastUpdate",diag_tickTime];
 	_object setVariable ["CharacterID", _characterID, true];
+	_object setVariable ["upgradeLvl", []];
 
 	if(DZE_TRADER_SPAWNMODE) then {
 		_object attachTo [_object_para, [0,0,-1.6]];

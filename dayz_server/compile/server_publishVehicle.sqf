@@ -62,6 +62,7 @@ _key = [
 	[], // inv backpacks
 	_array, // hitpoints
 	_fuel,
+	[], // Upgrade level
 	_uid
 ];
 _query = ["objectPublish", _key] call dayz_prepareDataForDB;
@@ -140,6 +141,7 @@ dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_object];
 
 	_object setVariable ["lastUpdate",time];
 	_object setVariable ["CharacterID", _characterID, true];
+	_object setVariable ["upgradeLvl", []];
 	_object setDamage _damage;
 
 	{

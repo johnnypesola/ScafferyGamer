@@ -1,4 +1,4 @@
-private ["_class","_uid","_charID","_object","_worldspace","_key","_query","_allowed","_obj","_inv","_objectID","_objectUID","_proceed","_activatingplayer","_ownerpuid","_vect","_clientKey","_exitReason","_playerUID"];	// extDB2
+private ["_class","_uid","_charID","_object","_worldspace","_key","_query","_allowed","_obj","_inv","_objectID","_objectUID","_proceed","_activatingplayer","_ownerpuid","_vect","_clientKey","_exitReason","_playerUID","_upgradeLvl"];	// extDB2
 
 if (count _this < 8) exitWith {diag_log "Server_SwapObject error: Wrong parameter format";};
 
@@ -14,12 +14,13 @@ _proceed = false;
 _objectID = "0";
 _objectUID = "0";
 _playerUID = getPlayerUID _activatingPlayer;
-
 _exitReason = [_this,"SwapObject",(_worldspace select 1),_clientKey,_playerUID,_activatingPlayer] call server_verifySender;
 if (_exitReason != "") exitWith {diag_log _exitReason};
 
 
 if(!isNull(_obj)) then {
+	_upgradeLvl = _obj getVariable ["upgradeLvl", []];
+
 	// Find objectID
 	_objectID 	= _obj getVariable ["ObjectID","0"];
 	// Find objectUID
@@ -57,6 +58,7 @@ _object setVariable ["CharacterID",_charID,true];
 //_object setVariable ["ObjectUID",_objectUID,true];
 _object setVariable ["OEMPos",(_worldspace select 1),true];
 
+_object setVariable ["upgradeLvl", _upgradeLvl, false];
 //diag_log ("PUBLISH: Attempt " + str(_object));
 
 //get UID
@@ -89,6 +91,7 @@ _key = [
 	[], // inv backpacks
 	[], // hitpoints
 	0,  // fuel
+	_upgradeLvl,
 	_uid
 ];
 _query = ["objectPublish", _key] call dayz_prepareDataForDB;

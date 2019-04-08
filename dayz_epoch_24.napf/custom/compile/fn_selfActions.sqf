@@ -349,6 +349,18 @@ if (!isNull _cursorTarget && !_inVehicle && !_isPZombie && (player distance _cur
 		s_player_siphonfuel = -1;
 	};
 	
+	// Plane upgrade action check
+	if (_typeOfCursorTarget in ["AN2_DZ"]) then {
+		if (s_player_addWeaponOption < 0) then {
+			s_player_addWeaponOption = player addAction ["Vehicle Weapon Upgrades", "custom\upgrade_veh_weapons\player_showWeaponUpgradesMenu.sqf",_cursorTarget, -10, false, true];
+		};
+	} else {
+		if (s_player_addWeaponOption > -1) then {
+			player removeAction s_player_addWeaponOption;
+			s_player_addWeaponOption = -1;
+		};
+	};
+
 	//Fireplace Actions check
 	if ((_cursorTarget call isInflamed) or (inflamed _cursorTarget)) then {
 		_hasRawMeat = {_x in Dayz_meatraw} count _magazinesPlayer > 0;

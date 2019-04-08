@@ -73,6 +73,7 @@ if ([_object, "Server"] call check_publishobject) then {
 		_backpacks,
 		[],	// hitpoints
 		0,	// fuel
+		[],	// Upgrade level
 		_objectUID
 	];
 	_query = ["objectPublish", _key] call dayz_prepareDataForDB;

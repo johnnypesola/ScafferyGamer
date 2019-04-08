@@ -19,6 +19,7 @@ if (!isDedicated) then {
 	
 	// SCAFFERY:
 	s_player_kickCrewOption	= -1;
+	s_player_addWeaponOption = -1;
 
 	fn_dropItem = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_dropItem.sqf";
 	fn_dynamicTool = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_dynamicTool.sqf";
@@ -100,8 +101,8 @@ if (!isDedicated) then {
 	} else {
 		player_build = compile preprocessFileLineNumbers "\z\addons\dayz_code\actions\player_build.sqf";
 	};
-    DZE_build_vector_file = "\z\addons\dayz_code\compile\BuildVectors\build_vectors.sqf";
-    build_vectors = compile preprocessFileLineNumbers DZE_build_vector_file;
+	DZE_build_vector_file = "\z\addons\dayz_code\compile\BuildVectors\build_vectors.sqf";
+	build_vectors = compile preprocessFileLineNumbers DZE_build_vector_file;
 	fnc_SetPitchBankYaw = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\BuildVectors\fnc_SetPitchBankYaw.sqf";
 	FNC_find_plots = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_find_plots.sqf";
 
@@ -141,7 +142,7 @@ if (!isDedicated) then {
 	player_markMap = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\player_markMap.sqf";
 	player_gearSet = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\player_gearSet.sqf";
 	ui_changeDisplay = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\ui_changeDisplay.sqf";
-    ui_gear_sound = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\ui_gear_sound.sqf";
+	ui_gear_sound = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\ui_gear_sound.sqf";
 	ui_updateControls = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\ui_updateControls.sqf";
 
 	//playerstats

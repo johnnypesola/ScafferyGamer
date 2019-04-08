@@ -82,7 +82,7 @@ _object_position = {
 };
 
 _object_inventory = {
-	private ["_inventory","_key","_query","_isNormal","_coins"];
+	private ["_inventory","_key","_query","_isNormal","_coins","_upgradeLvl"];
 	if (_class isKindOf "TrapItems") then {
 		_inventory = [["armed",_object getVariable ["armed",false]]];
 	} else {
@@ -107,6 +107,7 @@ _object_inventory = {
 	_previous = str(_object getVariable["lastInventory",[]]);
 	if (str _inventory != _previous) then {
 		_object setVariable["lastInventory",_inventory];
+		_upgradeLvl = _object getVariable ["upgrade_lvl", []];
 		if (_objectID == "0") then {
 			// extDB2
 			//_key = format["CHILD:309:%1:",_objectUID] + str _inventory + ":";
@@ -115,10 +116,11 @@ _object_inventory = {
 			} else {
 				_coins = -1;
 			};
+
 			if (_isNormal) then {
-				_key = [_objectUID, _inventory select 1, _inventory select 0, _inventory select 2, _coins];
+				_key = [_objectUID, _inventory select 1, _inventory select 0, _inventory select 2, _coins, _upgradeLvl];
 			} else {
-				_key = [_objectID, _inventory, [[],[]], [[],[]], _coins];
+				_key = [_objectID, _inventory, [[],[]], [[],[]], _coins, _upgradeLvl];
 			};
 			_query = ["objectInventoryByUID",_key] call dayz_prepareDataForDB;
 		} else {
@@ -131,9 +133,9 @@ _object_inventory = {
 				_coins = -1;
 			};
 			if (_isNormal) then {
-				_key = [_objectID, _inventory select 1, _inventory select 0, _inventory select 2, _coins];
+				_key = [_objectID, _inventory select 1, _inventory select 0, _inventory select 2, _coins, _upgradeLvl];
 			} else {
-				_key = [_objectID, _inventory, [[],[]], [[],[]], _coins];
+				_key = [_objectID, _inventory, [[],[]], [[],[]], _coins, _upgradeLvl];
 			};
 			_query = ["objectInventoryByID",_key] call dayz_prepareDataForDB;
 		};
@@ -373,6 +375,10 @@ switch (_type) do {
 		call _objWallDamage;
 	};
 	case "coins": {
+		_object setVariable ["lastInventory",["forceUpdate"]];
+		call _object_inventory;
+	};
+	case "upgrade": {
 		_object setVariable ["lastInventory",["forceUpdate"]];
 		call _object_inventory;
 	};

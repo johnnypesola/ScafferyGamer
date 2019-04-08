@@ -58,6 +58,9 @@ server_ferry_transportVehicle =		compile preprocessFileLineNumbers "\z\addons\da
 server_ferry_getVehicleCrewAssignments =compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\server_ferry_getVehicleCrewAssignments.sqf";
 server_ferry_receiveVehicle =		compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\server_ferry_receiveVehicle.sqf";
 
+// --- Upgrade Vehicle Weapons ---
+server_upgradeVehWeapons = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\server_upgradeVehWeapons.sqf";
+
 
 server_medicalSync = {
 	_player = _this select 0;

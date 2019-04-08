@@ -241,7 +241,10 @@ if ((playersNumber west + playersNumber civilian) == 0) exitWith {
 	_fuel =		_x select 13;
 	_damage = 	_x select 14;
 	_storageMoney = _x select 15;
-
+	_upgradeLvl = 	_x select 16;
+	if (isNil "_upgradeLvl") then {
+		_upgradeLvl = [];
+	};
 
 
 	//set object to be in maintenance mode
@@ -381,6 +384,12 @@ if ((playersNumber west + playersNumber civilian) == 0) exitWith {
 		_object setVariable ["lastUpdate",diag_ticktime];
 		_object setVariable ["ObjectID", _idKey, true];
 		_object setVariable ["OwnerPUID", _ownerPUID, true];
+		_object setVariable ["upgradeLvl", _upgradeLvl];
+
+		if (_object in ["AN2_DZ"] && 0 < count _upgradeLvl) then {
+			[_object, _upgradeLvl] call server_upgradeVehWeapons;
+		};
+
 		if (Z_SingleCurrency && {_type in DZE_MoneyStorageClasses}) then {
 			_object setVariable [Z_MoneyVariable, _storageMoney, true];
 		};
@@ -409,7 +418,7 @@ if ((playersNumber west + playersNumber civilian) == 0) exitWith {
 					_weaponcargo = _inventory select 0 select 0;
 					_magcargo = _inventory select 1 select 0;
 					_backpackcargo = _inventory select 2 select 0;
-				   _weaponqty = _inventory select 0 select 1;
+					_weaponqty = _inventory select 0 select 1;
 					{_object addWeaponCargoGlobal [_x, _weaponqty select _foreachindex];} foreach _weaponcargo;
 
 					_magqty = _inventory select 1 select 1;
