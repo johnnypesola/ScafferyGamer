@@ -31,7 +31,7 @@ if (_isKeyOK) then {
 		_location = [_sign] call FNC_GetPos;
 		[_vehtospawn,_sign] call fn_waitForObject;
 
-		PVDZE_veh_Publish2 = [[_dir,_location],_vehtospawn,false,_result select 1,_player];
+		PVDZE_veh_Publish2 = [[_dir,_location],_vehtospawn,false,_result select 1,_player,dayz_authKey];
 		publicVariableServer  "PVDZE_veh_Publish2";
 
 		cutText ["Vehicle spawned, key added to toolbelt.", "PLAIN DOWN"];
