@@ -97,7 +97,6 @@ OKWeps2 = [
 "M4A1_CCO_DZ",
 "AK74_Kobra_DZ",
 "AKM_DZ",
-"L85_Holo_DZ",
 "M16A4_ACOG_DZ",
 "M4A3_CCO_EP1",
 "Sa58V_RCO_EP1",
