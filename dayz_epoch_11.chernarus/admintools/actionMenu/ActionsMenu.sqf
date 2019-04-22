@@ -42,6 +42,7 @@ if(AllowPackBike) then {ActionsMenu = ActionsMenu + [["Pack Bike", [], "", -5, [
 if(AllowPackMozzie) then {ActionsMenu = ActionsMenu + [["Pack Mozzie", [], "", -5, [["expression", format[_EXECscript1,"packMozzie.sqf"]]], "1", "1"]];};
 if(AllowFlipVehicle) then {ActionsMenu = ActionsMenu + [["Flip Vehicle", [], "", -5, [["expression", format[_EXECscript1,"flipVehicle.sqf"]]], "1", "1"]];};
 if(AllowSuicide) then {ActionsMenu = ActionsMenu + [["Suicide", [], "", -5, [["expression", format[_EXECscript1,"suicide.sqf"]]], "1", "1"]];};
+if(AllowPlayerGetCorpseRadius > 0) then {ActionsMenu = ActionsMenu + [["Pull out my unreachable corpse!", [], "", -5, [["expression", format[_EXECscript1,"getcorpse.sqf"]]], "1", "1"]];};
 ActionsMenu = ActionsMenu + [["", [], "", -5, [["expression", ""]], "1", "0"], ["Exit", [20], "", -5, [["expression", ""]], "1", "1"]];
 
 

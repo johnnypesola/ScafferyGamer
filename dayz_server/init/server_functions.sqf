@@ -623,6 +623,38 @@ strip_quotes = {
 };
 
 
+pull_out_corpse = {
+	private ["_player","_entity","_entities","_exitLoop","_maxDist","_result"];
+	_player = _this select 0;
+	_maxDist = 6;
+	_exitLoop = false;
+	_result = 1;	// 0 = success, 1 = players near, 2 = too far away from corpse
+	{if (isPlayer _x && {alive _x} && {_maxDist < (_x distance _player)}) exitWith {_entity = _x;};} forEach ((entities "Man") - [_player]);
+	if (!isNil "_entity") exitWith {_result};
+	_exitLoop = false;
+	{
+		if (_maxDist > (_player distance _x)) then {
+			if (!alive _x) then {
+				if ((_x getVariable["bodyUID", ""]) == (getPlayerUID _player)) then {
+					_exitLoop = true;
+				};
+			};
+		};
+		if (_exitLoop) exitWith {_entity = _x};
+	} forEach ((entities "Man") - [_player]);
+
+	// Set the position
+	if (!isNil "_entity") then {
+		diag_log format["Found corpse at %1, moving it to %2.", getPosATL _entity, getPosATL _player];
+		_entity setPosATL (getPosATL _player);
+		_result = 0;
+	} else {
+		[nil,nil,rTitleText,format["You cannot be more than %1m away from your corpse", _maxDist], "PLAIN",3] call RE;
+		_result = 2;
+	};
+	_result
+};
+
 // -----------------------------------------------------------------------------------
 
 

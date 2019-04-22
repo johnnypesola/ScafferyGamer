@@ -77,6 +77,11 @@ helpQueue = []; // Initialize help queue
 				};
 			} forEach entities "CAManBase";
 		};
+		// Corpse retrieval system
+		"PV_pullOutCorpse" addPublicVariableEventHandler {
+			PV_pullOutCorpseResult = (_this select 1) call pull_out_corpse;
+			(owner ((_this select 1) select 0)) publicVariableClient "PV_pullOutCorpseResult";
+		};
 	};
 
 /****************** Client Public Variables ******************/
@@ -107,6 +112,19 @@ helpQueue = []; // Initialize help queue
 		helpQueue = (_this select 1);
 		if ((getPlayerUID player) in AdminAndModList) then {
 			systemChat "****A player needs help****";
+		};
+	};
+	// Corpse retrieval system result handler
+	"PV_pullOutCorpseResult" addPublicVariableEventHandler {
+		_result = (_this select 1);
+		if (_result == 0) then {
+			"You managed to pull out your corpse!" call dayz_rollingMessages;
+		};
+		if (_result == 1) then {
+			"Another player is near! Cannot pull out corpse now." call dayz_rollingMessages;
+		};
+		if (_result == 2) then {
+			"You are too far away from your corpse to be able to pull it out!" call dayz_rollingMessages;
 		};
 	};
 
