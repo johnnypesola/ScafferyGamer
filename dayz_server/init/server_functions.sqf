@@ -623,6 +623,51 @@ strip_quotes = {
 };
 
 
+pull_out_corpse = {
+	private ["_player","_entity","_entities","_exitLoop","_maxDist","_result"];
+	_player = _this select 0;
+	_maxDist = 6;
+	_exitLoop = false;
+	_result = 1;	// 0 = success, 1 = players near, 2 = too far away from corpse
+	{
+		if (isPlayer _x) then {
+			if (alive _x) then {
+				if (_maxDist > (_x distance _player)) then {
+					diag_log format["player %1 is too near corpse: %2m", getPlayerUID _x, _x distance _player];;
+					_entity = _x;
+					_exitLoop = true;
+				};
+			};
+		};
+		if (_exitLoop) exitWith {};
+	} forEach ((entities "Man") - [_player]);
+	
+	if (!isNil "_entity") exitWith {_result};
+	_exitLoop = false;
+	{
+		if (_maxDist > (_player distance _x)) then {
+			if (!alive _x) then {
+				if ((_x getVariable["bodyUID", ""]) == (getPlayerUID _player)) then {
+					diag_log format["This corpse belongs to player %1. OK.", getPlayerUID _player];
+					_exitLoop = true;
+				};
+			};
+		};
+		if (_exitLoop) exitWith {_entity = _x};
+	} forEach ((entities "Man") - [_player]);
+
+	// Set the position
+	if (!isNil "_entity") then {
+		diag_log format["Found corpse at %1, moving it to %2.", getPosATL _entity, getPosATL _player];
+		_entity setPosATL (getPosATL _player);
+		_result = 0;
+	} else {
+		diag_log format["Player cannt be further than %1m from corpse.", _maxDist];
+		_result = 2;
+	};
+	_result
+};
+
 // -----------------------------------------------------------------------------------
 
 
