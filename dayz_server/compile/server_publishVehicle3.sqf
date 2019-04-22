@@ -1,4 +1,4 @@
-private ["_activatingPlayer","_object","_worldspace","_location","_dir","_class","_uid","_key","_keySelected","_characterID","_donotusekey","_result","_outcome","_oid","_objectID","_objectUID","_newobject","_weapons","_magazines","_backpacks","_clientKey","_exitReason","_playerUID","_weaponUpgrade"];	// extDB2
+private ["_activatingPlayer","_object","_worldspace","_location","_dir","_class","_uid","_key","_keySelected","_characterID","_donotusekey","_result","_outcome","_oid","_objectID","_objectUID","_newobject","_weapons","_magazines","_backpacks","_clientKey","_exitReason","_playerUID","_weaponUpgrade","_upgradeArray","_currentLvl","_gunType","_calOrType"];	// extDB2
 #include "\z\addons\dayz_server\compile\server_toggle_debug.hpp"
 
 if (count _this < 7) exitWith {
@@ -43,6 +43,34 @@ _dir = 		_worldspace select 0;
 _location = _worldspace select 1;
 _uid = _worldspace call dayz_objectUID2;
 
+// Weapons upgrade pre-calculation (for database)
+if (0 < count _weaponUpgrade) then {
+
+	diag_log format["_weaponUpgrade = %1", _weaponUpgrade];
+
+	_gunType = _weaponUpgrade select 0;
+	_calOrType = _weaponUpgrade select 1; 
+
+	diag_log format ["Precalculating upgrade level to store in DB for vehicle %1, gun type %2, caliber %3", typeOf _object, _gunType, _calOrType];
+
+	_upgradeArray = _object getVariable ["upgradeArray", [[0,0],[0,0],[0,0],[0,0]]];
+	if (count _upgradeArray == 0) then {
+		diag_log format["upgradeArray is uninitialized: %1 - Resetting array.", _upgradeArray];
+		_upgradeArray = [[0,0],[0,0],[0,0],[0,0]];
+	};
+	diag_log format ["Current upgradeArray is %1", _upgradeArray];
+	if (((_upgradeArray select _gunType) select 1) != _calOrType) then {
+		_upgradeArray = [[0,0],[0,0],[0,0],[0,0]];	// Upgrading new gun type, reset to 0!
+		diag_log format["Caliber is new (%1), resetting array to %2", _calOrType, _upgradeArray];
+	};
+	_currentLvl = (_upgradeArray select _gunType) select 0;
+	_upgradeArray set [_gunType, [_currentLvl+1, _calOrType]]; 
+
+	diag_log format["Setting level to %1 and caliber to %2. Final array: %3", _currentLvl, _calOrType, _upgradeArray];
+} else {
+	_upgradeArray = _object getVariable ["upgradeArray", [[0,0],[0,0],[0,0],[0,0]]];
+};
+
 // extDB2
 //_key = format["CHILD:308:%1:%2:%3:%4:%5:%6:%7:%8:%9:",dayZ_instance, _class, 0 , _characterID, _worldspace, [], [], 1,_uid];
 //#ifdef OBJECT_DEBUG
@@ -67,7 +95,7 @@ _key = [
 	[], // inv backpacks
 	[], // hitpoints
 	1,  // fuel
-	[], // upgrade level
+	_upgradeArray, // upgrade level
 	_uid
 ];
 _query = ["objectPublish",_key] call dayz_prepareDataForDB;
@@ -79,8 +107,8 @@ diag_log ("HIVE: WRITE: "+ str(_query));
 _result = _query call server_hiveReadWrite;
 
 // Switched to spawn so we can wait a bit for the ID
-[_object,_uid,_characterID,_class,_dir,_location,_donotusekey,_activatingPlayer,_playerUID, _weaponUpgrade] spawn {
-   private ["_object","_uid","_characterID","_done","_retry","_key","_result","_outcome","_oid","_class","_location","_donotusekey","_activatingPlayer","_countr","_objectID","_objectUID","_dir","_newobject","_weapons","_magazines","_backpacks","_objWpnTypes","_objWpnQty","_playerUID","_weaponUpgrade"];
+[_object,_uid,_characterID,_class,_dir,_location,_donotusekey,_activatingPlayer,_playerUID,_weaponUpgrade] spawn {
+   private ["_object","_uid","_characterID","_done","_retry","_key","_result","_outcome","_oid","_class","_location","_donotusekey","_activatingPlayer","_countr","_objectID","_objectUID","_dir","_newobject","_weapons","_magazines","_backpacks","_objWpnTypes","_objWpnQty","_playerUID","_weaponUpgrade","_upgradeArray"];
 
 	_object = _this select 0;
 	_objectID 	= _object getVariable ["ObjectID","0"];
@@ -95,6 +123,7 @@ _result = _query call server_hiveReadWrite;
 	_activatingPlayer = _this select 7;
 	_playerUID = _this select 8;
 	_weaponUpgrade = _this select 9;
+	_upgradeArray = _object getVariable ["upgradeArray", [[0,0],[0,0],[0,0],[0,0]]];
 
 	_oid = "0";
 
@@ -160,6 +189,9 @@ _result = _query call server_hiveReadWrite;
 	deleteVehicle _object;
 	[_objectID,_objectUID] call server_deleteObjDirect;
 
+	// Wait 1 sec here to make object not spawn over deleted one, while having desync (old vehicle still present)
+	sleep 0.5;
+
 	//_newobject = createVehicle [_class, [0,0,0], [], 0, "CAN_COLLIDE"];
 	_newobject = _class createVehicle [0,0,0];
 
@@ -169,12 +201,15 @@ _result = _query call server_hiveReadWrite;
 	_object setVariable ["ObjectID", _oid, true];
 	_object setVariable ["lastUpdate",diag_tickTime];
 	_object setVariable ["CharacterID", _characterID, true];
-	if (0 < count _weaponUpgrade) then {
-		[_object, _weaponUpgrade select 0, _weaponUpgrade select 1] call server_upgradeVehWeapons;
-	};
+	_object setVariable ["upgradeArray", _upgradeArray];
+
+	// Upgrade vehicle weapons!
+	[_object, _upgradeArray, _weaponUpgrade select 0, _weaponUpgrade select 1] call server_upgradeVehWeapons;
 
 	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_object];
 
+	// Lift object 20cm up in the air to avoid crazy stuff
+	_location set [2, (_location select 2) + 0.2];
 	_object setDir _dir;
 	_object setPosATL _location;
 	_object setVectorUp surfaceNormal _location;

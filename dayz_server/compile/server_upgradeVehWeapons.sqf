@@ -1,92 +1,99 @@
 /* ----------------------------------------------------------------------------
-   Upgrade vehicle weapon (using addWeapon and addMagazine)
-   
-   	[_veh, _gunType, _requestedUpgradeType] call server_upgradeVehWeapons;
-   where _gunType is:
-   	0 - machinegun
-   	1 - AT
-   	2 - AA
-   	3 - armor
+ * Upgrade vehicle weapon (using addWeapon and addMagazine)
+ *
+ * [_veh, _gunType, _requestedCal] call server_upgradeVehWeapons;
+ *   where _gunType is:
+ *     0 - machinegun
+ *     1 - AT
+ *     2 - AA
+ *     3 - armor
+ *
+ * Each gun type is [gun,AT,AA,armor] where each element is a sub array: [level,caliber].
+ * "level" is the upgrade level, "caliber" is the upgrade type/caliber.
+ * Having value 0 on "caliber" does not add any upgrade to the vehicle.
+ *
+ * Alternatively:
+ * [_veh] call server_upgradeVehWeapons;
+ *
+ * where the _veh vehicle must have "upgradeArray" variable set with the existing upgradeArray on the vehicle.
+ *
+ * By Pastorn
+ * ----------------------------------------------------------------------------
+ */
 
-   each number is [gun,AT,AA,armor] where 5 first bits for each number is
-   the upgrade level, 3 last bits is the upgrade type.
+private ["_veh","_gunType","_upgradeArray","_gun","_at","_aa","_level","_currentCal","_doUpgrade","_requestedCal","_upgradeData","_vehicleTypes","_vehicleTypeLevelMultiplier","_multiplier","_mulIdx","_gunTypeName"];
 
-   Alternatively:
-   	[_veh, _upgradeLvl] call server_upgradeVehWeapons;
-
-   where _upgradeLvl is the existing upgradeLvl on the vehicle.
-
-   By Pastorn
-   ---------------------------------------------------------------------------- */
-
-private ["_veh","_gunType","_upgradeLvl","_gun","_at","_aa","_level","_currentUpgradeType","_found","_shift_right","_requestedUpgradeType"];
-
-
-_shift_right = {
-	private ["_op","_sh","_powTab"];
-	_powTab = [1,2,4,8,16,32,64,128,256];
-	_op = _this select 0;
-	_sh = _this select 1;
-	if (_sh > 7) then {
-		_op = 0;
-	} else {
-		if (_sh > 0) then {
-			if (_op < 0) then {
-				_op = _op - 256;
-				_op = _op / (_powTab select _sh);
-				_op = _op + (_powTab select (7 - _sh));
-			} else {
-				_op = _op / (_powTab select (_sh));
-			};
-		};
-	};
-	_op
-};
+_vehicleTypes 			= ["GNT_C185U_DZ", "GNT_C185_DZ", "GNT_C185R_DZ", "GNT_C185C_DZ", "AN2_DZ", "AN2_2_DZ", "AN2_2_TK_CIV_EP1_DZ", "C130J_US_EP1_DZ", "MV22_DZ"];
+_vehicleTypeLevelMultiplier 	= [2, 2, 2, 2, 2, 2, 2, 1, 4];
+_gunTypeName = ["Machine Gun", "Anti Tank", "Anti Air", "Bomb"];
 
 
 _veh = _this select 0;
-_upgradeLvl = _veh getVariable ["upgradeLvl", []];
-if (4 > count _upgradeLvl) then {
-	_upgradeLvl = [0, 0, 0, 0];
+_upgradeArray = _this select 1;
+diag_log format["Current vehicle %1 upgrade level is %2", typeOf _veh, _upgradeArray];
+if (4 > count _upgradeArray) then {
+	_upgradeArray = [[0,0],[0,0],[0,0],[0,0]];
+	diag_log "Resetting upgradeArray, it is empty.";
 };
 
-if (1 < count _this) then {
-	_gunType = _this select 1;
-	_requestedUpgradeType = _this select 2;
-	diag_log format["Upgrading vehicle with gun type %1 and upgrade type %2...", _gunType, _requestedUpgradeType];
+if (4 == count _this) then {
+	_gunType = _this select 2;
+	_requestedCal = _this select 3;
+
+	_doUpgrade = true;
+	diag_log format["Upgrading vehicle with gun type %1 and upgrade type/caliber %2...", _gunType, _requestedCal];
 } else {
+	diag_log "Vehicle was loaded with upgrades.";
+	_doUpgrade = false;
+
 	_gunType = 0;
-	if (0 < _upgradeLvl select 1) then {
+	_gun = _upgradeArray select 0;
+	if (0 < _gun select 1) then {	// Checks upgrade type for each gun type (here: 0:7.62mm, 1:0.5cal, 2:12.7x99mm, 3:40mm GMG)
+		_gunType = 0;
+	};
+	_gun = _upgradeArray select 1;
+	if (0 < _gun select 1) then {	// Checks upgrade type for each AT type (here: 0:NATO, 1:Russian)
 		_gunType = 1;
 	};
-	if (0 < _upgradeLvl select 2) then {
+	_gun = _upgradeArray select 2;
+	if (0 < _gun select 1) then {	// Checks upgrade type for each AA type (here: 0:NATO, 1:Russian)
 		_gunType = 2;
 	};
-	if (0 < _upgradeLvl select 3) then {
+	_gun = _upgradeArray select 3;
+	if (0 < _gun select 1) then {	// Checks upgrade type for each ARMOR type (here: 0:NATO, 1:Russian)
 		_gunType = 3;
 	};
-	_requestedUpgradeType = [(_upgradeLvl select (_gunType)), 5] call _shift_right;
-	diag_log format["Setting vehicle upgrade with gun type %1 and upgrade type %2...", _gunType, _requestedUpgradeType];
+	// Get type / caliber for missiles/guns
+	_requestedCal = (_upgradeArray select _gunType) select 1;
+	diag_log format["Setting vehicle upgrade with gun type %1 and upgrade type/caliber %2...", _gunTypeName select _gunType, _requestedCal];
 };
 
-if (!((typeOf _veh) in ["AN2_DZ"])) exitWith {
+if (!((typeOf _veh) in _vehicleTypes)) exitWith {
 	diag_log format ["Vehicle Weapon Upgrade: Vehicle type %1 not in upgradable vehicles list!", _veh];
 };
 
+// Applicable multiplier
+_mulIdx = _vehicleTypeLevelMultiplier find (toUpper(typeOf _veh));
+if (_mulIdx == -1) then {
+	diag_log "Whoops, didn't find multiplier index... using 0";
+	_mulIdx = 0
+};
+_multiplier = _vehicleTypeLevelMultiplier select _mulIdx;
 
 if (_gunType == 0) then {
 
 	// Process gun
-	_gun = _upgradeLvl select 0;
-	_level = _gun mod 31;	// _gun bitwise and 0x11111
-	_currentUpgradeType = [_gun, 5] call _shift_right;
+	_gun = _upgradeArray select 0;
+	_level = _gun select 0;
+	_currentCal = _gun select 1;
 
-	diag_log format["Current vehicle gun upgrade type and upgrade level is %1, %2...", _currentUpgradeType, _level];
-	if (_requestedUpgradeType == 1) then {
-		if (_currentUpgradeType != _requestedUpgradeType) then {
+	diag_log format["Current vehicle MG upgrade type and upgrade level is %1, %2...", _currentCal, _level];
+	if (_requestedCal == 1) then {
+		if (_currentCal != _requestedCal) then {
 			_level = 0;
 		};
-		if (_level == 0) then {
+		if (_doUpgrade) then { _level = _level + 1; };
+		if (_level == 1*_multiplier) then {
 			{_veh removeWeapon _x} forEach weapons _veh;
 			_veh addWeapon "M240_veh";
 			_veh addMagazine "100Rnd_762x51_M240";
@@ -94,7 +101,7 @@ if (_gunType == 0) then {
 			_veh addMagazine "100Rnd_762x51_M240";
 			_veh addMagazine "100Rnd_762x51_M240";
 		};
-		if (_level == 1) then {
+		if (_level == 2*_multiplier) then {
 			{_veh removeWeapon _x} forEach weapons _veh;
 			_veh addWeapon "M240_veh";
 			_veh addWeapon "M240_veh_2";
@@ -103,7 +110,7 @@ if (_gunType == 0) then {
 			_veh addMagazine "100Rnd_762x51_M240";
 			_veh addMagazine "100Rnd_762x51_M240";
 		};
-		if (_level == 5) then {
+		if (_level == 6*_multiplier) then {
 			{_veh removeWeapon _x} forEach weapons _veh;
 			_veh addWeapon "M134";
 			_veh addMagazine "4000Rnd_762x51_M134";
@@ -111,7 +118,7 @@ if (_gunType == 0) then {
 			_veh addMagazine "4000Rnd_762x51_M134";
 			_veh addMagazine "4000Rnd_762x51_M134";
 		};
-		if (_level == 11) then {
+		if (_level == 12*_multiplier) then {
 			{_veh removeWeapon _x} forEach weapons _veh;
 			_veh addWeapon "TwinM134";
 			_veh addMagazine "4000Rnd_762x51_M134";
@@ -119,14 +126,14 @@ if (_gunType == 0) then {
 			_veh addMagazine "4000Rnd_762x51_M134";
 			_veh addMagazine "4000Rnd_762x51_M134";
 		};
-		_level = _level + 1;
-		_veh setVariable ["upgradeLvl", (_level + _requestedUpgradeType)];
+		diag_log format["New vehicle %1 upgrade level is %2, caliber is %3", typeOf _veh, _level, _requestedCal];
 	};
-	if (_requestedUpgradeType == 2) then {
-		if (_currentUpgradeType != _requestedUpgradeType) then {
+	if (_requestedCal == 2) then {
+		if (_currentCal != _requestedCal) then {
 			_level = 0;
 		};
-		if (_level == 0) then {
+		if (_doUpgrade) then { _level = _level + 1; };
+		if (_level == 1*_multiplier) then {
 			{_veh removeWeapon _x} forEach weapons _veh;
 			_veh addWeapon "M2";
 			_veh addMagazine "100Rnd_127x99_M2";
@@ -134,7 +141,7 @@ if (_gunType == 0) then {
 			_veh addMagazine "100Rnd_127x99_M2";
 			_veh addMagazine "100Rnd_127x99_M2";
 		};
-		if (_level == 1) then {
+		if (_level == 2*_multiplier) then {
 			{_veh removeWeapon _x} forEach weapons _veh;
 			_veh addWeapon "M2";
 			_veh addWeapon "M2";
@@ -143,71 +150,71 @@ if (_gunType == 0) then {
 			_veh addMagazine "100Rnd_127x99_M2";
 			_veh addMagazine "100Rnd_127x99_M2";
 		};
-		_level = _level + 1;
-		_veh setVariable ["upgradeLvl", (_level + _requestedUpgradeType)];
+		diag_log format["New vehicle %1 upgrade level is %2, caliber is %3", typeOf _veh, _level, _requestedCal];
 	};
-	if (_requestedUpgradeType == 4) then {
-		if (_currentUpgradeType != _requestedUpgradeType) then {
+	if (_requestedCal == 4) then {
+		if (_currentCal != _requestedCal) then {
 			_level = 0;
 		};
-		if (_level == 0) then {
-			{_veh removeWeapon _x} forEach weapons _veh;
-			_veh addWeapon "DSHKM";
-			_veh addMagazine "150Rnd_127x107_DSHKM";
-			_veh addMagazine "150Rnd_127x107_DSHKM";
-			_veh addMagazine "150Rnd_127x107_DSHKM";
-			_veh addMagazine "150Rnd_127x107_DSHKM";
-		};
+		if (_doUpgrade) then { _level = _level + 1; };
 		if (_level == 1) then {
 			{_veh removeWeapon _x} forEach weapons _veh;
 			_veh addWeapon "DSHKM";
+			_veh addMagazine "150Rnd_127x107_DSHKM";
+			_veh addMagazine "150Rnd_127x107_DSHKM";
+			_veh addMagazine "150Rnd_127x107_DSHKM";
+			_veh addMagazine "150Rnd_127x107_DSHKM";
+		};
+		if (_level == 2) then {
+			{_veh removeWeapon _x} forEach weapons _veh;
+			_veh addWeapon "DSHKM";
 			_veh addWeapon "DSHKM";
 			_veh addMagazine "150Rnd_127x107_DSHKM";
 			_veh addMagazine "150Rnd_127x107_DSHKM";
 			_veh addMagazine "150Rnd_127x107_DSHKM";
 			_veh addMagazine "150Rnd_127x107_DSHKM";
 		};
-		_level = _level + 1;
-		_veh setVariable ["upgradeLvl", (_level + _requestedUpgradeType)];
+		diag_log format["New vehicle %1 upgrade level is %2, caliber is %3", typeOf _veh, _level, _requestedCal];
 	};
-	if (_requestedUpgradeType == 7) then {
-		if (_currentUpgradeType != _requestedUpgradeType) then {
+	if (_requestedCal == 7) then {
+		if (_currentCal != _requestedCal) then {
 			_level = 0;
 		};
-		if (_level == 0) then {
-			{_veh removeWeapon _x} forEach weapons _veh;
-			_veh addWeapon "MK19";
-			_veh addMagazine "48Rnd_40mm_MK19";
-			_veh addMagazine "48Rnd_40mm_MK19";
-			_veh addMagazine "48Rnd_40mm_MK19";
-			_veh addMagazine "48Rnd_40mm_MK19";
-		};
+		if (_doUpgrade) then { _level = _level + 1; };
 		if (_level == 1) then {
 			{_veh removeWeapon _x} forEach weapons _veh;
 			_veh addWeapon "MK19";
+			_veh addMagazine "48Rnd_40mm_MK19";
+			_veh addMagazine "48Rnd_40mm_MK19";
+			_veh addMagazine "48Rnd_40mm_MK19";
+			_veh addMagazine "48Rnd_40mm_MK19";
+		};
+		if (_level == 2) then {
+			{_veh removeWeapon _x} forEach weapons _veh;
+			_veh addWeapon "MK19";
 			_veh addWeapon "MK19";
 			_veh addMagazine "48Rnd_40mm_MK19";
 			_veh addMagazine "48Rnd_40mm_MK19";
 			_veh addMagazine "48Rnd_40mm_MK19";
 			_veh addMagazine "48Rnd_40mm_MK19";
 		};
-		_level = _level + 1;
-		_veh setVariable ["upgradeLvl", (_level + _requestedUpgradeType)];
+		diag_log format["New vehicle %1 upgrade level is %2, caliber is %3", typeOf _veh, _level, _requestedCal];
 	};
 };
 if (_gunType == 1) then {
 
 	// Process AT
-	_at = _upgradeLvl select 1;
-	_level = _at mod 31;	// _gun bitwise and 31
-	_currentUpgradeType = [_at, 5] call _shift_right;
+	_gun = _upgradeArray select 1;
+	_level = _gun select 0;
+	_currentCal = _gun select 1;
 
-	diag_log format["Current vehicle gun upgrade type and upgrade level is %1, %2...", _currentUpgradeType, _level];
-	if (_requestedUpgradeType == 1) then {
-		if (_currentUpgradeType != _requestedUpgradeType) then {
+	diag_log format["Current vehicle AT upgrade type and upgrade level is %1, %2...", _currentCal, _level];
+	if (_requestedCal == 1) then {
+		if (_currentCal != _requestedCal) then {
 			_level = 0;
 		};
-		if (_level == 0) then {
+		if (_doUpgrade) then { _level = _level + 1; };
+		if (_level == 1) then {
 			{_veh removeWeapon _x} forEach weapons _veh;
 			_veh addWeapon "TOWLauncherSingle";
 			_veh addMagazine "6Rnd_TOW_HMMWV";
@@ -215,7 +222,7 @@ if (_gunType == 1) then {
 			_veh addMagazine "6Rnd_TOW_HMMWV";
 			_veh addMagazine "6Rnd_TOW_HMMWV";
 		};
-		if (_level == 1) then {
+		if (_level == 2) then {
 			{_veh removeWeapon _x} forEach weapons _veh;
 			_veh addWeapon "TOWLauncher";
 			_veh addMagazine "2Rnd_TOW";
@@ -223,14 +230,14 @@ if (_gunType == 1) then {
 			_veh addMagazine "2Rnd_TOW";
 			_veh addMagazine "2Rnd_TOW";
 		};
-		_level = _level + 1;
-		_veh setVariable ["upgradeLvl", (_level + _requestedUpgradeType)];
+		diag_log format["New vehicle %1 upgrade level is %2, type is %3", typeOf _veh, _level, _requestedCal];
 	};
-	if (_requestedUpgradeType == 2) then {
-		if (_currentUpgradeType != _requestedUpgradeType) then {
+	if (_requestedCal == 2) then {
+		if (_currentCal != _requestedCal) then {
 			_level = 0;
 		};
-		if (_level == 0) then {
+		if (_doUpgrade) then { _level = _level + 1; };
+		if (_level == 1) then {
 			{_veh removeWeapon _x} forEach weapons _veh;
 			_veh addWeapon "AT13LauncherSingle";
 			_veh addMagazine "6Rnd_AT13";
@@ -238,7 +245,7 @@ if (_gunType == 1) then {
 			_veh addMagazine "6Rnd_AT13";
 			_veh addMagazine "6Rnd_AT13";
 		};
-		if (_level == 1) then {
+		if (_level == 2) then {
 			{_veh removeWeapon _x} forEach weapons _veh;
 			_veh addWeapon "AT5Launcher";
 			_veh addMagazine "5Rnd_AT5_BRDM2";
@@ -246,50 +253,49 @@ if (_gunType == 1) then {
 			_veh addMagazine "5Rnd_AT5_BRDM2";
 			_veh addMagazine "5Rnd_AT5_BRDM2";
 		};
-		_level = _level + 1;
-		_veh setVariable ["upgradeLvl", (_level + _requestedUpgradeType)];
+		diag_log format["New vehicle %1 upgrade level is %2, type is %3", typeOf _veh, _level, _requestedCal];
 	};
 };
-
 if (_gunType == 2) then {
 
 	// Process AA
-	_aa = _upgradeLvl select 1;
-	_level = _aa mod 31;	// _gun bitwise and 31
-	_currentUpgradeType = [_aa, 5] call _shift_right;
+	_gun = _upgradeArray select 2;
+	_level = _gun select 0;
+	_currentCal = _gun select 1;
 
-	diag_log format["Current vehicle gun upgrade type and upgrade level is %1, %2...", _currentUpgradeType, _level];
-	if (_requestedUpgradeType == 1) then {
-		if (_currentUpgradeType != _requestedUpgradeType) then {
+	diag_log format["Current vehicle AA upgrade type and upgrade level is %1, %2...", _currentCal, _level];
+	if (_requestedCal == 1) then {
+		if (_currentCal != _requestedCal) then {
 			_level = 0;
 		};
-		if (_level == 0) then {
+		if (_doUpgrade) then { _level = _level + 1; };
+		if (_level == 1) then {
 			{_veh removeWeapon _x} forEach weapons _veh;
 			_veh addWeapon "StingerLaucher";
 			_veh addMagazine "8Rnd_Stinger";
 		};
-		if (_level == 1) then {
+		if (_level == 2) then {
 			{_veh removeWeapon _x} forEach weapons _veh;
-			_veh addWeapon "StingerLauncher_twice";
+			_veh addWeapon "AALauncher_twice";
 			_veh addMagazine "2Rnd_Stinger";
 			_veh addMagazine "2Rnd_Stinger";
 			_veh addMagazine "2Rnd_Stinger";
 			_veh addMagazine "2Rnd_Stinger";
 		};
-		_level = _level + 1;
-		_veh setVariable ["upgradeLvl", (_level + _requestedUpgradeType)];
+		diag_log format["New vehicle %1 upgrade level is %2, type is %3", typeOf _veh, _level, _requestedCal];
 	};
-	if (_requestedUpgradeType == 2) then {
-		if (_currentUpgradeType != _requestedUpgradeType) then {
+	if (_requestedCal == 2) then {
+		if (_currentCal != _requestedCal) then {
 			_level = 0;
 		};
-		if (_level == 0) then {
+		if (_doUpgrade) then { _level = _level + 1; };
+		if (_level == 1) then {
 			{_veh removeWeapon _x} forEach weapons _veh;
 			_veh addWeapon "R73Launcher";
 			_veh addMagazine "4Rnd_R73";
 			_veh addMagazine "4Rnd_R73";
 		};
-		if (_level == 1) then {
+		if (_level == 2) then {
 			{_veh removeWeapon _x} forEach weapons _veh;
 			_veh addWeapon "R73Launcher_2";
 			_veh addMagazine "2Rnd_R73";
@@ -297,7 +303,10 @@ if (_gunType == 2) then {
 			_veh addMagazine "2Rnd_R73";
 			_veh addMagazine "2Rnd_R73";
 		};
-		_level = _level + 1;
-		_veh setVariable ["upgradeLvl", (_level + _requestedUpgradeType)];
+		diag_log format["New vehicle %1 upgrade level is %2, type is %3", typeOf _veh, _level, _requestedCal];
 	};
 };
+
+_upgradeData = [[0,0],[0,0],[0,0],[0,0]];
+_upgradeData set [_gunType, [_level, _requestedCal]];
+_veh setVariable ["upgradeArray", _upgradeData];

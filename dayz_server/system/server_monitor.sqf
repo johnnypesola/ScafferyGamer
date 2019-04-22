@@ -384,7 +384,7 @@ if ((playersNumber west + playersNumber civilian) == 0) exitWith {
 		_object setVariable ["lastUpdate",diag_ticktime];
 		_object setVariable ["ObjectID", _idKey, true];
 		_object setVariable ["OwnerPUID", _ownerPUID, true];
-		_object setVariable ["upgradeLvl", _upgradeLvl];
+		_object setVariable ["upgradeArray", _upgradeLvl];
 
 		if (_object in ["AN2_DZ"] && 0 < count _upgradeLvl) then {
 			[_object, _upgradeLvl] call server_upgradeVehWeapons;
