@@ -1,13 +1,16 @@
 /* ----------------------------------------------------------------------------
  * Upgrade vehicle weapon (using addWeapon and addMagazine)
  *
- * [_veh, _gunType, _requestedCal] call server_upgradeVehWeapons;
+ * [_veh, _owner, _upgradeArray, _gunType, _requestedCal] call server_upgradeVehWeapons;
  *   where _gunType is:
  *     0 - machinegun
  *     1 - AT
  *     2 - AA
  *     3 - armor
  *
+ * or just set upgrade level:
+ * [_veh, _owner, _upgradeArray] call server_upgradeVehWeapons;
+ * 
  * Each gun type is [gun,AT,AA,armor] where each element is a sub array: [level,caliber].
  * "level" is the upgrade level, "caliber" is the upgrade type/caliber.
  * Having value 0 on "caliber" does not add any upgrade to the vehicle.
