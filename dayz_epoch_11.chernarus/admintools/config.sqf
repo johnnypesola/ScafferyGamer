@@ -3,7 +3,7 @@
 
 	//Replace 111111111 with your ID. 
 	SuperAdminList = [
-	"76561198058567747"
+	"xxxxxxxxxxxxxxxxx"
 	];
 	AdminList = [
 	];
