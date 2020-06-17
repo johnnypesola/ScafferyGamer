@@ -242,7 +242,7 @@ if (isNil "keyboard_keys") then {
 
     scaffery_toggle_showDebugMonitor = true;
     scaffery_viewDist = 1000;
-    scaffery_viewDistLimit = 3000;
+    scaffery_viewDistLimit = 4000;
     scaffery_viewDistIncrement = 500;
 
     // custom stuff
