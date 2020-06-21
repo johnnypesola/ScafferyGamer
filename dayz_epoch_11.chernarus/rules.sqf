@@ -3,8 +3,8 @@ private ["_messages","_timeout"];
 _messages = [
 	["DayZ Epoch", "Welcome "+(name player)],
 	["World", worldName],
-	["Teamspeak", "TBA"],
-	["Website/Forums", "http://scaffery.pesola.se"],
+	["Teamspeak", "N/A"],
+	["Website/Forums", "http://scaffery.saltysalmon.com"],
 	["Server Rules", "Duping, glitching or using any<br />exploit will result in a<br />permanent ban."],
 	["Server Rules", "No talking in side."],
 	["Server Rules", "Hackers will be banned permanently<br />Respect others"],
