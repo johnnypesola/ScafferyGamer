@@ -19,7 +19,9 @@ Custom group spawns Eg.
 Place your custom group spawns below
 */
 
-keep_respawning = false;
+BASE_NMB = 0;
+BASE_SMB = 1;
+keep_respawning = [false, false];
 
 pick_n_positions = {
 	private ["_input_list", "_cloned_list", "_item", "_nof_groups","_result_array","_item2"];
@@ -32,7 +34,7 @@ pick_n_positions = {
 		for "_j" from 0 to (count _cloned_list)-1 do {
 			_item2 = _cloned_list select _j;
 			if ([_item2, _item] call BIS_fnc_areEqual) then {
-				_cloned_list set [_j, -1]; 
+				_cloned_list set [_j, -1];
 			};
 		};
 		// Remove picked element from cloned list
@@ -58,21 +60,31 @@ add_launchers = {
 };
 
 spawn_reinforcement_patrol = {
-	private ["_starting_point","_group_alive","_group","_groups","_actual_point","_faction","_target_point","_timeout","_nofUnits","_unit"];
+	private ["_starting_point","_group_alive","_group","_groups","_actual_point","_faction","_target_point","_timeout","_nofUnits","_unit","_base_idx","_launchers"];
 	_group_alive = false;
 	_faction = _this select 0;
 	_starting_point = _this select 1;
 	_target_point = _this select 2;
 	_timeout = _this select 3;
+	_base_idx = _this select 4;
 	_nofUnits = 3;
-	if (count _this == 5) then {
-		_groups = _this select 4;
+	if ((count _this) == 6) then {
+		_launchers = _this select 5;
+	} else {
+		if (_faction == "us") then {
+			_launchers = ["MAAWS", "MAAWS_HEAT"];
+		} else {
+			_launchers = ["M136", "M136"];
+		};
+	};
+	if (count _this == 7) then {
+		_groups = _this select 6;
 	} else {
 		_groups = [];
 	};
 	_group = grpNull;
 
-	while {keep_respawning} do {
+	while {keep_respawning select _base_idx} do {
 
 		_actual_point = [_starting_point,0,900,10,0,1,0,[],_starting_point] call BIS_fnc_findSafePos;
 		_actual_point set [2, 0];
@@ -92,7 +104,7 @@ spawn_reinforcement_patrol = {
 				_target_point,
 				false
 			] call spawn_3rd_faction_group;
-			[_group, "MAAWS", "MAAWS_HEAT"] call add_launchers; 
+			[_group, _launchers select 0, _launchers select 1] call add_launchers;
 
 		} else {
 			// Respawn patrol
@@ -109,25 +121,25 @@ spawn_reinforcement_patrol = {
 				_target_point,
 				false
 			] call spawn_neutral_group;
-			[_group, "M136", "M136"] call add_launchers; 
+			[_group, _launchers select 0, _launchers select 1] call add_launchers;
 		};
 
 		_group_alive = true;
 
 		while {_group_alive} do {
 			_group_alive = ({alive _x} count units _group) > 0;
-			if (!keep_respawning) exitWith {
+			if (!(keep_respawning select _base_idx)) exitWith {
 				diag_log format ["WAI: Stopping respawning of units..."];
 			};
 			for "_i" from 1 to 10 do {
-				if (!keep_respawning) exitWith {
+				if (!(keep_respawning select _base_idx)) exitWith {
 					diag_log format ["WAI: Stopping respawning of units..."];
 				};
 				sleep 1;
 			};
 		};
 		for "_i" from 1 to (_timeout) do {
-			if (!keep_respawning) exitWith {
+			if (!(keep_respawning select _base_idx)) exitWith {
 				diag_log format ["WAI: Stopping respawning of units..."];
 			};
 			sleep 1;
@@ -247,7 +259,7 @@ spawn_usable_static_gunners = {
 // ---- Napf military base #1 AI groups follow ----
 // ---- Napf military base #1 AI groups follow ----
 [] spawn {
-	Private ["_proceed","_themags","_theweap","_thetool","_item","_thebox","_hidden_box_number_of_gold","_hidden_box_number_of_guns","_hidden_box_number_of_tools","_hidden_box_number_of_buildmats","_numberofguns","_numberoftools","_numberofitems","_numberofbuildmats","_hidden_box_random_items","_hidden_box_random_guns","_hidden_box_random_tools","_hidden_box_random_buildmats","_objects","_rare_loot_items","_result","_positions","_pos", "_total_groups","_location","_prize_veh","_prize_veh_chute","_class","_units","_i","_mg_list","_gunner_list","_respawn_patrol_starting_point","_target_point","_sniper_groups","_sniper_group","_pair","_gunner_list_pos","_grp"];
+	Private ["_proceed","_themags","_theweap","_thetool","_item","_thebox","_hidden_box_number_of_gold","_hidden_box_number_of_guns","_hidden_box_number_of_tools","_hidden_box_number_of_buildmats","_numberofguns","_numberoftools","_numberofitems","_numberofbuildmats","_hidden_box_random_items","_hidden_box_random_guns","_hidden_box_random_tools","_hidden_box_random_buildmats","_objects","_rare_loot_items","_result","_positions","_pos", "_total_groups","_location","_prize_veh","_prize_veh_chute","_class","_units","_i","_mg_list","_gunner_list","_respawn_patrol_starting_point","_target_point","_sniper_groups","_sniper_group","_pair","_gunner_list_pos","_grp","_kent_waypoints"];
 
 	_respawn_patrol_starting_point = [16408.867, 18325.08, 3.7562463];
 	_target_point = [16745.498, 19048.521, 0.01];
@@ -255,17 +267,17 @@ spawn_usable_static_gunners = {
 
 	// M2 gunner positions
 	_mg_list = [
-		[[16394.445, 18400.254, 8.9207115],[16386.613, 18393.176, 8.8817167]], 
-		[[16438.412, 18328.098, 5.9698877],[16417.037, 18296.625, 5.9706712]], 
-		[[16102.933, 18761.24, 6.6767454], [16093.552, 18749.891, 6.889411]], 
-		[[16466.064, 18405.842, 11.65085], [16455.637, 18414.383, 11.663869]], 
-		[[16478.484, 18395.828, 12.105547], [16490.365, 18385.664, 11.715808]], 
-		[[16542.553, 18225.869, 15.263895], [16544.762, 18227.645, 11.650205]], 
-		[[16613.752, 18233.564, 15.419233], [16615.773, 18235.254, 11.519668]], 
-		[[16895.002, 18368.586, 8.3367281], [16906.025, 18376.975, 4.8012056]], 
-		[[17107.875, 18799.629, 9.5566349], [17099.396, 18794.455, 9.049469]], 
-		[[16322.931, 18836.68, 5.7220459e-005], [16329.277, 18830.129, -0.96573746]], 
-		[[16112.576, 19474.26, 10.973132], [16113.663, 19468.738, 11.959474]], 
+		[[16394.445, 18400.254, 8.9207115],[16386.613, 18393.176, 8.8817167]],
+		[[16438.412, 18328.098, 5.9698877],[16417.037, 18296.625, 5.9706712]],
+		[[16102.933, 18761.24, 6.6767454], [16093.552, 18749.891, 6.889411]],
+		[[16466.064, 18405.842, 11.65085], [16455.637, 18414.383, 11.663869]],
+		[[16478.484, 18395.828, 12.105547], [16490.365, 18385.664, 11.715808]],
+		[[16542.553, 18225.869, 15.263895], [16544.762, 18227.645, 11.650205]],
+		[[16613.752, 18233.564, 15.419233], [16615.773, 18235.254, 11.519668]],
+		[[16895.002, 18368.586, 8.3367281], [16906.025, 18376.975, 4.8012056]],
+		[[17107.875, 18799.629, 9.5566349], [17099.396, 18794.455, 9.049469]],
+		[[16322.931, 18836.68, 5.7220459e-005], [16329.277, 18830.129, -0.96573746]],
+		[[16112.576, 19474.26, 10.973132], [16113.663, 19468.738, 11.959474]],
 		[[17754.354, 18946.91, -0.12465555], [17745.424, 18939.453, -0.13854066]]
 	];
 
@@ -426,7 +438,7 @@ spawn_usable_static_gunners = {
 	200,               //Radius of patrol
 	10,                     //Number of waypoints to give
 	"HMMWV_Armored",      //Classname of vehicle (make sure it has driver and gunner)
-	1                  //Skill level of units 
+	1                  //Skill level of units
 	] spawn vehicle_patrol;
 
 	// HMMWV2
@@ -435,7 +447,7 @@ spawn_usable_static_gunners = {
 	50,               //Radius of patrol
 	10,                     //Number of waypoints to give
 	"HMMWV_M1151_M2_CZ_DES_EP1_DZ",      //Classname of vehicle (make sure it has driver and gunner)
-	1                  //Skill level of units 
+	1                  //Skill level of units
 	] spawn vehicle_patrol;
 
 	// HMMWV3
@@ -444,7 +456,7 @@ spawn_usable_static_gunners = {
 	50,               //Radius of patrol
 	10,                     //Number of waypoints to give
 	"HMMWV_M1151_M2_CZ_DES_EP1_DZ",      //Classname of vehicle (make sure it has driver and gunner)
-	1                  //Skill level of units 
+	1                  //Skill level of units
 	] spawn vehicle_patrol;
 
 
@@ -493,7 +505,7 @@ spawn_usable_static_gunners = {
             _numberofitems = _x select 1;
             for "_i" from  1 to _numberofitems do {
                 _result set [count _result, _item];
-            }; 
+            };
         } forEach _rare_loot_items;
         _thebox addMagazineCargoGlobal [(_result call BIS_fnc_selectRandom),1];
 
@@ -502,25 +514,25 @@ spawn_usable_static_gunners = {
 	publicVariable "activeTier";
 
 
-	keep_respawning = true;
-	["bandits", _respawn_patrol_starting_point, _target_point, 600] spawn spawn_reinforcement_patrol;
+	keep_respawning set [BASE_NMB, true];
+	["bandits", _respawn_patrol_starting_point, _target_point, 600, BASE_NMB] spawn spawn_reinforcement_patrol;
 
 	// Loot monitor
 	_proceed = false;
 	while {!_proceed} do {
 		// When player loots the box
-		if (count ((getMagazineCargo _thebox) select 0) == 0) then { 
+		if (count ((getMagazineCargo _thebox) select 0) == 0) then {
 			if (count ((getWeaponCargo _thebox) select 0) == 0) then {
 				_proceed = true;
 			};
 		};
 		sleep 5;
 	};
-	keep_respawning = false;	// Disable continuous patrol spawns
+	keep_respawning set [BASE_NMB, false];	// Disable continuous patrol spawns
 
 	_sniper_group = _sniper_groups call BIS_fnc_selectRandom;
 	["bandits", _sniper_group select 0, _sniper_group select 1, 2] call spawn_snipers;
-	
+
 
 	// Announce respawn!
 	[nil,nil,rTitleText,"Reinforcements approaching Northern Military Base! ETA: 5 min", "PLAIN",3] call RE;
@@ -578,7 +590,7 @@ spawn_usable_static_gunners = {
             _numberofitems = _x select 1;
             for "_i" from  1 to _numberofitems do {
                 _result set [count _result, _item];
-            }; 
+            };
         } forEach _rare_loot_items;
         _thebox addMagazineCargoGlobal [(_result call BIS_fnc_selectRandom),1];
 
@@ -725,7 +737,7 @@ spawn_usable_static_gunners = {
 	200,               //Radius of patrol
 	10,                     //Number of waypoints to give
 	"M113_TK_EP1",      //Classname of vehicle (make sure it has driver and gunner)
-	1                  //Skill level of units 
+	1                  //Skill level of units
 	] spawn vehicle_patrol;
 
 	// M113_2
@@ -734,7 +746,7 @@ spawn_usable_static_gunners = {
 	50,               //Radius of patrol
 	10,                     //Number of waypoints to give
 	"M113_TK_EP1",      //Classname of vehicle (make sure it has driver and gunner)
-	1                  //Skill level of units 
+	1                  //Skill level of units
 	] spawn vehicle_patrol;
 
 	// M113_3
@@ -743,7 +755,7 @@ spawn_usable_static_gunners = {
 	50,               //Radius of patrol
 	10,                     //Number of waypoints to give
 	"M113_TK_EP1",      //Classname of vehicle (make sure it has driver and gunner)
-	1                  //Skill level of units 
+	1                  //Skill level of units
 	] spawn vehicle_patrol;
 
 	// Paradrop just outside northern base entrance
@@ -758,7 +770,7 @@ spawn_usable_static_gunners = {
 	"DZ_British_ACU",                  //Backpack "" for random or classname here.
 	"Bandit2_DZ",                      //Skin "" for random or classname here.
 	4,                                 //Gearset number. "Random" for random gear set.
-	True,                              //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
+	True,                              //True: Heli will stay at position and fight. False: Heli will leave if not under fire.
 	["M136","M136"]
 	] spawn heli_para;
 
@@ -774,7 +786,7 @@ spawn_usable_static_gunners = {
 	"DZ_British_ACU",                  //Backpack "" for random or classname here.
 	"Bandit2_DZ",                      //Skin "" for random or classname here.
 	4,                                 //Gearset number. "Random" for random gear set.
-	True,                              //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
+	True,                              //True: Heli will stay at position and fight. False: Heli will leave if not under fire.
 	["M136","M136"]
 	] spawn heli_para;
 
@@ -784,7 +796,7 @@ spawn_usable_static_gunners = {
 	500,                        //Radius of patrol
 	10,                         //Number of waypoints to give
 	"UH1Y",                     //Classname of vehicle (make sure it has driver and two gunners)
-	1                           //Skill level of units 
+	1                           //Skill level of units
 	] spawn heli_patrol;
 
 	// Spawn static gunner pairs that will remain after killed
@@ -798,7 +810,7 @@ spawn_usable_static_gunners = {
 
 	while {!_proceed} do {
 		// When player loots the box the second time
-		if (count ((getMagazineCargo _thebox) select 0) == 0) then { 
+		if (count ((getMagazineCargo _thebox) select 0) == 0) then {
 			if (count ((getWeaponCargo _thebox) select 0) == 0) then {
 				_proceed = true;
 			};
@@ -806,20 +818,33 @@ spawn_usable_static_gunners = {
 		sleep 5;
 	};
 
-	keep_respawning = true;
-	["bandits", _respawn_patrol_starting_point, _target_point, 300] spawn spawn_reinforcement_patrol;
+	keep_respawning set [BASE_NMB, true];
+	["bandits", _respawn_patrol_starting_point, _target_point, 300, BASE_NMB] spawn spawn_reinforcement_patrol;
 
 	// [17845.1,19458.2,0.00160302] <- Temporary position
 	// [16686.3,19090.7,0.0014099] <- Original position
 
+	_kent_waypoints = [
+		[16741.7,19031.7,0.0013069],
+		[16715.8,19027.7,0.00157854],
+		[16713.6,18986.2,0.0947464],
+		[16745.4,19014.9,0.0013117],
+		[16717,19022.4,0.00156709],
+		[16718,19055.2,0.00131504],
+		[16698.2,19017.9,0.00145858],
+		[16666.1,19023.4,0.00151472],
+		[16663,19057.9,0.00134756],
+		[16741.7,19031.7,0.0013069]
+	];
+
 	WAI_kentIsDead = false;
-	[[16686.3,19090.7,0.0014099]] spawn kent_kombat;
+	[[16686.3,19090.7,0.0014099], _kent_waypoints] spawn kent_kombat;
 
 	_proceed = false;
 
 	while {!WAI_kentIsDead} do {sleep 5;};
 
-	keep_respawning = false;
+	keep_respawning set [BASE_NMB, false];
 
 	_sniper_group = _sniper_groups call BIS_fnc_selectRandom;
 	["bandits", _sniper_group select 0, _sniper_group select 1, 2] call spawn_snipers;
@@ -842,7 +867,7 @@ spawn_usable_static_gunners = {
 
 	[nil,nil,rTitleText,"All right, survivors, you've cleared the bandit scum outta that base. Now all your base are belong to US", "PLAIN",5] call RE;
 	sleep 15;
-	
+
 	// Delete old guns and search lights
 	_objects = [16685.227, 19087.596, 1] nearObjects ["M2StaticMG", 300];
 	{ deleteVehicle _x } forEach _objects;
@@ -854,14 +879,14 @@ spawn_usable_static_gunners = {
 	// SPAWN US HEAVY FORCES
 	_entities = ["AAV", "M2A2_EP1", "BAF_FV510_W"];
 	//_entities = ["LAV25", "M1126_ICV_M2_EP1", "M1128_MGS_EP1", "AAV", "M2A2_EP1", "BAF_FV510_W"];
-	_positions = 
+	_positions =
 	[
 		[16567.605, 19159.955, 0.011580579],
 		[16569.605, 19144.955, 0.011580579],
 		[16867.072, 18960.773, 0.011580579]
 	];
 	_total_groups = [];
-	
+
 	sleep 0.1;
 
 	for "_i" from 0 to 2 do {
@@ -871,7 +896,7 @@ spawn_usable_static_gunners = {
 		200,               	// Radius of patrol
 		10,                     // Number of waypoints to give
 		_entities call BIS_fnc_selectRandom, // Classname of vehicle (make sure it has driver and gunner)
-		0.75,			// Skill level of units 
+		0.75,			// Skill level of units
 		_total_groups
 		] call vehicle_patrol_3rd_faction;
 		sleep 0.1;
@@ -954,7 +979,7 @@ spawn_usable_static_gunners = {
 	"DZ_British_ACU",                  //Backpack "" for random or classname here.
 	"Soldier1_DZ",                      //Skin "" for random or classname here.
 	5,                                 //Gearset number. "Random" for random gear set.
-	True,                               //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
+	True,                               //True: Heli will stay at position and fight. False: Heli will leave if not under fire.
 	["M136","M136"],
 	_total_groups
 	] spawn heli_para_3rd_faction;
@@ -965,12 +990,12 @@ spawn_usable_static_gunners = {
 	500,                        //Radius of patrol
 	10,                         //Number of waypoints to give
 	"AH64D_EP1",                //Classname of vehicle (make sure it has driver and two gunners)
-	1,                           //Skill level of units 
+	1,                           //Skill level of units
 	_total_groups
 	] spawn heli_patrol_3rd_faction;
 
-	keep_respawning = true;
-	["us", _respawn_patrol_starting_point, _target_point, 300] spawn spawn_reinforcement_patrol;
+	keep_respawning set [BASE_NMB, true];
+	["us", _respawn_patrol_starting_point, _target_point, 300, BASE_NMB] spawn spawn_reinforcement_patrol;
 
 	// [17845.1,19458.2,0.00160302] <- Temporary position
 	// [16686.3,19090.7,0.0014099] <- Original position
@@ -991,7 +1016,7 @@ spawn_usable_static_gunners = {
 		sleep 30;
 	};
 
-	keep_respawning = false;
+	keep_respawning set [BASE_NMB, false];
 
 	// Spawn prize vehicle at this position:
 	_class = [
@@ -1035,7 +1060,6 @@ spawn_usable_static_gunners = {
 	};
 	clearWeaponCargoGlobal  _prize_veh;
 	clearMagazineCargoGlobal  _prize_veh;
-
 
 	_prize_veh attachTo [_prize_veh_chute, [0,0,-1.6]];
 	sleep 1.0;
@@ -1169,7 +1193,7 @@ spawn_usable_static_gunners = {
 //100,               //Radius of patrol
 //10,                     //Number of waypoints to give
 //"HMMWV_M1151_M2_CZ_DES_EP1_DZ",      //Classname of vehicle (make sure it has driver and gunner)
-//1                  //Skill level of units 
+//1                  //Skill level of units
 //] spawn vehicle_patrol;
 
 // Guards 1
@@ -1228,7 +1252,7 @@ spawn_usable_static_gunners = {
 // Base 1 (rambo)
 
 [] spawn {
-	Private ["_proceed", "_themags","_theweap","_thetool","_item","_thebox","_hidden_box_number_of_gold","_hidden_box_number_of_guns","_hidden_box_number_of_tools","_hidden_box_number_of_buildmats","_numberofguns","_numberoftools","_numberofitems","_numberofbuildmats","_hidden_box_random_items","_hidden_box_random_guns","_hidden_box_random_tools","_hidden_box_random_buildmats","_objects"];
+	Private ["_proceed","_themags","_theweap","_thetool","_item","_thebox","_hidden_box_number_of_gold","_hidden_box_number_of_guns","_hidden_box_number_of_tools","_hidden_box_number_of_buildmats","_numberofguns","_numberoftools","_numberofitems","_numberofbuildmats","_hidden_box_random_items","_hidden_box_random_guns","_hidden_box_random_tools","_hidden_box_random_buildmats","_objects","_sniper_groups","_armored","_total_groups","_entities","_start_positions","_target_point","_respawn_patrol_starting_point","_gunner_list_pos","_mg_list","_gunner_list","_fake_prize_box","_prize_box","_prize_box_chute","_location","_result","_rare_loot_items","_launchers"];
 
 	waitUntil {sleep 5; {isPlayer _x && _x distance [10462.832, 2943.3831, 0.01] <= 1000 } count playableunits > 0 };
 
@@ -1301,7 +1325,7 @@ spawn_usable_static_gunners = {
 	[10501.552, 2966.0142, 0.259837]
 	] call spawn_neutral_group2;
 
-	// Static 0 
+	// Static 0
 	[[[10500.552, 2966.0142, 20.259837]], //position(s) (can be multiple).
 	"M2StaticMG",   //Classname of turret
 	1,      //Skill level 0-1. Has no effect if using custom skills
@@ -1351,7 +1375,7 @@ spawn_usable_static_gunners = {
 	100,               //Radius of patrol
 	10,                     //Number of waypoints to give
 	"HMMWV_M1151_M2_CZ_DES_EP1_DZ",      //Classname of vehicle (make sure it has driver and gunner)
-	0.75                  //Skill level of units 
+	0.75                  //Skill level of units
 	] spawn vehicle_patrol;
 
 	// Humvee 2
@@ -1360,10 +1384,10 @@ spawn_usable_static_gunners = {
 	100,               //Radius of patrol
 	10,                     //Number of waypoints to give
 	"HMMWV_M1151_M2_CZ_DES_EP1_DZ",      //Classname of vehicle (make sure it has driver and gunner)
-	0.75                  //Skill level of units 
+	0.75                  //Skill level of units
 	] spawn vehicle_patrol;
 
-	// Static 1 
+	// Static 1
 	[[[10480.543, 2950.6602, -0.053607285]], //position(s) (can be multiple).
 	"M2StaticMG",   //Classname of turret
 	0.75,      //Skill level 0-1. Has no effect if using custom skills
@@ -1373,6 +1397,308 @@ spawn_usable_static_gunners = {
 	"",      //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
 	5   //Gearset number. "Random" for random gear set. (not needed if ai_static_useweapon = False)
 	] call spawn_neutral_static;
+
+	_respawn_patrol_starting_point = [10526, 3386, 0];
+	_target_point = [10526, 2986, 0];
+	_launchers = ["MAAWS", "MAAWS_HEAT"];
+
+	_thebox = createVehicle ["BAF_VehicleBox",[10562.068, 2953.7969, -0.081606433], [], 0, "CAN_COLLIDE"];
+	clearWeaponCargoGlobal _thebox;
+	clearMagazineCargoGlobal _thebox;
+	_thebox setVariable ["ObjectID","1",true];
+	_thebox setVariable ["permaLoot",true];
+	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_thebox];
+
+	_thebox allowDamage false;
+
+	_hidden_box_number_of_gold = 2;
+	_hidden_box_random_items = [
+		"ItemTopaz",
+		"ItemBriefcase100oz"
+	];
+
+	_rare_loot_items = [
+		["ItemBriefcase100oz", 17],
+		["ItemObsidian", 2],
+		["ItemAmethyst", 1]
+	];
+
+	// Add the normal valuables...
+	_numberofitems = (round (random 1)) + _hidden_box_number_of_gold;
+	for "_i" from 1 to _numberofitems do {
+		_item = _hidden_box_random_items call BIS_fnc_selectRandom;
+		_thebox addMagazineCargoGlobal [_item,1];
+	};
+
+        // Add 1 item from the rare loot item list
+        _result = [];
+        {
+            _item = _x select 0;
+            _numberofitems = _x select 1;
+            for "_i" from  1 to _numberofitems do {
+                _result set [count _result, _item];
+            };
+        } forEach _rare_loot_items;
+        _thebox addMagazineCargoGlobal [(_result call BIS_fnc_selectRandom),1];
+
+	// Wait until prize box is looted
+	_proceed = false;
+	while {!_proceed} do {
+		// When player loots the box the second time
+		if (count ((getMagazineCargo _thebox) select 0) == 0) then {
+			if (count ((getWeaponCargo _thebox) select 0) == 0) then {
+				_proceed = true;
+			};
+		};
+		sleep 5;
+	};
+
+	if (isNil "MILBASE2_alarm_tower") then {
+		MILBASE2_alarm_tower = nearestObject [[10526.189, 2986.717, 0], "MAP_Ind_IlluminantTower"];
+	};
+
+	[nil,nil,rTitleText,"Warning! Heavy forces approaching SMB base location!", "PLAIN",5] call RE;
+
+	[nil,MILBASE2_alarm_tower,rSAY,"tornado_siren"] call RE;
+	sleep 4;
+	[nil,MILBASE2_alarm_tower,rSAY,"tornado_siren"] call RE;
+	sleep 4;
+	[nil,MILBASE2_alarm_tower,rSAY,"tornado_siren"] call RE;
+	sleep 4;
+
+	keep_respawning set [BASE_SMB, true];
+	["bandits", _respawn_patrol_starting_point, _target_point, 400, BASE_SMB, _launchers] spawn spawn_reinforcement_patrol;
+
+	// SPAWN BANDIT HEAVY FORCES
+	//_entities = ["AAV", "M2A2_EP1", "BAF_FV510_W"];
+	_entities = ["LAV25", "M1126_ICV_M2_EP1", "M1128_MGS_EP1", "AAV", "M2A2_EP1", "BAF_FV510_W"];
+	_start_positions =
+	[
+		[9681.8457, 3260.7495, 0.011580579],
+		[10172.721, 2542.8733, 0.011580579]
+	];
+
+	_total_groups = [];
+
+	sleep 0.1;
+
+	for "_i" from 0 to 1 do {
+		_armored = _entities call BIS_fnc_selectRandom;
+		_pos = _start_positions select _i;
+		[_target_point,   	// Position to patrol
+		_pos,   		// Position to spawn at
+		200,               	// Radius of patrol
+		10,                     // Number of waypoints to give
+		_armored,		// Classname of vehicle (make sure it has driver and gunner)
+		0.5,			// Skill level of units
+		_total_groups
+		] call vehicle_patrol;
+		sleep 0.1;
+	};
+
+	_sniper_groups = [
+		// [[<Sniper pair position>], <target position>],
+		[[9856.3633, 3597.2336, -0.00067901611],_target_point],
+		[[10472.338, 3427.1274, 3.8146973e-006],_target_point],
+		[[10860.322, 2698.6404, -2.9563904e-005],_target_point],
+		[[9892.0303, 1969.6088, 8.2969666e-005],_target_point]
+	];
+
+	_sniper_group = _sniper_groups call BIS_fnc_selectRandom;
+	["bandits", _sniper_group select 0, _sniper_group select 1, 2] call spawn_snipers;
+	_sniper_group = _sniper_groups call BIS_fnc_selectRandom;
+	["bandits", _sniper_group select 0, _sniper_group select 1, 2] call spawn_snipers;
+
+	_gunner_list_pos = 0;
+
+	// M2 gunner positions
+	_mg_list = [
+		[[10765.557, 2605.0125, 6.1035156e-005],[10736.538, 2584.99, 0.00012207031]],
+		[[10709.454, 2556.3533, 0],[10268.984, 2733.3899]],
+		[[9947.2041, 2804.8247, -3.0517578e-005],[10004.696, 2741.1111, -6.1035156e-005]],
+		[[9697.9014, 2936.4451, -0.00018310547],[10402.753, 2550.926, 0.00012207031]]
+	];
+	_gunner_list = [_mg_list, 4] call pick_n_positions;
+	_pair = _gunner_list select _gunner_list_pos;
+	["bandits", _pair, "M2StaticMG"] call spawn_usable_static_gunners;
+	_gunner_list_pos = _gunner_list_pos + 1;
+	_pair = _gunner_list select _gunner_list_pos;
+	["bandits", _pair, "M2StaticMG"] call spawn_usable_static_gunners;
+
+	// Wait until the heavy unit groups are destroyed
+	_proceed = false;
+	_units = [];
+	{ _units = _units + (units _x); } forEach _total_groups;
+	while {not _proceed} do {
+		_proceed = ({alive _x} count _units) == 0;
+		sleep 30;
+	};
+
+	[nil,nil,rTitleText,"Well done! The heavy units have been destroyed!", "PLAIN",5] call RE;
+	sleep 6;
+
+	_fake_prize_box = createVehicle ["BAF_VehicleBox",[0, 0, 0], [], 0, "CAN_COLLIDE"];
+	clearWeaponCargoGlobal _fake_prize_box;
+	clearMagazineCargoGlobal _fake_prize_box;
+	_fake_prize_box setVariable ["ObjectID","1",true];
+	_fake_prize_box setVariable ["permaLoot",true];
+	_fake_prize_box allowDamage false;
+
+	_location = [10526, 2986, 0];
+	_prize_box_chute = createVehicle ["ParachuteMediumWest", [0,0,0], [], 0, "CAN_COLLIDE"];
+	_prize_box_chute setPos [_location select 0, _location select 1,(_location select 2) + 100];
+	_fake_prize_box attachTo [_prize_box_chute, [0,0,-1.6]];
+	sleep 1.0;
+	WaitUntil{(([_fake_prize_box] call FNC_GetPos) select 2) < 0.1};
+	detach _fake_prize_box;
+	deleteVehicle _prize_box_chute;
+	keep_respawning set [BASE_SMB, false];
+
+	_prize_box = createVehicle ["BAF_VehicleBox",getPos (_fake_prize_box), [], 0, "CAN_COLLIDE"];
+	deleteVehicle _fake_prize_box;
+	clearWeaponCargoGlobal _prize_box;
+	clearMagazineCargoGlobal _prize_box;
+	_prize_box setVariable ["ObjectID","1",true];
+	_prize_box setVariable ["permaLoot",true];
+	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_prize_box];
+	_prize_box allowDamage false;
+
+	_hidden_box_number_of_gold = 4;
+	_hidden_box_random_items = [
+		"ItemObsidian",
+		"ItemBriefcase100oz"
+	];
+
+	_rare_loot_items = [
+		["ItemBriefcase100oz", 17],
+		["ItemObsidian", 2],
+		["ItemAmethyst", 1]
+	];
+
+	// Add the normal valuables...
+	_numberofitems = (round (random 1)) + _hidden_box_number_of_gold;
+	for "_i" from 1 to _numberofitems do {
+		_item = _hidden_box_random_items call BIS_fnc_selectRandom;
+		_prize_box addMagazineCargoGlobal [_item,1];
+	};
+
+        // Add 1 item from the rare loot item list
+        _result = [];
+        {
+            _item = _x select 0;
+            _numberofitems = _x select 1;
+            for "_i" from  1 to _numberofitems do {
+                _result set [count _result, _item];
+            };
+        } forEach _rare_loot_items;
+        _prize_box addMagazineCargoGlobal [(_result call BIS_fnc_selectRandom),1];
+        _prize_box addMagazineCargoGlobal [(_result call BIS_fnc_selectRandom),1];
+
+	// Add more loot
+	_hidden_box_number_of_buildmats = 20;
+	_hidden_box_random_buildmats = [
+		"half_cinder_wall_kit",
+		"half_cinder_wall_kit",
+		"half_cinder_wall_kit",
+		"half_cinder_wall_kit",
+		"cinder_garage_kit",
+		"cinder_garage_kit",
+		"cinder_garage_kit",
+		"cinder_garage_kit",
+		"metal_floor_kit",
+		"metal_floor_kit",
+		"metal_floor_kit",
+		"metal_floor_kit",
+		"CinderBlocks",
+		"CinderBlocks",
+		"CinderBlocks",
+		"CinderBlocks",
+		"CinderBlocks",
+		"CinderBlocks",
+		"CinderBlocks",
+		"CinderBlocks",
+		"CinderBlocks",
+		"CinderBlocks",
+		"MortarBucket",
+		"MortarBucket",
+		"MortarBucket",
+		"MortarBucket",
+		"MortarBucket",
+		"MortarBucket",
+		"MortarBucket",
+		"MortarBucket",
+		"MortarBucket",
+		"MortarBucket",
+		"ItemTanktrap",
+		"ItemTanktrap",
+		"ItemTanktrap",
+		"ItemTanktrap",
+		"ItemTanktrap",
+		"ItemTanktrap",
+		"ItemTanktrap",
+		"ItemTanktrap",
+		"ItemTanktrap",
+		"ItemTanktrap",
+		"PartGeneric",
+		"PartGeneric",
+		"PartGeneric",
+		"PartGeneric",
+		"PartGeneric",
+		"PartGeneric",
+		"PartGeneric",
+		"PartGeneric",
+		"PartGeneric",
+		"PartGeneric",
+		"ItemComboLock",
+		"ItemComboLock",
+		"ItemComboLock",
+		"ItemComboLock"
+	];
+
+	_hidden_box_number_of_guns = 5;
+	_hidden_box_random_guns = [
+		"DMR",
+		"DMR",
+		"KSVK_DZE",
+		"KSVK_DZE",
+		"Pecheneg_DZ",
+		"Pecheneg_DZ",
+		"M4A1_AIM_SD_camo",
+		"M4A1_AIM_SD_camo",
+		"M4A1_AIM_SD_camo",
+		"M4A1_AIM_SD_camo",
+		"M4A1_AIM_SD_camo",
+		"BAF_LRR_scoped",
+		"BAF_LRR_scoped",
+		"BAF_LRR_scoped",
+		"BAF_LRR_scoped",
+		"M110_NVG_EP1",
+		"M110_NVG_EP1",
+		"M110_NVG_EP1",
+		"SCAR_H_LNG_Sniper_SD",
+		"SCAR_H_LNG_Sniper_SD",
+		"SCAR_H_LNG_Sniper_SD",
+		"FN_FAL_ANPVS4",
+		"FN_FAL_ANPVS4",
+		"BAF_L85A2_RIS_CWS",
+		"m107_DZ",
+		"MAAWS"
+	];
+
+	_numberofguns = (round (random 2)) + _hidden_box_number_of_guns;
+	_numberoftools = 0;//(round (random 1)) + _hidden_box_number_of_tools;
+	_numberofitems = (round (random 2)) + _hidden_box_number_of_gold;
+	_numberofbuildmats = (round (random 5)) + _hidden_box_number_of_buildmats;
+	for "_i" from 1 to _numberofguns do {
+		_theweap = _hidden_box_random_guns call BIS_fnc_selectRandom;
+		_themags = getArray (configFile >> "cfgWeapons" >> _theweap >> "magazines");
+		_prize_box addWeaponCargoGlobal [_theweap,1];
+		_prize_box addMagazineCargoGlobal [(_themags select 0),round(random 3) + 2];
+	};
+	for "_i" from 1 to _numberofbuildmats do {
+		_item = _hidden_box_random_buildmats call BIS_fnc_selectRandom;
+		_prize_box addMagazineCargoGlobal [_item,1];
+	};
 };
 
 // Base 2 (ammo)
@@ -1399,7 +1725,7 @@ spawn_usable_static_gunners = {
 	100,               //Radius of patrol
 	10,                     //Number of waypoints to give
 	"HMMWV_M1151_M2_CZ_DES_EP1_DZ",      //Classname of vehicle (make sure it has driver and gunner)
-	0.75                  //Skill level of units 
+	0.75                  //Skill level of units
 	] spawn vehicle_patrol;
 };
 
@@ -1456,7 +1782,7 @@ Custom static weapon spawns Eg. (with mutiple positions)
 [[[911.21545,4532.7612,2.6292224],[921.21545,4532.7612,2.6292224]], //position(s) (can be multiple).
 "M2StaticMG",             //Classname of turret
 0.5,                 //Skill level 0-1. Has no effect if using custom skills
-"Bandit2_DZ",           //Skin "" for random or classname here. 
+"Bandit2_DZ",           //Skin "" for random or classname here.
 1,                    //Primary gun set number. "Random" for random weapon set. (not needed if ai_static_useweapon = False)
 2,                    //Number of magazines. (not needed if ai_static_useweapon = False)
 "",                    //Backpack "" for random or classname here. (not needed if ai_static_useweapon = False)
@@ -1474,7 +1800,7 @@ Custom Chopper Patrol spawn Eg.
 2000,               //Radius of patrol
 10,                     //Number of waypoints to give
 "UH1H_DZ",              //Classname of vehicle (make sure it has driver and two gunners)
-1                  //Skill level of units 
+1                  //Skill level of units
 ] spawn heli_patrol;
 
 Place your heli patrols below
@@ -1487,7 +1813,7 @@ Place your heli patrols below
 500,                        //Radius of patrol
 10,                         //Number of waypoints to give
 "UH1H_DZ",                  //Classname of vehicle (make sure it has driver and two gunners)
-1                           //Skill level of units 
+1                           //Skill level of units
 ] spawn heli_patrol;
 
 // Southern Heli patrol
@@ -1496,7 +1822,7 @@ Place your heli patrols below
 //500,                        //Radius of patrol
 //10,                         //Number of waypoints to give
 //"UH1H_DZ",                  //Classname of vehicle (make sure it has driver and two gunners)
-//1                           //Skill level of units 
+//1                           //Skill level of units
 //] spawn heli_patrol;
 
 
@@ -1504,7 +1830,7 @@ Place your heli patrols below
 
 
 
-/* 
+/*
 Custom Vehicle patrol spawns Eg. (Watch out they are stupid)
 
 [[725.391,4526.06,0],   //Position to patrol
@@ -1512,7 +1838,7 @@ Custom Vehicle patrol spawns Eg. (Watch out they are stupid)
 200,               //Radius of patrol
 10,                     //Number of waypoints to give
 "HMMWV_Armored",      //Classname of vehicle (make sure it has driver and gunner)
-1                  //Skill level of units 
+1                  //Skill level of units
 ] spawn vehicle_patrol;
 
 Place your vehicle patrols below this line
@@ -1536,7 +1862,7 @@ Paradropped unit custom spawn Eg.
 "",                                //Backpack "" for random or classname here.
 "Bandit2_DZ",                      //Skin "" for random or classname here.
 "Random",                          //Gearset number. "Random" for random gear set.
-True                               //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
+True                               //True: Heli will stay at position and fight. False: Heli will leave if not under fire.
 ] spawn heli_para;
 
 Place your paradrop spawns under this line
@@ -1554,7 +1880,7 @@ Place your paradrop spawns under this line
 "DZ_British_ACU",                  //Backpack "" for random or classname here.
 "Bandit2_DZ",                      //Skin "" for random or classname here.
 5,                                 //Gearset number. "Random" for random gear set.
-True,                              //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
+True,                              //True: Heli will stay at position and fight. False: Heli will leave if not under fire.
 ["M136","M136"]
 ] spawn heli_para;
 
@@ -1570,7 +1896,7 @@ True,                              //True: Heli will stay at position and fight.
 "DZ_British_ACU",                  //Backpack "" for random or classname here.
 "Bandit2_DZ",                      //Skin "" for random or classname here.
 5,                                 //Gearset number. "Random" for random gear set.
-True,                              //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
+True,                              //True: Heli will stay at position and fight. False: Heli will leave if not under fire.
 ["M136","M136"]
 ] spawn heli_para;
 
@@ -1587,7 +1913,7 @@ True,                              //True: Heli will stay at position and fight.
 "DZ_British_ACU",                  //Backpack "" for random or classname here.
 "Bandit2_DZ",                      //Skin "" for random or classname here.
 5,                                 //Gearset number. "Random" for random gear set.
-True                               //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
+True                               //True: Heli will stay at position and fight. False: Heli will leave if not under fire.
 ] spawn heli_para;
 
 // Paradrop just outside southern base entrance
@@ -1602,7 +1928,7 @@ True                               //True: Heli will stay at position and fight.
 "DZ_British_ACU",                  //Backpack "" for random or classname here.
 "Bandit2_DZ",                      //Skin "" for random or classname here.
 5,                                 //Gearset number. "Random" for random gear set.
-True                               //True: Heli will stay at position and fight. False: Heli will leave if not under fire. 
+True                               //True: Heli will stay at position and fight. False: Heli will leave if not under fire.
 ] spawn heli_para;
 
 
