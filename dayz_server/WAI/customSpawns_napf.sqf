@@ -1678,11 +1678,13 @@ spawn_usable_static_gunners = {
 		"SCAR_H_LNG_Sniper_SD",
 		"SCAR_H_LNG_Sniper_SD",
 		"SCAR_H_LNG_Sniper_SD",
+		"MAAWS",
+		"MAAWS",
+		"MAAWS",
 		"FN_FAL_ANPVS4",
 		"FN_FAL_ANPVS4",
 		"BAF_L85A2_RIS_CWS",
-		"m107_DZ",
-		"MAAWS"
+		"m107_DZ"
 	];
 
 	_numberofguns = (round (random 2)) + _hidden_box_number_of_guns;
