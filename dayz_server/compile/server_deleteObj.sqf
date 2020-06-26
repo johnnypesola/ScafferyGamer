@@ -4,7 +4,7 @@
 private["_id","_uid","_key","_activatingPlayer","_query","_objPos","_clientKey","_exitReason","_playerUID","_processDelete"];
 
 if (count _this < 5) exitWith {
-	diag_log format["Server_DeleteObj error: Improper parameter format, expected 5 or 6 args, got %2", (count _this)];
+	diag_log format["Server_DeleteObj error: Improper parameter format, expected 5 or 6 args, got %1", (count _this)];
 	diag_log "Parameters received: ";
 	{ diag_log format["%1", _x];} forEach _this;
 };

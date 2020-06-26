@@ -32,7 +32,7 @@ _objectUID = _obj getVariable["ObjectUID","0"];
 		};
 
 		cutText ["Object deleted from database", "PLAIN DOWN",1];
-		PVDZ_obj_Destroy = [_objectID,_objectUID,(name player)];
+		PVDZ_obj_Destroy = [_objectID,_objectUID,player,_obj,dayz_authKey];
 		publicVariableServer "PVDZ_obj_Destroy";
 		if (isServer) then {
 			PVDZ_obj_Destroy call server_deleteObj;

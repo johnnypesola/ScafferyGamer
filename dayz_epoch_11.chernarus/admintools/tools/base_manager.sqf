@@ -354,7 +354,7 @@ fn_BCConfirmDelete = {
 		deleteVehicle _x;
 		_objectID = _x getVariable ["ObjectID", "0"];
 		_objectUID = _x getVariable ["ObjectUID", "0"];
-		PVDZ_obj_Destroy = [_objectID, _objectUID, (name player)];
+		PVDZ_obj_Destroy = [_objectID, _objectUID, player, _x, dayz_authKey];
 		publicVariableServer "PVDZ_obj_Destroy";
 	} forEach _objects;
 
