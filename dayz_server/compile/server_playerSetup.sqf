@@ -1,4 +1,4 @@
-private ["_characterID","_playerObj","_spawnSelection","_inventory","_playerID","_dummy","_worldspace","_state","_doLoop","_key","_primary","_medical","_stats","_humanity","_randomSpot","_position","_distance","_fractures","_score","_findSpot","_mkr","_j","_isIsland","_w","_clientID","_lastInstance","_debug"];
+private ["_characterID","_playerObj","_spawnSelection","_inventory","_playerID","_dummy","_worldspace","_state","_doLoop","_key","_primary","_medical","_stats","_humanity","_randomSpot","_position","_distance","_fractures","_score","_findSpot","_mkr","_j","_isIsland","_w","_clientID","_lastInstance","_debug","_v","_d","_modifiedPos"];
 
 _characterID = _this select 0;
 _playerObj = _this select 1;
@@ -91,7 +91,20 @@ if (count _worldspace > 0) then {
 	_distance = [0,0,0] distance _position;
 	if (_distance < 500) then {_randomSpot = true;};
 	//_playerObj setPosATL _position;
-	
+
+	// If too close to NMB or SMB loot
+	if (dayZ_instance == 11 && _position distance [1931.6,14410,0.00144861] < 100) then {
+		_worldspace set [1, [1796.6761, 14321.693, 0]];
+	};
+	if (dayZ_instance == 24) then {
+		if (_position distance [16771.174, 19084.066] < 100) then {
+			_worldspace set [1, [16603.613, 19091.287, 0]];
+		};
+		if (_position distance [10562.068, 2953.7969] < 100) then {
+			_worldspace set [1, [10426.536, 2883.0676, 0]];
+		};
+	};
+
 	// Came from another server force random spawn
 	// FERRY
 	//if (_lastInstance != dayZ_instance) then {_randomSpot = true;};
