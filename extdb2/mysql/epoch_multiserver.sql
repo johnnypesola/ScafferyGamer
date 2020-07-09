@@ -130,6 +130,36 @@ CREATE TABLE `object_data_cherno` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------------
+-- Table structure for table `old_base_parts_cherno`
+-- ----------------------------------
+
+CREATE TABLE `old_base_parts_cherno` (
+  `object_id` int(11) NOT NULL AUTO_INCREMENT,
+  `object_uid` bigint(24) NOT NULL DEFAULT '0',
+  `base_id` int(11) unsigned NOT NULL,
+  `classname` varchar(50) NOT NULL DEFAULT '',
+  `datestamp` datetime NOT NULL,
+  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `character_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `ws_x` double(13,5) NOT NULL DEFAULT '0.00000',
+  `ws_y` double(13,5) NOT NULL DEFAULT '0.00000',
+  `ws_z` double(13,5) NOT NULL DEFAULT '0.00000',
+  `ws_dir` double(13,5) NOT NULL DEFAULT '0.00000',
+  `ws_ownerpuid` varchar(32) NOT NULL DEFAULT '0',
+  `ws_vect` varchar(255) NOT NULL DEFAULT '[[0,0,0],[0,0,0]]',
+  `inventory_magazines` text NOT NULL,
+  `inventory_weapons` text NOT NULL,
+  `inventory_backpacks` text NOT NULL,
+  `hitpoints` varchar(512) NOT NULL DEFAULT '[]',
+  `fuel` double(13,5) NOT NULL DEFAULT '1.00000',
+  `damage` double(13,5) NOT NULL DEFAULT '0.00000',
+  `storage_coins` bigint(20) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`object_id`),
+  KEY `object_uid` (`object_uid`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+-- ----------------------------------
 -- Table structure for table `object_data_napf`
 -- ----------------------------------
 
@@ -157,6 +187,61 @@ CREATE TABLE `object_data_napf` (
   PRIMARY KEY (`object_id`),
   KEY `object_uid` (`object_uid`) USING BTREE,
   KEY `instance` (`instance`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------------
+-- Table structure for table `old_base_parts_napf`
+-- ----------------------------------
+
+CREATE TABLE `old_base_parts_napf` (
+  `object_id` int(11) NOT NULL AUTO_INCREMENT,
+  `object_uid` bigint(24) NOT NULL DEFAULT '0',
+  `base_id` int(11) unsigned NOT NULL,
+  `classname` varchar(50) NOT NULL DEFAULT '',
+  `datestamp` datetime NOT NULL,
+  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `character_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `ws_x` double(13,5) NOT NULL DEFAULT '0.00000',
+  `ws_y` double(13,5) NOT NULL DEFAULT '0.00000',
+  `ws_z` double(13,5) NOT NULL DEFAULT '0.00000',
+  `ws_dir` double(13,5) NOT NULL DEFAULT '0.00000',
+  `ws_ownerpuid` varchar(32) NOT NULL DEFAULT '0',
+  `ws_vect` varchar(255) NOT NULL DEFAULT '[[0,0,0],[0,0,0]]',
+  `inventory_magazines` text NOT NULL,
+  `inventory_weapons` text NOT NULL,
+  `inventory_backpacks` text NOT NULL,
+  `hitpoints` varchar(512) NOT NULL DEFAULT '[]',
+  `fuel` double(13,5) NOT NULL DEFAULT '1.00000',
+  `damage` double(13,5) NOT NULL DEFAULT '0.00000',
+  `storage_coins` bigint(20) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`object_id`),
+  KEY `object_uid` (`object_uid`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------------
+-- Table structure for table `old_bases_cherno`
+-- ----------------------------------
+
+CREATE TABLE `old_bases_cherno` (
+  `base_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ws_x` double(13,5) NOT NULL DEFAULT '0.00000',
+  `ws_y` double(13,5) NOT NULL DEFAULT '0.00000',
+  `ws_z` double(13,5) NOT NULL DEFAULT '0.00000',
+  `grouped` tinyint(4) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`base_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------------
+-- Table structure for table `old_bases_napf`
+-- ----------------------------------
+
+CREATE TABLE `old_bases_napf` (
+  `base_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ws_x` double(13,5) NOT NULL DEFAULT '0.00000',
+  `ws_y` double(13,5) NOT NULL DEFAULT '0.00000',
+  `ws_z` double(13,5) NOT NULL DEFAULT '0.00000',
+  `grouped` tinyint(4) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`base_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------------

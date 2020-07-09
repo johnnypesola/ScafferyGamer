@@ -27,11 +27,11 @@ if (!isServer) exitWith {};
 for "_x" from 1 to _unitcount do {
 
 	//Lets pick a skin from the arrays
-    switch (_skin) do {
+	switch (_skin) do {
 		case 0: {_aiskin = OKBanditSkins1 call BIS_fnc_selectRandom;};
 		case 1: {_aiskin = OKBanditSkins2 call BIS_fnc_selectRandom;};
 		case 2: {_aiskin = OKBanditSkins3 call BIS_fnc_selectRandom;};
-        case 3: {_aiskin = OKBanditSkins4 call BIS_fnc_selectRandom;};
+		case 3: {_aiskin = OKBanditSkins4 call BIS_fnc_selectRandom;};
 	};
 	
 	

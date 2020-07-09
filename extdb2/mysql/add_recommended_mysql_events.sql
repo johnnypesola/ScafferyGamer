@@ -33,18 +33,17 @@ DELIMITER ;
 
 
 -- ----------------------------
--- Event structure for removeObjectOld (nonkey vehicles)
+-- Event structure for removeObjectOld
 -- ----------------------------
 DROP EVENT IF EXISTS `removeObjectOld`;
 DELIMITER ;;
 CREATE EVENT `removeObjectOld` ON SCHEDULE EVERY 1 DAY STARTS '2017-04-22 00:00:00' COMMENT 'Removes old objects and vehicles' DO 
 BEGIN
 	DELETE FROM `object_data_cherno` WHERE `last_updated` < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 90 DAY) 
-	AND `datestamp` < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 120 DAY) AND `object_data_cherno`.`character_id` = 0 ;
+	AND `datestamp` < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 120 DAY);
 	DELETE FROM `object_data_napf` WHERE `last_updated` < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 90 DAY) 
-	AND `datestamp` < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 120 DAY) AND `object_data_napf`.`character_id` = 0 ;
-	DELETE FROM `object_data_intermediate` WHERE `datestamp` < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 90 DAY) 
-	AND `object_data_intermediate`.`character_id` = 0 ;
+	AND `datestamp` < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 120 DAY);
+	DELETE FROM `object_data_intermediate` WHERE `datestamp` < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 90 DAY);
 END
 ;;
 DELIMITER ;

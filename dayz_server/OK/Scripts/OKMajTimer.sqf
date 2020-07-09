@@ -16,18 +16,19 @@ _run = true;
 OKMajDone = false;
 while {_run} do
 {
-	//Lets wait the random time
-	_wait  = round(random _timeDiff) + OKMajorMin;
-	sleep _wait;
-	
 	//Let's check that there are missions in the array.
 	//If there are none, lets end the timer.
 	_cntMis = count OKMajorArray;
 	if (_cntMis == 0) then { _run = false; };
 	
 	//Lets pick a mission
-	_ranMis = floor (random _cntMis);
-	_varName = OKMajorArray select _ranMis;
+	if (isNil "_ranMis") then {
+		_ranMis = 2;
+		_varName = OKMajorArray select _ranMis;
+	} else {
+		_ranMis = floor (random _cntMis);
+		_varName = OKMajorArray select _ranMis;
+	};
 	
 	//Let's Run the Mission
 	[] execVM format ["\z\addons\dayz_server\OK\Missions\Major\%1.sqf",_varName];
@@ -36,4 +37,8 @@ while {_run} do
 	//Let's wait for it to finish or timeout
 	waitUntil {OKMajDone};
 	OKMajDone = false;
+
+	//Lets wait the random time
+	_wait  = round(random _timeDiff) + OKMajorMin;
+	sleep _wait;
 };

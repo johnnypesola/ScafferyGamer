@@ -11,6 +11,8 @@ OKAddMajMarker = "\z\addons\dayz_server\OK\Scripts\OKAddMajMarker.sqf";
 OKAISpawn = compile preprocessfilelinenumbers "\z\addons\dayz_server\OK\Scripts\OKAISpawn.sqf";
 OKAISpawn2 = compile preprocessFileLineNumbers "\z\addons\dayz_server\OK\Scripts\OKAISpawn2.sqf";
 OKVehiclePatrol = compile preprocessFileLineNumbers "\z\addons\dayz_server\OK\Scripts\OKVehiclePatrol.sqf";
+OKVehiclePatrolGround = compile preprocessFileLineNumbers "\z\addons\dayz_server\OK\Scripts\OKVehiclePatrolGround.sqf";
+OKManStaticGun = compile preprocessFileLineNumbers "\z\addons\dayz_server\OK\Scripts\OKManStaticGun.sqf";
 OKAIKilled = "\z\addons\dayz_server\OK\Scripts\OKAIKilled.sqf";
 OKAIPinata = "\z\addons\dayz_server\OK\Scripts\OKAIPinata.sqf";
 
@@ -59,7 +61,7 @@ OKFindPos = {
 				// Is the height difference too big?
 				if (abs ((_list select 0) - (_list select _i)) > 3) then {
 
-					// Yes, keep looking 
+					// Yes, keep looking
 					_findRun = true;
 				};
 			};
@@ -193,7 +195,7 @@ OKSetupVehicleArmed = {
 	_object setvelocity [0,0,1];
 	_object setDir (round(random 360));
     _object setvehicleammo 1;
-    
+
 	
 	//If saving vehicles to the database is disabled, lets warn players it will disappear
 	if (!(OKSaveVehicles)) then {
@@ -248,6 +250,150 @@ OKGetWeapon = {
 	_fin
 };
 
+// Returns gems and briefcases, gold and silver based on total value
+OKCalcCurrency = {
+	private ["_GemTotal","_GemTotal2","_ItemAmethyst","_ItemCitrine","_ItemEmerald","_ItemObsidian","_ItemRuby","_ItemSapphire","_ItemTopaz","_briefcase_100oz","_gem","_gold_10oz","_gold_10oz_a","_gold_10oz_b","_gold_1oz","_gold_1oz_a","_gold_1oz_b","_noIMG","_pic","_silver_10oz","_silver_10oz_a","_silver_10oz_b","_silver_1oz","_silver_1oz_a","_silver_1oz_b","_result","_total","_value"];
+
+	_total = _this select 0;
+	_result = [];
+	_ItemTopaz = 0;
+	_ItemObsidian = 0;
+	_ItemSapphire = 0;
+	_ItemAmethyst = 0;
+	_ItemEmerald = 0;
+	_ItemCitrine = 0;
+	_ItemRuby = 0;
+	_GemTotal = 0;
+	_GemTotal2 = _total;
+
+	{
+		_gem = _x;
+		_value = DZE_GemWorthList select _forEachIndex;
+		switch(_gem) do {
+		case 'ItemTopaz': {
+				_ItemTopaz = floor(_GemTotal2 / _value);
+				if (_ItemTopaz >= 1) then {
+					_GemTotal = (_value * _ItemTopaz) + _GemTotal;
+					_GemTotal2 = _total - _GemTotal;
+					for [{_i=0},{_i<_ItemTopaz},{_i=_i+1}] do {
+						_result = _result + ["ItemTopaz"];
+					};
+				};
+			};
+		case 'ItemObsidian': {
+				_ItemObsidian = floor(_GemTotal2 / _value);
+				if (_ItemObsidian >= 1) then {
+					_GemTotal = (_value * _ItemObsidian) + _GemTotal;
+					_GemTotal2 = _total - _GemTotal;
+					for [{_i=0},{_i<_ItemObsidian},{_i=_i+1}] do {
+						_result = _result + ["ItemObsidian"];
+					};
+				};
+			};
+		case 'ItemSapphire': {
+				_ItemSapphire = floor(_GemTotal2 / _value);
+				if (_ItemSapphire >= 1) then {
+					_GemTotal = (_value * _ItemSapphire) + _GemTotal;
+					_GemTotal2 = _total - _GemTotal;
+					for [{_i=0},{_i<_ItemSapphire},{_i=_i+1}] do {
+						_result = _result + ["ItemSapphire"];
+					};
+				};
+			};
+		case 'ItemAmethyst': {
+				_ItemAmethyst = floor(_GemTotal2 / _value);
+				if (_ItemAmethyst >= 1) then {
+					_GemTotal = (_value * _ItemAmethyst) + _GemTotal;
+					_GemTotal2 = _total - _GemTotal;
+					for [{_i=0},{_i<_ItemAmethyst},{_i=_i+1}] do {
+						_result = _result + ["ItemAmethyst"];
+					};
+				};
+			};
+		case 'ItemEmerald': {
+				_ItemEmerald = floor(_GemTotal2 / _value);
+				if (_ItemEmerald >= 1) then {
+					_GemTotal = (_value * _ItemEmerald) + _GemTotal;
+					_GemTotal2 = _total - _GemTotal;
+					for [{_i=0},{_i<_ItemEmerald},{_i=_i+1}] do {
+						_result = _result + ["ItemEmerald"];
+					};
+				};
+			};
+		case 'ItemCitrine': {
+				_ItemCitrine = floor(_GemTotal2 / _value);
+				if (_ItemCitrine >= 1) then {
+					_GemTotal = (_value * _ItemCitrine) + _GemTotal;
+					_GemTotal2 = _total - _GemTotal;
+					for [{_i=0},{_i<_ItemCitrine},{_i=_i+1}] do {
+						_result = _result + ["ItemCitrine"];
+					};
+				};
+			};
+		case 'ItemRuby': {
+				_ItemRuby = floor(_GemTotal2 / _value);
+				if (_ItemRuby >= 1) then {
+					_GemTotal = (_value * _ItemRuby) + _GemTotal;
+					_GemTotal2 = _total - _GemTotal;
+					for [{_i=0},{_i<_ItemRuby},{_i=_i+1}] do {
+						_result = _result + ["ItemRuby"];
+					};
+				};
+			};
+		};
+	} forEach DZE_GemList;
+	_total = _GemTotal2;
+
+	_briefcase_100oz = floor(_total / 10000);
+	for [{_i=0},{_i<_briefcase_100oz},{_i=_i+1}] do {
+		_result = _result + ["ItemBriefcase100oz"];
+	};
+
+	_gold_10oz_a = floor(_total / 1000);
+	_gold_10oz_b = _briefcase_100oz * 10;
+	_gold_10oz = (_gold_10oz_a - _gold_10oz_b);
+	if (_gold_10oz > 0) then {
+		for [{_i=0},{_i<_gold_10oz},{_i=_i+1}] do {
+			_result = _result + [format ["ItemBriefcase%1oz", _gold_10oz*10]];
+		};
+	};
+
+	_gold_1oz_a = floor(_total / 100);
+	_gold_1oz_b = _gold_10oz_a * 10;
+	_gold_1oz = (_gold_1oz_a - _gold_1oz_b);
+	if (_gold_1oz > 0) then {
+		if (_gold_1oz == 1) then {
+			_result = _result + ["ItemGoldBar"];
+		} else {
+			for [{_i=0},{_i<_gold_1oz},{_i=_i+1}] do {
+				_result = _result + [format ["ItemGoldBar%1oz", _gold_1oz]];
+			};
+		};
+	};
+
+	_silver_10oz_a = floor(_total / 10);
+	_silver_10oz_b = _gold_1oz_a * 10;
+	_silver_10oz = (_silver_10oz_a - _silver_10oz_b);
+	if (_silver_10oz > 0) then {
+		for [{_i=0},{_i<_silver_10oz},{_i=_i+1}] do {
+			_result = _result + [format ["ItemBriefcaseS%1oz", _silver_10oz*10]];
+		};
+	};
+
+	_silver_1oz_a = floor(_total);
+	_silver_1oz_b = _silver_10oz_a * 10;
+	_silver_1oz = (_silver_1oz_a - _silver_1oz_b);
+	if (_silver_1oz > 0) then {
+		if (_silver_1oz == 1) then {
+			_result = _result + ["ItemSilverBar"];
+		} else {
+			for [{_i=0},{_i<_silver_1oz},{_i=_i+1}] do {
+				_result = _result + [format ["ItemSilverBar%1oz", _silver_1oz]];
+			};
+		};
+	};
+	_result
+};
 
 //------------------------------------------------------------------//
 diag_log format ["[OK]: Mission Functions Script Loaded!"];

@@ -3,12 +3,12 @@
 	This is the file that every other file branches off from.
 	It checks that it is safe to run, sets relations, and starts mission timers.
 */
-private["_modVariant"];
+private["_modVariant","_tempGemList","_tempWorthList","_largest"];
 
 waitUntil{initialized};
 
 // Lets let the heavier scripts run first
-sleep 60;
+sleep 30;
 
 // Error Check
 if (!isServer) exitWith { diag_log format ["[OK]: <ERROR> OK is Installed Incorrectly! OK is not Running!"]; };
@@ -27,7 +27,7 @@ if ( (isnil("DZAI_isActive")) && (isnil("SAR_version")) && (isnil("WAIconfigload
 
 	// They weren't found, so let's set relationships
 	diag_log format ["[OK]: Relations not found! Using OK Relations."];
-	
+
 	// Create the groups if they aren't created already
 	createCenter east;
 	// Make AI Hostile to Survivors
@@ -36,7 +36,7 @@ if ( (isnil("DZAI_isActive")) && (isnil("SAR_version")) && (isnil("WAIconfigload
 	// Make AI Hostile to Zeds
 	EAST setFriend [CIVILIAN,0];
 	CIVILIAN setFriend [EAST,0];
-	
+
 } else {
 
 	// Let's inform the user which relations we are using
@@ -59,13 +59,42 @@ if ( (isnil("DZAI_isActive")) && (isnil("SAR_version")) && (isnil("WAIconfigload
 		diag_log format ["[OK]: If Issues Arise, Decide on a Single AI System! (DayZAI, SargeAI, or WickedAI)"];
 	};
 	OKRelations = nil; //Destroy the Global Var
-	
+
 };
 
 // Let's Load the Mission Configuration
 call compile preprocessFileLineNumbers "\z\addons\dayz_server\OK\OKConfig.sqf";
 waitUntil {OKConfigured};
 OKConfigured = nil;
+
+// This is normally only available on client side for AdvancedTrading
+if (isServer) then {
+	DZE_GemList = [];
+	DZE_GemWorthList = [];
+
+	_tempGemList = [];
+	_tempWorthList = [];
+
+	{
+		_tempGemList set [(count _tempGemList), (_x select 0)];
+		_tempWorthList set [(count _tempWorthList), (_x select 1)];
+	} count DZE_GemWorthArray;
+
+	for "_i" from 0 to ((count _tempGemList) - 1) do {
+		_largest = -1e9;
+
+		{
+			_largest = _largest max _x;
+		} forEach _tempWorthList;
+
+		_LargestGem = _tempGemList select (_tempWorthList find _largest);
+		_tempWorthList = _tempWorthList - [_largest];
+		_tempGemList = _tempGemList - [_LargestGem];
+		DZE_GemList set [(count DZE_GemList), _LargestGem];
+		DZE_GemWorthList set [(count DZE_GemWorthList), _largest];
+	};
+};
+
 
 // These are Extended configuration files the user can adjust if wanted
 call compile preprocessFileLineNumbers "\z\addons\dayz_server\OK\ExtConfig\OKWeaponCrateList.sqf";

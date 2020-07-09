@@ -58,6 +58,9 @@ server_ferry_transportVehicle =		compile preprocessFileLineNumbers "\z\addons\da
 server_ferry_getVehicleCrewAssignments =compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\server_ferry_getVehicleCrewAssignments.sqf";
 server_ferry_receiveVehicle =		compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\server_ferry_receiveVehicle.sqf";
 
+// --- Abandoned Bases ---
+server_getAbandonedBase = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\server_getAbandonedBase.sqf";
+server_deleteAbandonedBase = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\server_deleteAbandonedBase.sqf";
 
 server_medicalSync = {
 	_player = _this select 0;
