@@ -212,6 +212,46 @@ END
 DELIMITER ;
 
 -- ----------------------------
+-- Event structure for UnlockVehiclesInSafezones
+-- ----------------------------
+DELIMITER ;;
+CREATE EVENT `UnlockVehiclesInSafezones` ON SCHEDULE EVERY 1 DAY STARTS '2020-06-30 00:00:00' DO 
+BEGIN
+  UPDATE `object_data_cherno` AS `objs` INNER JOIN `safe_zones` AS `zones` ON `objs`.`instance`=`zones`.`instance_id`
+    SET `objs`.`character_id`=0
+  WHERE
+    `objs`.`character_id` <> 0
+    AND `objs`.`character_id` <= 12500
+    AND `objs`.`classname` NOT LIKE 'Tent%'
+    AND `objs`.`classname` NOT LIKE 'Land%'
+    AND `objs`.`classname` NOT LIKE 'Cinder%'
+    AND `objs`.`classname` NOT LIKE 'Wood%'
+    AND `objs`.`classname` NOT LIKE 'Metal%'
+    AND `objs`.`classname` NOT IN ('OutHouse_DZ', 'GunRack_DZ', 'WorkBench_DZ', 'Sandbag1_DZ', 'FireBarrel_DZ', 'DesertCamoNet_DZ', 'StickFence_DZ', 'LightPole_DZ', 'DeerStand_DZ', 'ForestLargeCamoNet_DZ', 'Plastic_Pole_EP1_DZ', 'Hedgehog_DZ', 'FuelPump_DZ', 'Fort_RazorWire', 'SandNest_DZ', 'ForestCamoNet_DZ', 'Fence_corrugated_DZ', 'CanvasHut_DZ', 'Generator_DZ')
+    AND `objs`.`ws_x`<`zones`.`x`+`zones`.`radius`
+    AND `objs`.`ws_x`>`zones`.`x`-`zones`.`radius`
+    AND `objs`.`ws_y`<`zones`.`y`+`zones`.`radius`
+    AND `objs`.`ws_y`>`zones`.`y`-`zones`.`radius`;
+  UPDATE `object_data_napf` AS `objs` INNER JOIN `safe_zones` AS `zones` ON `objs`.`instance`=`zones`.`instance_id`
+    SET `objs`.`character_id`=0
+  WHERE
+    `objs`.`character_id` <> 0
+    AND `objs`.`character_id` <= 12500
+    AND `objs`.`classname` NOT LIKE 'Tent%'
+    AND `objs`.`classname` NOT LIKE 'Land%'
+    AND `objs`.`classname` NOT LIKE 'Cinder%'
+    AND `objs`.`classname` NOT LIKE 'Wood%'
+    AND `objs`.`classname` NOT LIKE 'Metal%'
+    AND `objs`.`classname` NOT IN ('OutHouse_DZ', 'GunRack_DZ', 'WorkBench_DZ', 'Sandbag1_DZ', 'FireBarrel_DZ', 'DesertCamoNet_DZ', 'StickFence_DZ', 'LightPole_DZ', 'DeerStand_DZ', 'ForestLargeCamoNet_DZ', 'Plastic_Pole_EP1_DZ', 'Hedgehog_DZ', 'FuelPump_DZ', 'Fort_RazorWire', 'SandNest_DZ', 'ForestCamoNet_DZ', 'Fence_corrugated_DZ', 'CanvasHut_DZ', 'Generator_DZ')
+    AND `objs`.`ws_x`<`zones`.`x`+`zones`.`radius`
+    AND `objs`.`ws_x`>`zones`.`x`-`zones`.`radius`
+    AND `objs`.`ws_y`<`zones`.`y`+`zones`.`radius`
+    AND `objs`.`ws_y`>`zones`.`y`-`zones`.`radius`;
+END;;
+DELIMITER ;
+
+
+-- ----------------------------
 -- Event structure for UnlockOldSafes
 -- ----------------------------
 DROP EVENT IF EXISTS `UnlockOldSafes`;

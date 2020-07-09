@@ -202,6 +202,21 @@ CREATE TABLE `server_traders` (
 ) ENGINE=InnoDB AUTO_INCREMENT=181 DEFAULT CHARSET=utf8;
 
 -- ----------------------------------
+-- Table structure for table `safe_zones`
+-- ----------------------------------
+
+CREATE TABLE IF NOT EXISTS `safe_zones` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `instance_id` int(11) NOT NULL,
+  `x` int(11) DEFAULT NULL,
+  `y` int(11) DEFAULT NULL,
+  `radius` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1 COMMENT='List of safe zones by instance ID, name, position and radius';
+
+-- ----------------------------------
 -- Dumping data for table `server_traders`
 -- ----------------------------------
 
@@ -2705,3 +2720,24 @@ INSERT INTO `trader_tids` VALUES(716,'Anti Tank Ammo',180);
 INSERT INTO `trader_tids` VALUES(717,'Airport Utility',152);
 INSERT INTO `trader_tids` VALUES(718,'General Ammo',179);
 INSERT INTO `trader_tids` VALUES(719,'General Ammo',180);
+
+-- ----------------------------------
+-- Dumping data for table `safe_zones`
+-- ----------------------------------
+
+INSERT INTO `safe_zones` (`id`, `name`, `instance_id`, `x`, `y`, `radius`) VALUES(1, 'Trader City Lenzburg', 24, 8246, 15485, 50);
+INSERT INTO `safe_zones` (`id`, `name`, `instance_id`, `x`, `y`, `radius`) VALUES(2, 'Trader City Emmen', 24, 15506, 13229, 100);
+INSERT INTO `safe_zones` (`id`, `name`, `instance_id`, `x`, `y`, `radius`) VALUES(3, 'Trader City Schratten', 24, 12399, 5074, 75);
+INSERT INTO `safe_zones` (`id`, `name`, `instance_id`, `x`, `y`, `radius`) VALUES(4, 'Bandit Vendor', 24, 10398, 8279, 50);
+INSERT INTO `safe_zones` (`id`, `name`, `instance_id`, `x`, `y`, `radius`) VALUES(5, 'Hero Vendor', 24, 5149, 4864, 50);
+INSERT INTO `safe_zones` (`id`, `name`, `instance_id`, `x`, `y`, `radius`) VALUES(6, 'West Wholesaler', 24, 2122, 7807, 50);
+INSERT INTO `safe_zones` (`id`, `name`, `instance_id`, `x`, `y`, `radius`) VALUES(7, 'North Wholesaler', 24, 5379, 16103, 50);
+INSERT INTO `safe_zones` (`id`, `name`, `instance_id`, `x`, `y`, `radius`) VALUES(8, 'Nordic Boats', 24, 6772, 16983, 50);
+INSERT INTO `safe_zones` (`id`, `name`, `instance_id`, `x`, `y`, `radius`) VALUES(9, 'Pauls Boats', 24, 16839, 5264, 50);
+INSERT INTO `safe_zones` (`id`, `name`, `instance_id`, `x`, `y`, `radius`) VALUES(10, 'AWOLs Airfield', 24, 15128, 16421, 75);
+INSERT INTO `safe_zones` (`id`, `name`, `instance_id`, `x`, `y`, `radius`) VALUES(11, 'Trader City Stary', 11, 6325, 7807, 100);
+INSERT INTO `safe_zones` (`id`, `name`, `instance_id`, `x`, `y`, `radius`) VALUES(12, 'Trader City Bash', 11, 4063, 11664, 100);
+INSERT INTO `safe_zones` (`id`, `name`, `instance_id`, `x`, `y`, `radius`) VALUES(13, 'Trader City Klen', 11, 11447, 11364, 100);
+INSERT INTO `safe_zones` (`id`, `name`, `instance_id`, `x`, `y`, `radius`) VALUES(14, 'Bandit Vendor', 11, 1606, 7803, 100);
+INSERT INTO `safe_zones` (`id`, `name`, `instance_id`, `x`, `y`, `radius`) VALUES(15, 'Hero Vendor', 11, 12944, 12766, 100);
+INSERT INTO `safe_zones` (`id`, `name`, `instance_id`, `x`, `y`, `radius`) VALUES(16, 'Airplane Dealer', 11, 12060, 12638, 100);
