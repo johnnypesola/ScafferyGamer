@@ -17,7 +17,7 @@ _playerUID = getPlayerUID _player;
 _exitReason = [_this,"PublishObj",(_worldspace select 1),_clientKey,_playerUID,_player] call server_verifySender;
 if (_exitReason != "") exitWith {diag_log _exitReason};
 
-if ([_object, "Server"] call check_publishobject) then {
+if ([_object, "Server", _playerUID] call check_publishobject) then {
 	//diag_log ("PUBLISH: Attempt " + str(_object));
 
 	_objectUID = _worldspace call dayz_objectUID2;

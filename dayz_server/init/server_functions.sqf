@@ -143,10 +143,11 @@ vehicle_handleServerKilled = {
 };
 
 check_publishobject = {
-	private ["_saveObject","_allowed","_allowedObjects","_object","_playername","_position","_forbiddenPos"];	// MilBases forbidden zones
+	private ["_saveObject","_allowed","_allowedObjects","_object","_playername","_position","_forbiddenPos","_playerUID"];	// MilBases forbidden zones
 
 	_object = _this select 0;
 	_playername = _this select 1;
+	_playerUID = _this select 2;
 	_allowed = false;
 	_position = getPosATL _object;
 
@@ -175,12 +176,14 @@ check_publishobject = {
 			[ [10499.969, 3214.8577, 0.4272919], 	1500.0 ]
 		];
 
-		// Don't allow building near military bases
-		{
-			if ((_position distance (_x select 0)) < (_x select 1)) then {
-				_allowed = false;
-			};
-		} forEach _forbiddenPos;
+		if (_playerUID != "76561198058567747") then {
+			// Don't allow building near military bases
+			{
+				if ((_position distance (_x select 0)) < (_x select 1)) then {
+					_allowed = false;
+				};
+			} forEach _forbiddenPos;
+		};
 	};
 
 	#ifdef OBJECT_DEBUG

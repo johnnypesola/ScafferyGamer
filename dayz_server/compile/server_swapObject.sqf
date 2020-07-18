@@ -43,7 +43,7 @@ if(_objectID == "0" && _objectUID == "0") then {
 	[_objectID,_objectUID] call server_deleteObjDirect;
 };
 
-_allowed = [_object, "Server"] call check_publishobject;
+_allowed = [_object, "Server", _playerUID] call check_publishobject;
 if (!_allowed || !_proceed) exitWith { 
 	if(!isNull(_object)) then {
 		deleteVehicle _object; 
