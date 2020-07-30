@@ -22,13 +22,8 @@ while {_run} do
 	if (_cntMis == 0) then { _run = false; };
 	
 	//Lets pick a mission
-	if (isNil "_ranMis") then {
-		_ranMis = 2;
-		_varName = OKMajorArray select _ranMis;
-	} else {
-		_ranMis = floor (random _cntMis);
-		_varName = OKMajorArray select _ranMis;
-	};
+	_ranMis = floor (random _cntMis);
+	_varName = OKMajorArray select _ranMis;
 	
 	//Let's Run the Mission
 	[] execVM format ["\z\addons\dayz_server\OK\Missions\Major\%1.sqf",_varName];

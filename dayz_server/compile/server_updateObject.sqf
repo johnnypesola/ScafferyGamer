@@ -29,6 +29,9 @@ if (typeName _objectID != "STRING" or (typeName _objectUID != "STRING")) then {
 // Epoch Admin Tools
 if ((_object getVariable ["MalSar", 0]) == 1) exitWith {};
 
+// Do not update MGs, let them expire
+if (_class in ["M2StaticMG","DSHKM_CDF"]) exitWith {};
+
 if (!(_class in DZE_safeVehicle) && !locked _object) then {
 	//diag_log format["Object: %1, ObjectID: %2, ObjectUID: %3",_object,_objectID,_objectUID];
 	if (!(_objectID in dayz_serverIDMonitor) && isNil {_objectUID}) then { 

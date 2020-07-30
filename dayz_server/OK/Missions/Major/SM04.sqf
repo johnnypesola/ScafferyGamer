@@ -3,7 +3,7 @@
 //	Based on New Mission Format by Vampire
 //
 
-private ["_missName","_dbData","_baseId","_coords","_coords3d","_coords3dGround","_survivors","_startTime","_wp","_nearbyStorage","_calculatedLootValue","_expectedTotalGoldValue","_remainingGoldValue","_mags","_magTypes","_magCount","_weaps","_backpacks","_arrayOfTraderCat","_storageTypes","_additionalCurrency","_items","_storageName","_storageNameUnlocked","_selectedStorage","_safePos","_objectUID","_ws","_patrolCoords","_patrolGroup","_patrolGroup2","_patrolClasses","_patrol2Classes","_patrolClass","_nearbyPlayers","_patrolVeh","_moreSurvivors","_nearestPlayer","_unlocked","_capacity","_unlockedClass","_weapons","_magazines","_holder","_type","_dir","_vector","_pos","_charID","_objectID","_ownerID","_patrolData","_patrolVeh","_patrolVeh2","_rubyCount","_nearbyGuns","_gunnerGroup","_gunnerGroups","_gunnerGroupsAlive"];
+private ["_missName","_dbData","_baseId","_coords","_coords3d","_coords3dGround","_survivors","_wp","_nearbyStorage","_calculatedLootValue","_expectedTotalGoldValue","_remainingGoldValue","_mags","_magTypes","_magCount","_weaps","_backpacks","_arrayOfTraderCat","_storageTypes","_additionalCurrency","_items","_storageName","_storageNameUnlocked","_selectedStorage","_safePos","_objectUID","_ws","_patrolCoords","_patrolGroup","_patrolGroup2","_patrolClasses","_patrol2Classes","_patrolClass","_nearbyPlayers","_patrolVeh","_moreSurvivors","_nearestPlayer","_unlocked","_capacity","_unlockedClass","_weapons","_magazines","_holder","_type","_dir","_vector","_pos","_charID","_objectID","_ownerID","_patrolData","_patrolVeh","_patrolVeh2","_rubyCount","_nearbyGuns","_gunnerGroup","_gunnerGroups","_gunnerGroupsAlive","_baseObjects","_startTime","_lastUpdated","_takenOver"];
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -21,8 +21,8 @@ _patrolGroup = grpNull;
 _patrolGroup2 = grpNull;
 _patrolClasses = ["HMMWV_M998A2_SOV_DES_EP1_DZ","HMMWV_M1151_M2_CZ_DES_EP1_DZ","LandRover_Special_CZ_EP1","LandRover_MG_TK_EP1","HMMWV_M998_crows_M2_DES_EP1","ArmoredSUV_PMC"];
 _patrol2Classes = ["BTR90","BTR60_TK_EP1","BTR40_MG_TK_INS_EP1","BRDM2_TK_EP1","M1126_ICV_M2_EP1"];
-_nearbyPlayers = ["dummy"];
 _unlocked = false;
+_takenOver = false;
 
 // function to get value of a single item
 _get_value = {0};
@@ -246,6 +246,7 @@ _gunnerGroups = [];
 //	};
 //};
 
+_startTime = diag_ticktime;
 diag_log "OK: Waiting for a player to come within 75m of the abandoned base.";
 
 waitUntil {sleep 3; {isPlayer _x && _x distance _coords3d <= 75 } count playableunits > 0 };
@@ -302,7 +303,7 @@ while {(count _nearbyPlayers) > 0} do {
 	{
 		_gunnerGroupsAlive = _gunnerGroupsAlive + ({alive _x} count units _x);
 	} forEach _gunnerGroups;
-	if (!_unlocked && {(({alive _x} count ((units _survivors) + (units _moreSurvivors) + (units _patrolGroup) + (units _patrolGroup2))) + _gunnerGroupsAlive == 0)}) then {
+	if (!_unlocked && {({alive _x} count ((units _survivors) + (units _moreSurvivors) + (units _patrolGroup) + (units _patrolGroup2))) + _gunnerGroupsAlive == 0}) then {
 		{
 			// Unlock each safe
 			_x setVariable ["CharacterID", "0000", true];
@@ -321,6 +322,24 @@ while {(count _nearbyPlayers) > 0} do {
 	sleep 5;
 };
 diag_log "OK: Players have left the abandoned base!";
+
+// Check if base was taken over
+{
+	_lastUpdated = _x getVariable ["lastUpdate", 0];
+	if (_lastUpdated > _startTime && {alive _x}) then {
+		_takenOver = true;
+	};
+} forEach nearestObjects [_coords3d, "Plastic_Pole_EP1_DZ", 75];
+
+// Delete base if not taken over or 
+_baseObjects = nearestObjects[_coords3d, DayZ_SafeObjects, 75];
+if (!_takenOver) then {
+	{
+		_objectID = _x getVariable ["ObjectID", "0"];
+		[_objectID, "0"] call server_deleteObjDirect;
+		deleteVehicle _x;
+	} forEach _baseObjects;
+};
 
 //Let everyone know the mission is over
 [nil,nil,rTitleText,"Abandoned base was visited!", "PLAIN",6] call RE;
