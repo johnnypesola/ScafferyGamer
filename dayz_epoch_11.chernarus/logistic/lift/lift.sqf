@@ -2,14 +2,15 @@ if (LOG_INPROGRESS) then{
 [STR_LOG_INPROGRESS,COLOR_ERROR] call SAM_SAYS;
 } else {
 LOG_INPROGRESS = true;
-	private ["_heliporteur", "_object", "_off"];
+	private ["_heliporteur", "_objects", "_object", "_off"];
 	_off = 0;
 	_heliporteur = _this select 0;
-	_object = nearestObjects [_heliporteur, LOG_CFG_ISLIFTABLE, 20];
-	_object = _object - [_heliporteur];	
-	if (count _object > 0) then{
-		_object = _object select 0;	
-		if !(_object getVariable "LOG_disabled") then {
+	_objects = nearestObjects [_heliporteur, LOG_CFG_ISLIFTABLE, 20];
+	_objects = _objects - [_heliporteur];
+	_object = objNull;
+	if (count _objects > 0) then{
+		{ if ((locked _x) == 0) exitWith {_object = _x;};} forEach _objects;
+		if ((!isNull _object) && !(_object getVariable "LOG_disabled")) then {
 			if (isNull (_object getVariable "LOG_moves_by")) then {
 				if (count crew _object == 0) then{	
 					if (isNull (_object getVariable "LOG_moves_by") || (!alive (_object getVariable "LOG_moves_by"))) then{
