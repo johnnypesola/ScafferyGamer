@@ -34,7 +34,15 @@ if (isPlayer _player) then {
 			_player setVariable ["humanity",(_humanity + OKCntHumanity),true];
 		};
 	};
-	
+	//If the player gets humanity per config, lets give it
+	if (OKGainHumanity) then {
+		if (_humanity >= 0) then {
+			_player setVariable ["humanity",(_humanity + OKCntHumanity),true];
+		} else {
+			_player setVariable ["humanity",(_humanity - OKCntHumanity),true];
+		};
+	};
+
 	//If this counts as a bandit kill, lets give it
 	if (OKCntBanditKls) then {
 		_player setVariable ["banditKills",(_banditkills + 1),true];

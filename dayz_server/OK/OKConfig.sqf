@@ -4,7 +4,8 @@
 
 ///////////////////////////////////////////////////////////////////////
 // Do you want your players to gain humanity from killing mission AI?
-OKMissHumanity = true;
+OKMissHumanity = false;
+OKGainHumanity = true;
 
 // How Much Humanity?
 OKCntHumanity = 15;
