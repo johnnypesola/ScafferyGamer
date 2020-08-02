@@ -9,7 +9,7 @@ LOG_INPROGRESS = true;
 	_objects = _objects - [_heliporteur];
 	_object = objNull;
 	if (count _objects > 0) then{
-		{ if ((locked _x) == 0) exitWith {_object = _x;};} forEach _objects;
+		{ if (!(locked _x)) exitWith {_object = _x;};} forEach _objects;
 		if ((!isNull _object) && !(_object getVariable "LOG_disabled")) then {
 			if (isNull (_object getVariable "LOG_moves_by")) then {
 				if (count crew _object == 0) then{	
