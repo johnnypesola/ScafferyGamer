@@ -329,7 +329,7 @@ diag_log "OK: Players have left the abandoned base!";
 	if (_lastUpdated > _startTime && {alive _x}) then {
 		_takenOver = true;
 	};
-} forEach nearestObjects [_coords3d, "Plastic_Pole_EP1_DZ", 75];
+} forEach nearestObjects [_coords3d, ["Plastic_Pole_EP1_DZ"], 75];
 
 // Delete base if not taken over or 
 _baseObjects = nearestObjects[_coords3d, DayZ_SafeObjects, 75];

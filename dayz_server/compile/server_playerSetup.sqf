@@ -93,14 +93,14 @@ if (count _worldspace > 0) then {
 	//_playerObj setPosATL _position;
 
 	// If too close to NMB or SMB loot
-	if (dayZ_instance == 11 && _position distance [1931.6,14410,0.00144861] < 100) then {
+	if (dayZ_instance == 11 && _position distance [1931.6,14410,0.00144861] < 200) then {
 		_worldspace set [1, [1796.6761, 14321.693, 0]];
 	};
 	if (dayZ_instance == 24) then {
-		if (_position distance [16771.174, 19084.066] < 100) then {
+		if (_position distance [16771.174, 19084.066] < 200) then {
 			_worldspace set [1, [16603.613, 19091.287, 0]];
 		};
-		if (_position distance [10562.068, 2953.7969] < 100) then {
+		if (_position distance [10562.068, 2953.7969] < 200) then {
 			_worldspace set [1, [10426.536, 2883.0676, 0]];
 		};
 	};
