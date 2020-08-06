@@ -1,4 +1,4 @@
-private ["_aipack","_class","_position2","_direction","_static","_position","_unitnumber","_skill","_gun","_mags","_backpack","_skin","_gear","_aiweapon","_aigear","_aiskin","_skillarray","_unitGroup","_weapon","_magazine","_weaponandmag","_gearmagazines","_geartools","_unit","_groups","_weaponArray"];
+private ["_aipack","_class","_position2","_direction","_static","_position","_unitnumber","_skill","_gun","_mags","_backpack","_skin","_gear","_aiweapon","_aigear","_aiskin","_skillarray","_unitGroup","_weapon","_magazine","_weaponandmag","_gearmagazines","_geartools","_unit","_groups","_weaponArray","_useSameGroup"];
 _static = _this select 0;
 _skill = _this select 1;
 _skin = _this select 2;
@@ -6,6 +6,9 @@ if ((count _this) > 3) then {
 	_groups = _this select 3;
 } else {
 	_groups = [];
+};
+if ((count _this) > 4) then {
+	_useSameGroup = _this select 4;
 };
 
 // This script will spawn in one unit+group to man the specified static gun
@@ -16,7 +19,15 @@ _aiweapon = [];
 _aigear = [];
 _aiskin = "";
 _aipack = "";
-_unitGroup = createGroup east;
+
+if (_useSameGroup) then {
+	if ((count _groups) == 0) then {
+		_groups set [0, createGroup east];
+	};
+	_unitGroup = _groups select ((count _groups)-1);
+} else {
+	_unitGroup = createGroup east;
+};
 _unitnumber = count _position;
 
 if (!isServer) exitWith {};
@@ -104,5 +115,7 @@ if (!isServer) exitWith {};
 _unitGroup selectLeader ((units _unitGroup) select 0);
 
 diag_log format ["[OK]: Spawned %1 AI at %2",_unitnumber,_position];
-_groups set [count _groups, _unitGroup];
+if (!_useSameGroup) then {
+	_groups set [count _groups, _unitGroup];
+};
 _unitGroup

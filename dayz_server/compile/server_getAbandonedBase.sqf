@@ -1,4 +1,7 @@
-private ["_key","_query","_baseList","_base","_baseId","_baseParts","_ws_x","_ws_y","_ws_z","_numberOfBaseParts","_qty","_baseArray","_obj","_continueLoading","_page","_pageSize","_objId"];
+private ["_key","_query","_baseList","_base","_baseId","_baseParts","_ws_x","_ws_y","_ws_z","_numberOfBaseParts","_qty","_baseArray","_obj","_continueLoading","_page","_pageSize","_objId","_DZE_VehObjects","_vehEhSetter"];
+
+// Pass the event handler setter function from topside.
+_vehEhSetter = _this select 0;
 
 // Get an abandoned base from DB
 _key = [];
@@ -31,16 +34,16 @@ _qty = 0;
 _baseArray = [];
 _continueLoading = true;
 
-while {_continueLoading} do 
+while {_continueLoading} do
 {
 	_key = [_baseId, _page * _pageSize, _pageSize];
 	_query = ["getPublishedAbandonedBasePartIds", _key] call dayz_prepareDataForDB;
 	_baseParts = _query call server_hiveReadWrite;
 
 	_numberOfBaseParts = count _baseParts;
-	if (_numberOfBaseParts > 0) then 
+	if (_numberOfBaseParts > 0) then
 	{
-		for "_i" from 0 to _numberOfBaseParts - 1 do 
+		for "_i" from 0 to _numberOfBaseParts - 1 do
 		{
 			_key = [(_baseParts select _i) select 0];
 			_query = ["getObject", _key] call dayz_prepareDataForDB;
@@ -63,10 +66,11 @@ if ((count _baseArray) == 0) exitWith {
 	_baseArray = [];
 	_baseArray
 };
+_DZE_VehObjects = [];
 
 // Create the base objects
 {
-	private["_idKey","_type","_ownerID","_worldspace","_inventory","_hitPoints","_fuel","_damage","_storageMoney","_maintenanceMode","_maintenanceModeVars","_dir","_pos","_wsDone","_wsCount","_vector","_vecExists","_ownerPUID","_posATL","_ws2TN","_ws3TN","_object","_nonCollide","_doorLocked","_isPlot","_isDZ_Buildable","_isTrapItem","_isSafeObject","_weaponcargo","_magcargo","_backpackcargo","_weaponqty","_magqty","_backpackqty","_lockable","_codeCount","_xTypeName","_x1"];
+	private["_idKey","_type","_ownerID","_worldspace","_inventory","_hitPoints","_fuel","_damage","_storageMoney","_maintenanceMode","_maintenanceModeVars","_dir","_pos","_wsDone","_wsCount","_vector","_vecExists","_ownerPUID","_posATL","_ws2TN","_ws3TN","_object","_nonCollide","_doorLocked","_isPlot","_isDZ_Buildable","_isTrapItem","_isSafeObject","_weaponcargo","_magcargo","_backpackcargo","_weaponqty","_magqty","_backpackqty","_lockable","_codeCount","_xTypeName","_x1","_isAir","_selection","_dam"];
 	_idKey = 		_x select 0;
 	_type =			_x select 1;
 	_ownerID = 		_x select 2;
@@ -99,7 +103,7 @@ if ((count _baseArray) == 0) exitWith {
 	//set object to be in maintenance mode
 	_maintenanceMode = false;
 	_maintenanceModeVars = [];
-	
+
 	_dir = 90;
 	_pos = [0,0,0];
 	_wsDone = false;
@@ -115,7 +119,7 @@ if ((count _baseArray) == 0) exitWith {
 		_posATL = _worldspace select 1;
 		if (count _posATL == 3) then {
 			_pos = _posATL;
-			_wsDone = true;					
+			_wsDone = true;
 		};
 		if (_wsCount >= 3) then{
 			_ws2TN = typename (_worldspace select 2);
@@ -127,7 +131,7 @@ if ((count _baseArray) == 0) exitWith {
 						 if (_ws2TN == "ARRAY") then{
 							_vector = _worldspace select 2;
 							_vecExists = true;
-						};                  
+						};
 					};
 			} else {
 				if (_wsCount == 4) then{
@@ -166,7 +170,7 @@ if ((count _baseArray) == 0) exitWith {
 		_maintenanceModeVars = [_type,_pos];
 		_type = _type + "_Damaged";
 	};
-	_nonCollide = _type in DayZ_nonCollide;	
+	_nonCollide = _type in DayZ_nonCollide;
 
 	//Create it
 	if (_nonCollide) then {
@@ -194,14 +198,14 @@ if ((count _baseArray) == 0) exitWith {
 	};
 
 	dayz_serverIDMonitor set [count dayz_serverIDMonitor,_idKey];
-	
+
 	if (!_wsDone) then {[_object,"position",true] call server_updateObject;};
 	if (_type == "Base_Fire_DZ") then {_object spawn base_fireMonitor;};
-	
+
 	_isDZ_Buildable = _object isKindOf "DZ_buildables";
 	_isTrapItem = _object isKindOf "TrapItems";
 	_isSafeObject = _type in DayZ_SafeObjects;
-	
+
 	//Dont add inventory for traps.
 	if (!_isDZ_Buildable && !_isTrapItem) then {
 		clearWeaponCargoGlobal _object;
@@ -238,57 +242,73 @@ if ((count _baseArray) == 0) exitWith {
 		};
 	};
 
-	// Fix for leading zero issues on safe codes after restart
-	_lockable = getNumber (configFile >> "CfgVehicles" >> _type >> "lockable");
-	_codeCount = count (toArray _ownerID);
-	switch (_lockable) do {
-		case 4: {
-			switch (_codeCount) do {
-				case 3: {_ownerID = format["0%1",_ownerID];};
-				case 2: {_ownerID = format["00%1",_ownerID];};
-				case 1: {_ownerID = format["000%1",_ownerID];};
-			};
-		};
-		case 3: {
-			switch (_codeCount) do {
-				case 2: {_ownerID = format["0%1",_ownerID];};
-				case 1: {_ownerID = format["00%1",_ownerID];};
-			};
-		};
-	};
-	_object setVariable ["CharacterID", _ownerID, true];
-	if (_isDZ_Buildable || {(_isSafeObject && !_isTrapItem)}) then {
-		_object setVariable["memDir",_dir,true];
-		if (DZE_GodModeBase && {!(_type in DZE_GodModeBaseExclude)}) then {
-			_object addEventHandler ["HandleDamage",{false}];
-		} else {
-			_object addMPEventHandler ["MPKilled",{_this call vehicle_handleServerKilled;}];
-		};
-		_object setVariable ["OEMPos",_pos,true]; // used for inplace upgrades and lock/unlock of safe
-	} else {
+	if ((typeOf _object) in ["M2StaticMG", "DSHKM_CDF"]) then {
 		_object enableSimulation true;
 	};
-	if (_isDZ_Buildable || {_isTrapItem}) then {
-		//Use inventory for owner/clan info and traps armed state
-		{
-			_xTypeName = typeName _x;
-			switch (_xTypeName) do {
-				case "ARRAY": {
-					_x1 = _x select 1;
-					switch (_x select 0) do {
-						case "ownerArray" : { _object setVariable ["ownerArray", _x1, true]; };
-						case "clanArray" : { _object setVariable ["clanArray", _x1, true]; };
-						case "armed" : { _object setVariable ["armed", _x1, true]; };
-						case "padlockCombination" : { _object setVariable ["dayz_padlockCombination", _x1, false]; };
-						case "BuildLock" : { _object setVariable ["BuildLock", _x1, true]; };
-					};
+
+	if (_object isKindOf "AllVehicles") then {
+		_object setVariable ["CharacterID", _ownerID, true];
+		_object setFuel _fuel;
+		if (!_isSafeObject) then {
+			_DZE_VehObjects set [count _DZE_VehObjects,_object];
+			_object call _vehEhSetter;
+			if (_ownerID != "0" && {!(_object isKindOf "Bicycle")}) then {_object setVehicleLock "locked";};
+		} else {
+			_object enableSimulation true;
+		};
+	} else {
+		// Fix for leading zero issues on safe codes after restart
+		_lockable = getNumber (configFile >> "CfgVehicles" >> _type >> "lockable");
+		_codeCount = count (toArray _ownerID);
+		switch (_lockable) do {
+			case 4: {
+				switch (_codeCount) do {
+					case 3: {_ownerID = format["0%1",_ownerID];};
+					case 2: {_ownerID = format["00%1",_ownerID];};
+					case 1: {_ownerID = format["000%1",_ownerID];};
 				};
-				case "STRING": {_object setVariable ["ownerArray", [_x], true]; };
-				case "BOOLEAN": {_object setVariable ["armed", _x, true]};
 			};
-		} foreach _inventory;
-		
-		if (_maintenanceMode) then { _object setVariable ["Maintenance", true, true]; _object setVariable ["MaintenanceVars", _maintenanceModeVars]; };
+			case 3: {
+				switch (_codeCount) do {
+					case 2: {_ownerID = format["0%1",_ownerID];};
+					case 1: {_ownerID = format["00%1",_ownerID];};
+				};
+			};
+		};
+		_object setVariable ["CharacterID", _ownerID, true];
+		if (_isDZ_Buildable || {(_isSafeObject && !_isTrapItem)}) then {
+			_object setVariable["memDir",_dir,true];
+			if (DZE_GodModeBase && {!(_type in DZE_GodModeBaseExclude)}) then {
+				_object addEventHandler ["HandleDamage",{false}];
+			} else {
+				_object addMPEventHandler ["MPKilled",{_this call vehicle_handleServerKilled;}];
+			};
+			_object setVariable ["OEMPos",_pos,true]; // used for inplace upgrades and lock/unlock of safe
+		} else {
+			_object enableSimulation true;
+		};
+		if (_isDZ_Buildable || {_isTrapItem}) then {
+			//Use inventory for owner/clan info and traps armed state
+			{
+				_xTypeName = typeName _x;
+				switch (_xTypeName) do {
+					case "ARRAY": {
+						_x1 = _x select 1;
+						switch (_x select 0) do {
+							case "ownerArray" : { _object setVariable ["ownerArray", _x1, true]; };
+							case "clanArray" : { _object setVariable ["clanArray", _x1, true]; };
+							case "armed" : { _object setVariable ["armed", _x1, true]; };
+							case "padlockCombination" : { _object setVariable ["dayz_padlockCombination", _x1, false]; };
+							case "BuildLock" : { _object setVariable ["BuildLock", _x1, true]; };
+						};
+					};
+					case "STRING": {_object setVariable ["ownerArray", [_x], true]; };
+					case "BOOLEAN": {_object setVariable ["armed", _x, true]};
+				};
+			} foreach _inventory;
+
+			if (_maintenanceMode) then { _object setVariable ["Maintenance", true, true]; _object setVariable ["MaintenanceVars", _maintenanceModeVars]; };
+		};
 	};
 	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_object]; //Monitor the object
 } forEach _baseArray;
