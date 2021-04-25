@@ -232,6 +232,81 @@ array_reduceSize = {
 	_array
 };
 
+pull_out_corpse = {
+	private ["_player","_entity","_entities","_exitLoop","_maxDist","_result"];
+	_player = _this select 0;
+	_maxDist = 6;
+	_exitLoop = false;
+	_result = 1;	// 0 = success, 1 = players near, 2 = too far away from corpse
+	{
+		if (isPlayer _x) then {
+			if (alive _x) then {
+				if (_maxDist > (_x distance _player)) then {
+					diag_log format["player %1 is too near corpse: %2m", getPlayerUID _x, _x distance _player];;
+					_entity = _x;
+					_exitLoop = true;
+				};
+			};
+		};
+		if (_exitLoop) exitWith {};
+	} forEach ((entities "Man") - [_player]);
+	
+	if (!isNil "_entity") exitWith {_result};
+	_exitLoop = false;
+	{
+		if (_maxDist > (_player distance _x)) then {
+			if (!alive _x) then {
+				if ((_x getVariable["bodyUID", ""]) == (getPlayerUID _player)) then {
+					diag_log format["This corpse belongs to player %1. OK.", getPlayerUID _player];
+					_exitLoop = true;
+				};
+			};
+		};
+		if (_exitLoop) exitWith {_entity = _x};
+	} forEach ((entities "Man") - [_player]);
+
+	// Set the position
+	if (!isNil "_entity") then {
+		diag_log format["Found corpse at %1, moving it to %2.", getPosATL _entity, getPosATL _player];
+		_entity setPosATL (getPosATL _player);
+		_result = 0;
+	} else {
+		diag_log format["Player cannt be further than %1m from corpse.", _maxDist];
+		_result = 2;
+	};
+	_result
+};
+
+// -----------------------------------------------------------------------------------
+
+
+// Multimap tools
+// Lets get the map name for deciding what to add here...
+DZE_Extras_WorldName = toLower format ["%1", worldName];
+diag_log format["%1 detected. Map Specific Settings Adjusted!", DZE_Extras_WorldName];
+
+//Napf Universal bases
+if (DZE_Extras_WorldName == "napf") then {
+	server_ferryTerminalPos = [18333.551, 2286.2048, 0];
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\calling_military_base.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\pastorn_military_base.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\military_mission_base.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\traders.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\boat_harbors.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\ferry_terminal_napf.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\trader_extras_napf.sqf";
+};
+if (DZE_Extras_WorldName == "chernarus") then {
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\elektro.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\epochbalota.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\epochcherno.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\neaf.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\nwaf.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\ferry_terminal_chernarus.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\milbase_chernarus.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\trader_extras_chernarus.sqf";
+};
+
 // Precise base building 1.0.5
 call compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\kk_functions.sqf";
 call compile preprocessFileLineNumbers "\z\addons\dayz_server\eventHandlers\server_eventHandler.sqf";

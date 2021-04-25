@@ -22,7 +22,7 @@ if (isServer) then {
 // Client only settings
 if (!isDedicated) then {
 	dayz_antihack = 1; // DayZ Antihack / 1 = enabled // 0 = disabled
-	dayZ_serverName = ""; //Shown to all players in the bottom left of the screen (country code + server number)
+	dayZ_serverName = "Scaffery - Napf "; //Shown to all players in the bottom left of the screen (country code + server number)
 	dayz_enableRules = true; //Enables a nice little news/rules feed on player login (make sure to keep the lists quick).
 	dayz_quickSwitch = false; //Turns on forced animation for weapon switch. (hotkeys 1,2,3) False = enable animations, True = disable animations
 	dayz_randomMaxFuelAmount = 500; //Puts a random amount of fuel in all fuel stations.
@@ -33,13 +33,13 @@ if (!isDedicated) then {
 	dayz_temperature_override = false; // Set to true to disable all temperature changes.
 	DZE_TwoPrimaries = 2; // 0 do not allow primary weapon on back. 1 allow primary weapon on back, but not when holding a primary weapon in hand. 2 allow player to hold two primary weapons, one on back and one in their hands.
 	dayz_paraSpawn = false; // Halo spawn
-	DZE_BackpackAntiTheft = false; // Prevent stealing from backpacks in trader zones
+	DZE_BackpackAntiTheft = true; // Prevent stealing from backpacks in trader zones
 	DZE_BuildOnRoads = false; // Allow building on roads
 	DZE_R3F_WEIGHT = true; // Enable R3F weight. Players carrying too much will be overburdened and forced to move slowly.
-	DZE_StaticConstructionCount = 0; // Steps required to build. If greater than 0 this applies to all objects.
+	DZE_StaticConstructionCount = 1; // Steps required to build. If greater than 0 this applies to all objects.
 	DZE_requireplot = 1; // Require a plot pole to build  0 = Off, 1 = On
-	DZE_PlotPole = [30,45]; // Radius owned by plot pole [Regular objects,Other plotpoles]. Difference between them is the minimum buffer between bases.
-	DZE_BuildingLimit = 150; // Max number of built objects allowed in DZE_PlotPole radius
+	DZE_PlotPole = [45,45]; // Radius owned by plot pole [Regular objects,Other plotpoles]. Difference between them is the minimum buffer between bases.
+	DZE_BuildingLimit = 300; // Max number of built objects allowed in DZE_PlotPole radius
 	DZE_SelfTransfuse = true; // Allow players to bloodbag themselves
 	DZE_selfTransfuse_Values = [12000,15,120]; // [blood amount given, infection chance %, cooldown in seconds]
 	dayz_maxMaxWeaponHolders = 120; // Maximum number of loot piles that can spawn within 200 meters of a player.
@@ -57,6 +57,16 @@ DZE_GodModeBase = false; // Make player built base objects indestructible
 DZE_SafeZonePosArray = [[[8246,15485,0],100],[[15506,13229,0],100],[[12399,5074,0],100],[[10398,8279,0],100],[[5149,4864,0],100],[[15128,16421,0],100]]; // Format is [[[3D POS],RADIUS],[[3D POS],RADIUS]]; Stops loot and zed spawn, salvage and players being killed if their vehicle is destroyed in these zones.
 DZE_Weather = 1; // Options: 1 - Summer Static, 2 - Summer Dynamic, 3 - Winter Static, 4 - Winter Dynamic. If static is selected, the weather settings will be set at server startup and not change. Weather settings can be adjusted with array DZE_WeatherVariables in configVariables.sqf.
 
+dayz_groupSystem = true; // Enable group system
+dayz_markGroup = 2; // Players can see their group members on the map 0=never, 1=always, 2=With GPS only
+dayz_markSelf = 2; // Players can see their own position on the map 0=never, 1=always, 2=With GPS only
+dayz_markBody = 1; // Players can see their corpse position on the map 0=never, 1=always, 2=With GPS only
+dayz_requireRadio = false; // Require players to have a radio on their toolbelt to create a group, be in a group and receive invites.
+MaxMineVeins = 2;
+DZE_GemOccurance = [["ItemTopaz",1000], ["ItemObsidian",50], ["ItemSapphire",25], ["ItemAmethyst",12], ["ItemEmerald",6], ["ItemCitrine",2], ["ItemRuby",1]]; //Sets how rare each gem is in the order shown when mining (whole numbers only)
+DZE_GemWorthArray = [["ItemTopaz",50000], ["ItemObsidian",100000], ["ItemSapphire",500000], ["ItemAmethyst",1000000], ["ItemEmerald",5000000], ["ItemCitrine",10000000], ["ItemRuby",50000000]]; // Array of gem prices, only works with config traders. Set DZE_GemWorthArray=[]; to disable return change in gems.
+
+
 // Uncomment the lines below to change the default loadout
 //DefaultMagazines = ["HandRoadFlare","ItemBandage","ItemPainkiller","8Rnd_9x18_Makarov","8Rnd_9x18_Makarov"];
 //DefaultWeapons = ["Makarov_DZ","ItemFlashlight"];
@@ -67,7 +77,7 @@ DZE_Weather = 1; // Options: 1 - Summer Static, 2 - Summer Dynamic, 3 - Winter S
 
 enableRadio false;
 enableSentences false;
-//setTerrainGrid 25;
+setTerrainGrid 25;
 
 diag_log 'dayz_preloadFinished reset';
 dayz_preloadFinished=nil;
@@ -93,7 +103,8 @@ call compile preprocessFileLineNumbers "\z\addons\dayz_code\init\publicEH.sqf";
 dayz_progressBarValue = 0.1;
 call compile preprocessFileLineNumbers "\z\addons\dayz_code\medical\setup_functions_med.sqf";
 dayz_progressBarValue = 0.15;
-call compile preprocessFileLineNumbers "\z\addons\dayz_code\init\compiles.sqf";
+//call compile preprocessFileLineNumbers "\z\addons\dayz_code\init\compiles.sqf";
+call compile preprocessFileLineNumbers "custom\compiles.sqf";
 dayz_progressBarValue = 0.25;
 call compile preprocessFileLineNumbers "\z\addons\dayz_code\system\mission\napf.sqf"; //Add trader city objects locally on every machine early
 initialized = true;
@@ -133,4 +144,16 @@ if (!isDedicated) then {
 	3 fadeSound 1;
 	3 fadeMusic 1;
 	endLoadingScreen;
+};
+
+if (!isServer) then {
+	// Start custom debug monitor
+	execVM "custom\gui\playerstats.sqf";
+
+	// Service Point
+	sleep 5;
+
+	// ... some other stuff ...
+	// add the next line somewhere in this block
+	execVM "custom\service_point\service_point.sqf";
 };

@@ -44,7 +44,8 @@ Below is the array of mission file names and the minimum and maximum times they 
 Do not edit the Arrays unless you know what you are doing.
 */
 //"SM01","SM02","SM03"
-OKMajorArray = ["SM02", "SM03", "SM04"];
+//OKMajorArray = ["SM02", "SM03", "SM04"]; // Commented because cannot be used
+OKMajorArray = ["SM02", "SM03"];
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // The Minumum time in seconds before a major mission will run.

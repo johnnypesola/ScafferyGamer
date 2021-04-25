@@ -465,3 +465,12 @@ if (_hiveLoaded) then {
 		{[_x,"gear"] call server_updateObject} count _vehiclesToUpdate;
 	};
 };
+
+// WAI missions
+[] ExecVM "\z\addons\dayz_server\WAI\Init.sqf";
+
+// Supply drops
+[] ExecVM "\z\addons\dayz_server\WAI\supply_dropper.sqf";
+
+// OK missions
+[] ExecVM "\z\addons\dayz_server\OK\OKInit.sqf";

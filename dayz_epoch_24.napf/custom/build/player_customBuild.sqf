@@ -10,9 +10,7 @@ private ["_location","_pos","_dir","_classname","_item","_cancel","_reason","_st
 if (dayz_actionInProgress) exitWith {localize "str_epoch_player_40" call dayz_rollingMessages;};
 dayz_actionInProgress = true;
 _pos = [player] call FNC_GetPos;
-
 _onLadder = (getNumber (configFile >> "CfgMovesMaleSdr" >> "States" >> (animationState player) >> "onLadder")) == 1;
-
 _cancel = false;
 _canBuildOnPlot = false;
 
@@ -67,8 +65,7 @@ _needNear = ["Plastic_Pole_EP1_DZ"];
 	};
 } forEach _needNear;
 
-
-if(_abort) exitWith {
+if (_abort) exitWith {
 	format[localize "str_epoch_player_135",_reason,_distance] call dayz_rollingMessages;
 	dayz_actionInProgress = false;
 };
@@ -128,7 +125,7 @@ if (_canBuild select 0) then {
 
 	_object = createVehicle [_classname, _location, [], 0, "CAN_COLLIDE"];
 
-	if((count _offset) <= 0) then {
+	if ((count _offset) <= 0) then {
 		_offset = [0,(abs(((boundingBox _object)select 0) select 1)),0];
 	};
 
@@ -190,47 +187,47 @@ if (_canBuild select 0) then {
 			_dir = 0;
 		};
 
-		if(_rotate) then {
+		if (_rotate) then {
 			_object setDir _dir;
 			_object setPosATL _position;
 			//diag_log format["DEBUG Rotate BUILDING POS: %1", _position];
 		};
 
-		if(_zheightchanged) then {
+		if (_zheightchanged) then {
 			detach _object;
 
 			_position = getPosATL _object;
 
-			if(_zheightdirection == "up") then {
+			if (_zheightdirection == "up") then {
 				_position set [2,((_position select 2)+0.1)];
 				_objHDiff = _objHDiff + 0.1;
 			};
-			if(_zheightdirection == "down") then {
+			if (_zheightdirection == "down") then {
 				_position set [2,((_position select 2)-0.1)];
 				_objHDiff = _objHDiff - 0.1;
 			};
 
-			if(_zheightdirection == "up_alt") then {
+			if (_zheightdirection == "up_alt") then {
 				_position set [2,((_position select 2)+1)];
 				_objHDiff = _objHDiff + 1;
 			};
-			if(_zheightdirection == "down_alt") then {
+			if (_zheightdirection == "down_alt") then {
 				_position set [2,((_position select 2)-1)];
 				_objHDiff = _objHDiff - 1;
 			};
 
-			if(_zheightdirection == "up_ctrl") then {
+			if (_zheightdirection == "up_ctrl") then {
 				_position set [2,((_position select 2)+0.01)];
 				_objHDiff = _objHDiff + 0.01;
 			};
-			if(_zheightdirection == "down_ctrl") then {
+			if (_zheightdirection == "down_ctrl") then {
 				_position set [2,((_position select 2)-0.01)];
 				_objHDiff = _objHDiff - 0.01;
 			};
 
 			_object setDir (getDir _object);
 
-			if((_isAllowedUnderGround == 0) && ((_position select 2) < 0)) then {
+			if ((_isAllowedUnderGround == 0) && {(_position select 2) < 0}) then {
 				_position set [2,0];
 			};
 
@@ -246,7 +243,7 @@ if (_canBuild select 0) then {
 
 		_location2 = getPosATL player;
 
-		if(DZE_5) exitWith {
+		if (DZE_5) exitWith {
 			_isOk = false;
 			detach _object;
 			_dir = getDir _object;
@@ -255,7 +252,7 @@ if (_canBuild select 0) then {
 			deleteVehicle _object;
 		};
 
-		if(_location1 distance _location2 > DZE_buildMaxMoveDistance) exitWith {
+		if (_location1 distance _location2 > DZE_buildMaxMoveDistance) exitWith {
 			_isOk = false;
 			_cancel = true;
 			_reason = format[localize "STR_EPOCH_BUILD_FAIL_MOVED",DZE_buildMaxMoveDistance];
@@ -263,7 +260,7 @@ if (_canBuild select 0) then {
 			deleteVehicle _object;
 		};
 
-		if(abs(_objHDiff) > DZE_buildMaxHeightDistance) exitWith {
+		if (abs(_objHDiff) > DZE_buildMaxHeightDistance) exitWith {
 			_isOk = false;
 			_cancel = true;
 			_reason = format[localize "STR_EPOCH_BUILD_FAIL_HEIGHT",DZE_buildMaxHeightDistance];
@@ -294,9 +291,9 @@ if (_canBuild select 0) then {
 	};
 
 	// No building in trader zones
-	if(!canbuild) then { _cancel = true; _reason = format[localize "STR_EPOCH_PLAYER_136",localize "STR_EPOCH_TRADER"]; };
+	if (!canbuild) then { _cancel = true; _reason = format[localize "STR_EPOCH_PLAYER_136",localize "STR_EPOCH_TRADER"]; };
 
-	if(!_cancel) then {
+	if (!_cancel) then {
 
 		_classname = _classnametmp;
 
@@ -308,7 +305,7 @@ if (_canBuild select 0) then {
 		// Get position based on object
 		_location = _position;
 
-		if((_isAllowedUnderGround == 0) && ((_location select 2) < 0)) then {
+		if ((_isAllowedUnderGround == 0) && {(_location select 2) < 0}) then {
 			_location set [2,0];
 		};
 
@@ -332,7 +329,6 @@ if (_canBuild select 0) then {
 		_counter = 0;
 
 		while {_isOk} do {
-		
 			format[localize "str_epoch_player_139",_text, (_counter + 1),_limit] call dayz_rollingMessages;
 
 			player playActionNow "Medic";
@@ -368,16 +364,16 @@ if (_canBuild select 0) then {
 			r_doLoop = false;
 
 
-			if(!_finished) exitWith {
+			if (!_finished) exitWith {
 				_isOk = false;
 				_proceed = false;
 			};
 
-			if(_finished) then {
+			if (_finished) then {
 				_counter = _counter + 1;
 			};
 
-			if(_counter == _limit) exitWith {
+			if (_counter == _limit) exitWith {
 				_isOk = false;
 				_proceed = true;
 			};

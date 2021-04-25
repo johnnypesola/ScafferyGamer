@@ -5,7 +5,7 @@ LOG_INPROGRESS = true;
 	private ["_heliporteur", "_objects", "_object", "_off"];
 	_off = 0;
 	_heliporteur = _this select 0;
-	_objects = nearestObjects [_heliporteur, LOG_CFG_ISLIFTABLE, 20];
+	_objects = nearestObjects [_heliporteur, LOG_CFG_ISLIFTABLE, 30];
 	_objects = _objects - [_heliporteur];
 	_object = objNull;
 	if (count _objects > 0) then{

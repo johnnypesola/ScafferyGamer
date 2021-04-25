@@ -186,7 +186,7 @@ class Mission
 	};
 	class Markers
 	{
-		items=25;
+		items=27;
 		class Item0
 		{
 			position[]={10010,0,10448};
@@ -359,6 +359,22 @@ class Mission
 			text="Trader city Emmen";
 			type="mil_circle";
 			colorName="ColorBlack";
+		};
+		class Item25
+		{
+			position[]={10490.275,6.1035156e-005,2966.2397};
+			name="Rambo";
+			text="Military Base South";
+			type="mil_circle";
+			colorName="ColorOrange";
+		};
+		class Item26
+		{
+			position[]={16701.484,4.5776367e-005,19048.014};
+			name="McClane";
+			text="Military Base North";
+			type="mil_circle";
+			colorName="ColorOrange";
 		};
 	};
 	class Sensors

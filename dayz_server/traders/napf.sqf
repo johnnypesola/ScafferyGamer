@@ -48,7 +48,7 @@
 	["TK_CIV_Worker01_EP1",[12421.8,5058.99,0.225952],24.8034],
 	/***********************************************/
 	//Aircraft Dealer
-	["RU_Pilot",[15128.7,16420.9,0.0772419],134.335],	
+	["RU_Pilot",[15128.7,16420.9,0.0772419],134.335],
 	//Boat Vendor
 	["RU_Villager3",[16864.951,5273.5635,1.3620883],180],
 	//Boat Vendor
@@ -56,8 +56,24 @@
 	//Wholesaler
 	["Profiteer2",[5371,16091.2,0],0],
 	//Wholesaler
-	["Profiteer3",[2128.3,7807.78,6.99081],260.566]	
+	["Profiteer3",[2128.3,7807.78,6.99081],260.566],
+	// Scaffery Construction Vendor
+	["Soldier_M4A3_PMC",[16782.816,18982.412,0],0],
+	// Scaffery Tier 2 Hero Vendor
+	["Soldier_PMC",[8417.1201,926.12878,0],126.96378],
+	// Scaffery Tier 2 Bandit Vendor
+	["Soldier_AA_PMC",[14381.422,2784.875,0],0]
 ] call server_spawnTraders;
+
+// Bankers
+if (Z_singleCurrency && Z_globalBanking && Z_globalBankingTraders) then {
+	[
+		["Functionary1_EP1",[12399.83,5054.3413,0.2],52],
+		["Functionary1_EP1",[15529.827,13236.555,2.38],164],
+		["Functionary1_EP1",[8252.4922,15494.612,0.22],24.5],
+		["Functionary1_EP1",[2123.4653,7806.499,0.28],53]
+	] call server_spawnTraders;
+};
 
 // Bankers
 if (Z_singleCurrency && Z_globalBanking && Z_globalBankingTraders) then {

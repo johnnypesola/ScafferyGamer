@@ -19,88 +19,64 @@ if (isNull _object OR !alive _object OR (damage _object) > .97) exitWith {};
 _ranFuel = random 1;
 if (_ranFuel < .1) then {_ranFuel = .1;};
 
-//if (OKEpoch) then {
+if (OKEpoch) then {
 
 	//The server is running DayZ Epoch, so we use the Epoch method.
 	_uid = _worldspace call dayz_objectUID2;
 
-	_key = [
-		dayZ_instance,
-		_class,
-		0,	// damage
-		0,	// char id
-		((_worldspace select 1) select 0) call KK_fnc_floatToString,	// x
-		((_worldspace select 1) select 1) call KK_fnc_floatToString,	// y
-		((_worldspace select 1) select 2) call KK_fnc_floatToString,	// z
-		(_worldspace select 0) call KK_fnc_floatToString,		// dir
-		'0', // owner playeruid
-		[[0,0,0],[0,0,0]], // up vector
-		[], // inv magazines
-		[], // inv weapons
-		[], // inv backpacks
-		[], // hitpoints
-		1,  // fuel
-		_uid
-	];
-	_query = ["objectPublish", _key] call dayz_prepareDataForDB;
-	diag_log ("HIVE: WRITE: "+ str(_query));
-	_result = _query call server_hiveReadWrite;
+	_key = format["CHILD:308:%1:%2:%3:%4:%5:%6:%7:%8:%9:", dayZ_instance, _class, 0, 0, _worldspace, [], [], 1, _uid];
 
-	// Try to get object ID already here
-	if (0 < count _result) then {
-		_oid = str (_result select 0);
-		_object setVariable ["ObjectID", _oid, true];
-	};
-	
-	//If the server is busy, it might not write on the first try
-	//Because of this, we loop it until it works
-	_done = false;
-	_retry = 0;
-	if (!isNil "_oid") then {
+	#ifdef OBJECT_DEBUG
+	diag_log ("HIVE: WRITE: "+ str(_key));
+	#endif
 
-		_retry = 100;
-		_done = true;
-	};
+	_key call server_hiveWrite;
 
-	while {_retry < 10} do
-	{
-		sleep 0.3;
-		_key = [_uid];
-		_query = ["objectReturnID", _key] call dayz_prepareDataForDB;
-		_result = _query call server_hiveReadWrite;
-		_outcome = (count _result > 0);
-		if (_outcome) then {
-			_oid = (_result select 0) select 0;
-			_object setVariable ["ObjectID", _oid, true];
-			_done = true;
-			_retry = 11;
-		} else {
-			_done = false;
-			_retry = _retry + 1;
-		};
-	};
-	
-	//Lets get it ready for the user
-	_object setvelocity [0,0,1];
-	_object setFuel _ranFuel;
-	_object setVehicleLock "UNLOCKED";
-	
-	clearWeaponCargoGlobal  _object;
-	clearMagazineCargoGlobal  _object;
-	
-	_object allowDamage false;
-	_object setVariable ["lastUpdate", time];
-	_object setVariable ["CharacterID", "0", true];
 	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor, _object];
-	
-	sleep 1;
-	_object call fnc_veh_ResetEH;
-	PVDZE_veh_Init = _object;
-	publicVariable "PVDZE_veh_Init";
-	[_object,"all"] spawn server_updateObject;
-	_object allowDamage true;
-	
-/*
+
+	// GET DB ID
+	_key = format["CHILD:388:%1:",_uid];
+
+	#ifdef OBJECT_DEBUG
+	diag_log ("HIVE: WRITE: "+ str(_key));
+	#endif
+
+	_result = _key call server_hiveReadWrite;
+	_outcome = _result select 0;
+
+	if (_outcome != "PASS") then {
+		deleteVehicle _object;
+		diag_log("CUSTOM: failed to get id for : " + str(_uid));
+	} else {
+		_oid = _result select 1;
+		_object setVariable ["ObjectID", _oid, true];
+
+		#ifdef OBJECT_DEBUG
+		diag_log("CUSTOM: Selected " + str(_oid));
+		#endif
+
+		_object allowDamage false;
+		_object setVariable ["lastUpdate",diag_tickTime];
+		_object setVariable ["CharacterID", "0", true];
+
+		//Lets get it ready for the user
+		_object setFuel _ranFuel;
+		_object setvelocity [0,0,1];
+		_object call fnc_veh_ResetEH;
+		_object setVehicleLock "UNLOCKED";
+
+		clearWeaponCargoGlobal  _object;
+		clearMagazineCargoGlobal  _object;
+
+		PVDZE_veh_Init = _object;
+		publicVariable "PVDZE_veh_Init";
+
+		[_object,"all"] spawn server_updateObject;
+		_object allowDamage true;
+
+		diag_log ("PUBLISH: Created " + (_class) + " with ID " + str(_uid));
+	};
+
 } else {
 	
 	//They are running a different DayZ Varient
@@ -162,4 +138,3 @@ if (_ranFuel < .1) then {_ranFuel = .1;};
 	[_object,"all"] spawn server_updateObject;
 
 };
-*/

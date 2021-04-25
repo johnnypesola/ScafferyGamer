@@ -2,41 +2,41 @@
 
 #include "\ca\editor\Data\Scripts\dikCodes.h"
 
-_dikCode = _this select 1;
-_shiftState = _this select 2;
-_ctrlState = _this select 3;
-_altState = _this select 4;
-_handled = false;
+local _dikCode = _this select 1;
+local _shiftState = _this select 2;
+local _ctrlState = _this select 3;
+local _altState = _this select 4;
+local _handled = false;
 
 if (isNil "keyboard_keys") then {
-    _cancelBuild = {
+    local _cancelBuild = {
 		DZE_cancelBuilding = true;
 		call dayz_EjectPlayer;
 		_handled = false;
 		if (r_player_dead) then {_handled = true;}; // Disable ESC after death
     };
-	_dze_f = {
-		 if (!_ctrlState && !_altState) then {DZE_F = true;};
+	local _dze_f = {
+		if (!_ctrlState && !_altState) then {DZE_F = true;};
 	};
-	_dze_q = {
-		 if (!_ctrlState && !_altState) then {DZE_Q = true;};
-		 if (!_ctrlState && _altState) then {DZE_Q_alt = true;};
-		 if (_ctrlState && !_altState) then {DZE_Q_ctrl = true;};
+	local _dze_q = {
+		if (!_ctrlState && !_altState) then {DZE_Q = true;};
+		if (!_ctrlState && {_altState}) then {DZE_Q_alt = true;};
+		if (_ctrlState && !_altState) then {DZE_Q_ctrl = true;};
 	};
-	_dze_z = {
-		 if (!_ctrlState && !_altState) then {DZE_Z = true;};
-		 if (!_ctrlState && _altState) then {DZE_Z_alt = true;};
-		 if (_ctrlState && !_altState) then {DZE_Z_ctrl = true;};
+	local _dze_z = {
+		if (!_ctrlState && !_altState) then {DZE_Z = true;};
+		if (!_ctrlState && _altState) then {DZE_Z_alt = true;};
+		if (_ctrlState && !_altState) then {DZE_Z_ctrl = true;};
 	};
-	_autoRun = {
+	local _autoRun = {
 		if (!dayz_autoRun) then {
 			dayz_autoRun = true;
 			dayz_autoRunThread = [] spawn {
-				_weapon = currentWeapon player;
+				local _weapon = currentWeapon player;
 				while {dayz_autoRun} do {
 					// SurfaceIsWater does not work for ponds
 					// Check weapon to detect Arma action (dayz action is handled in dz_fn_switchWeapon)
-					if (player != vehicle player or (surfaceIsWater getPosASL player) or ((call fn_nearWaterHole) select 0) or (currentWeapon player != _weapon) or r_fracture_legs) exitWith {
+					if (player != vehicle player || {r_fracture_legs || {surfaceIsWater getPosASL player} || {currentWeapon player != _weapon} || {(call fn_nearWaterHole) select 0}}) exitWith {
 						call dayz_autoRunOff;
 					};
 					player playAction "FastF";
@@ -48,12 +48,12 @@ if (isNil "keyboard_keys") then {
 		};
 		_handled = true;
 	};
-	_filterCheat = {
+	local _filterCheat = {
 		//Overriding default engine handling does not stop cheat input, need manual disableUserInput too
 		_handled = [displayNull,_dikCode,_shiftState] call dze_filterCheats;
 	};
-	_openGroups = {
-		if (dayz_requireRadio && !("ItemRadio" in items player)) then {
+	local _openGroups = {
+		if (dayz_requireRadio && {!("ItemRadio" in items player)}) then {
 			localize "STR_EPOCH_NEED_RADIO" call dayz_rollingMessages;
 		} else {
 			if (isNull findDisplay 80000) then {
@@ -64,86 +64,53 @@ if (isNil "keyboard_keys") then {
 		};
 		_handled = true;
 	};
-	_muteSound = {
+	local _muteSound = {
 		call player_toggleSoundMute;
 		_handled = true;
 	};
-	_statusUI = {
-		profileNamespace setVariable ["statusUI",(if (profileNamespace getVariable ["statusUI",1] == 1) then {0} else {1})];
+	local _statusUI = {
+		DZE_UI = DZE_UI + 1;
+		if (DZE_UI == 6) then {DZE_UI = 0; [format[localize "STR_UI_STATUS_ICONS" + " %1",localize "STR_DISABLED"],1] call dayz_rollingMessages;};
+		if (DZE_UI == 1) then {[format[localize "STR_UI_STATUS_ICONS" + " %1",localize "STR_ENABLED"],1] call dayz_rollingMessages;};
+		profileNamespace setVariable ["statusUI",DZE_UI];
 		saveProfileNamespace;
 		call ui_changeDisplay;
 		_handled = true;
 	};
-    _rifle = {
+    local _rifle = {
 		2 call dz_fn_switchWeapon;
         _handled = true;
     };
-    _pistol = {
+    local _pistol = {
 		3 call dz_fn_switchWeapon;
         _handled = true;
     };
-    _melee = { // Also works for rifle on back if DZE_TwoPrimaries = 2;
+    local _melee = { // Also works for rifle on back if DZE_TwoPrimaries = 2;
 		4 call dz_fn_switchWeapon;
         _handled = true;
     };
-    _throwable = { // select next non empty throwable weapon
-        if (vehicle player == player) then {
-            _ammo_throwable = [];
-            _muzzles_throwable = [];
-            _weapon_throwable = [];
-            {
-                _weapon = _x;
-                _muzzles = getArray(configFile >> "cfgWeapons" >> _weapon >> "muzzles");
-                if (count _muzzles == 0) then { _muzzles = [_weapon ]; };
-                {
-                    _muzz = _x;
-                    {
-                        if (_x in magazines player) then {
-                            _ammo_throwable set [ count _ammo_throwable, getText(configFile >> "cfgMagazines" >> _x >> "ammo") ];
-                            _muzzles_throwable set [ count _muzzles_throwable, _muzz ];
-                            _weapon_throwable set [ count _weapon_throwable, _weapon ];
-                        };                      
-                    } forEach getArray(configFile >> "cfgWeapons" >> _weapon >> _muzz >> "magazines");
-                } forEach _muzzles;
-            } forEach ["Throw"];
-
-            _magCount = count _ammo_throwable;
-            if (_magCount > 0) then {
-                if (isNil "KB_CurrentThrowable") then { KB_CurrentThrowable = -1; };
-                _currentAmmo = (weaponState player) select 3;       
-                _idx = _ammo_throwable find _currentAmmo;
-                if (_idx >= 0) then { KB_CurrentThrowable = _idx; };
-                KB_CurrentThrowable = (KB_CurrentThrowable + 1) mod _magCount;
-                player selectWeapon (_muzzles_throwable select KB_CurrentThrowable);
+	local _surrender = {
+		call player_surrender;
+		_handled = true;
+    };
+    local _gear = {
+        if ((vehicle player != player) && {!_shiftState && !_ctrlState && !_altState && !dialog}) then {
+            createGearDialog [player, "RscDisplayGear"];
+            _handled = true;
+        } else {
+            if ((vehicle player == player) && {speed vehicle player > 0}) then {
+                //[objNull, player, rSwitchMove,""] call RE;
                 _handled = true;
             };
         };
     };
-	_surrender = {
-		call player_surrender;
-		_handled = true;
-    };
-    _gear = {
-        if ((vehicle player != player) and !_shiftState and !_ctrlState and !_altState && !dialog) then {
-            createGearDialog [player, "RscDisplayGear"];
-            _handled = true;
-        }
-        else { if ((vehicle player == player) and (speed vehicle player > 0)) then {
-            //[objNull, player, rSwitchMove,""] call RE;
-            _handled = true;
-        };};
-    };
-    _forcesave = {
+    local _forcesave = {
 		if (diag_tickTime - dayz_lastSave > 10) then {
 			call player_forceSave;
 		};
     };
-    _forcesave2 = {
-        if ((!isNull (findDisplay 106)) OR dialog) then {
-            call player_forceSave;          
-        };
-    };
-    _drop = {
+    local _drop = {
+		local _doors = [];
 		if (r_drag_sqf) then {
 			_doors = nearestObjects [player, DayZ_DropDrageeObjects, 3]; //Prevent dropping dragged player through objects
 			if (count _doors > 0) then {_handled = true;};
@@ -153,73 +120,32 @@ if (isNil "keyboard_keys") then {
 			if (count _doors > 0 && {speed player > 0}) then {_handled = true;}; //Prevent sprint and prone through doors glitch
 		};
     };
-    _interrupt = {
+    local _interrupt = {
 		r_interrupt = true;
 		if (DZE_Surrender) then {call dze_surrender_off};
 		if (dayz_autoRun) then {call dayz_autoRunOff;};
     };
     // TODO: left/right, when gear open: onKeyDown = "[_this,'onKeyDown',0,107,0,107] execVM '\z\addons\dayz_code\system\handleGear.sqf'";
-    _noise = {
+    local _noise = {
 		//Overriding default engine handling does not stop combination binds, need manual disableUserInput too
 		_handled = [displayNull,_dikCode,_shiftState] call dze_filterCheats;
-		
-        if (diag_ticktime - dayz_lastCheckBit > 10 && !(_dikCode in channel_keys)) then {
+
+        if (diag_ticktime - dayz_lastCheckBit > 10 && {!(_dikCode in channel_keys)}) then {
             dayz_lastCheckBit = diag_ticktime;
             [player,20,true,(getPosATL player)] call player_alertZombies;
         };
     };
-    _journal = {
-        if (!dayz_isSwimming and !dialog) then {
+    local _journal = {
+        if (!dayz_isSwimming && !dialog) then {
             [player,4,true,(getPosATL player)] call player_alertZombies;
             createDialog 'horde_journal_front_cover';
         };
         _handled = true;
     };
 
-    _build_left = {
-		DZE_4 = true;
-        // fence construction
-        if (0 != count Dayz_constructionContext) then {
-            _angleRef = Dayz_constructionContext select 1;
-            _dir = _angleRef - (getDir player) -5;
-            if (_dir > 180) then {_dir = _dir - 360}; 
-            if (_dir < -180) then {_dir = _dir + 360};
-            if ( _dir > -75) then {
-                _new = floor((_angleRef - 5)/5)*5;
-                Dayz_constructionContext set [ 1, _new]; // favorite angle
-                r_interrupt = true;
-            };
-            _handled = true;
-        };
-        dayz_dodge = true;
-    };
-    _build_right = {
-		DZE_6 = true;
-        if (0 != count Dayz_constructionContext) then {
-            _angleRef = Dayz_constructionContext select 1;
-            _dir = _angleRef - (getDir player) +5;
-            if (_dir > 180) then { _dir = _dir - 360; }; 
-            if (_dir < -180) then { _dir = _dir + 360; };
-            if (_dir < 75) then {
-                _new = ceil((_angleRef + 5)/5)*5;
-                Dayz_constructionContext set [ 1, _new]; // favorite angle
-                r_interrupt = true;
-            };
-            _handled = true;
-        };
-        dayz_dodge = true;
-    };
-
-    _build_camOnOff = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\fn_buildCamera.sqf";
-
-    _build_str8OnOff = {
+    local _bunnyhop = {
 		r_interrupt = true;
-		
-        if (0 != count Dayz_constructionContext) then {
-            Dayz_constructionContext set [ 5, !(Dayz_constructionContext select 5) ];
-            _handled = true;
-        };
-		
+
 		if (animationState player in ["bunnyhopunarmed","bunnyhoprifle"]) then {
 			//Fixes invisible weapon switch glitch if double tapping vault with no weapon in hands
 			_handled = true;
@@ -227,7 +153,7 @@ if (isNil "keyboard_keys") then {
 		if (player isKindOf "PZombie_VB") then {
 			_handled = true; // do not allow player zombies to vault or jump
 		} else {
-			_nearbyObjects = nearestObjects [getPosATL player, dayz_disallowedVault, 8];
+			local _nearbyObjects = nearestObjects [getPosATL player, dayz_disallowedVault, 8];
 			if (count _nearbyObjects > 0) then {
 				if (diag_tickTime - dayz_lastCheckBit > 4) then {
 					[objNull, player, rSwitchMove,"GetOver"] call RE;
@@ -263,11 +189,11 @@ if (isNil "keyboard_keys") then {
         _handled = true;
     };
 
-    _block = {
+    local _block = {
         _handled = true;
     };
 	
-    _addArray = {
+    local _addArray = {
         {
 			if (_x <= 999999) then {
 				keyboard_keys set [_x, _this select 1];
@@ -306,7 +232,6 @@ if (isNil "keyboard_keys") then {
     [[DIK_1], _rifle] call _addArray;
     [[DIK_2], _pistol] call _addArray;
     [[DIK_3], _melee] call _addArray;
-    //[[DIK_4], _throwable] call _addArray;
     [actionKeys "Gear", _gear] call _addArray;
     [actionKeys "Prone", _drop] call _addArray;
     [actionKeys "Crouch", _drop] call _addArray;
@@ -334,13 +259,9 @@ if (isNil "keyboard_keys") then {
 	[[DIK_F3], _statusUI] call _addArray;
 	[[DIK_F4], {if (diag_tickTime - dayz_lastSave > 10) then {call player_forceSave;};_handled = true;}] call _addArray;
     [[DIK_TAB,DIK_DELETE], _forcesave] call _addArray;
-    //[[DIK_F4, DIK_RMENU, DIK_LMENU,DIK_LSHIFT,DIK_RSHIFT,DIK_ESCAPE], _forcesave2] call _addArray;
-    [actionKeys "LeanLeft", _build_left ] call _addArray;
-    [actionKeys "LeanRight", _build_right ] call _addArray;
-    [actionKeys "PersonView", _build_camOnOff ] call _addArray; // Camera Mode
-    [actionKeys "GetOver", _build_str8OnOff ] call _addArray; // V
-//  [[DIK_NUMPAD7], _rotate_left] call _addArray;
-//  [[DIK_NUMPAD9], _rotate_right] call _addArray;
+	[actionKeys "LeanLeft", {DZE_4 = true; dayz_dodge = true;}] call _addArray;
+	[actionKeys "LeanRight", {DZE_6 = true; dayz_dodge = true;}] call _addArray;
+    [actionKeys "GetOver", _bunnyhop] call _addArray; // V
     [actionKeys "ForceCommandingMode", {DZE_5 = true;_handled = true;}] call _addArray;
 
     // custom
@@ -348,9 +269,9 @@ if (isNil "keyboard_keys") then {
     [[DIK_F7], _scaff_toggleDebug ] call _addArray; // toggle debug monitor (scaffery)
 
     [[  DIK_F9,DIK_F10,DIK_F11,DIK_F12,
-        DIK_F8,
+        DIK_F8,DIK_F5,
         DIK_F2,DIK_9,
-        DIK_8,DIK_7,DIK_6,DIK_5,DIK_4], _block] call _addArray;
+        DIK_8,DIK_7,DIK_6,DIK_5,DIK_4,DIK_BACK], _block] call _addArray;
 	if (dayz_groupSystem) then {
 		[[DIK_F5], _openGroups] call _addArray;
 		[[DIK_LWIN,DIK_RWIN], {dayz_groupNameTags = !dayz_groupNameTags;_handled = true;}] call _addArray;
@@ -358,11 +279,11 @@ if (isNil "keyboard_keys") then {
 	};
 	[actionKeys "DSInterface", _block] call _addArray;
 	[[DIK_P], {if (_shiftState) then {_handled = true;};}] call _addArray;
-	diag_log "keyboard_keys reset";
+	//diag_log "keyboard_keys reset";
 };
 
 if (r_player_unconsciousInputDisabled) exitWith {true};
-_code = keyboard_keys select _dikCode;
+local _code = keyboard_keys select _dikCode;
 if (!isNil "_code") then {
     call _code;
 };

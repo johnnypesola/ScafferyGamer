@@ -261,6 +261,123 @@ spawn_usable_static_gunners = {
 [] spawn {
 	Private ["_proceed","_themags","_theweap","_thetool","_item","_thebox","_hidden_box_number_of_gold","_hidden_box_number_of_guns","_hidden_box_number_of_tools","_hidden_box_number_of_buildmats","_numberofguns","_numberoftools","_numberofitems","_numberofbuildmats","_hidden_box_random_items","_hidden_box_random_guns","_hidden_box_random_tools","_hidden_box_random_buildmats","_objects","_rare_loot_items","_result","_positions","_pos", "_total_groups","_location","_prize_veh","_prize_veh_chute","_class","_units","_i","_mg_list","_gunner_list","_respawn_patrol_starting_point","_target_point","_sniper_groups","_sniper_group","_pair","_gunner_list_pos","_grp","_kent_waypoints"];
 
+/*
+	// BEGIN Spawn a temporary box with upgrades
+	_thebox = createVehicle ["BAF_VehicleBox",[15128.7,16422.9,0.0772419], [], 0, "CAN_COLLIDE"];
+	clearWeaponCargoGlobal _thebox;
+	clearMagazineCargoGlobal _thebox;
+	_thebox setVariable ["ObjectID","1",true];
+	_thebox setVariable ["permaLoot",true];
+	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_thebox];
+
+	_thebox allowDamage false;
+
+	_hidden_box_random_items = [
+		"ItemARM",
+		"ItemARM",
+		"ItemARM",
+		"ItemARM",
+		"ItemORP",
+		"ItemORP",
+		"ItemORP",
+		"ItemORP",
+		"ItemAVE",
+		"ItemAVE",
+		"ItemAVE",
+		"ItemAVE",
+		"ItemLRK",
+		"ItemLRK",
+		"ItemLRK",
+		"ItemLRK",
+		"ItemTNK",
+		"ItemTNK",
+		"ItemTNK",
+		"ItemTNK",
+		"ItemTruckORP",
+		"ItemTruckORP",
+		"ItemTruckORP",
+		"ItemTruckORP",
+		"ItemTruckAVE",
+		"ItemTruckAVE",
+		"ItemTruckAVE",
+		"ItemTruckAVE",
+		"ItemTruckLRK",
+		"ItemTruckLRK",
+		"ItemTruckLRK",
+		"ItemTruckLRK",
+		"ItemTruckTNK",
+		"ItemTruckTNK",
+		"ItemTruckTNK",
+		"ItemTruckTNK",
+		"ItemTruckARM",
+		"ItemTruckARM",
+		"ItemTruckARM",
+		"ItemTruckARM",
+		"ItemTankORP",
+		"ItemTankORP",
+		"ItemTankORP",
+		"ItemTankORP",
+		"ItemTankAVE",
+		"ItemTankAVE",
+		"ItemTankAVE",
+		"ItemTankAVE",
+		"ItemTankLRK",
+		"ItemTankLRK",
+		"ItemTankLRK",
+		"ItemTankLRK",
+		"ItemTankTNK",
+		"ItemTankTNK",
+		"ItemTankTNK",
+		"ItemTankTNK",
+		"ItemHeliAVE",
+		"ItemHeliAVE",
+		"ItemHeliAVE",
+		"ItemHeliAVE",
+		"ItemHeliLRK",
+		"ItemHeliLRK",
+		"ItemHeliLRK",
+		"ItemHeliLRK",
+		"ItemHeliTNK",
+		"ItemHeliTNK",
+		"ItemHeliTNK",
+		"ItemHeliTNK",
+		"equip_metal_sheet",
+		"equip_metal_sheet",
+		"equip_metal_sheet",
+		"equip_metal_sheet",
+		"equip_metal_sheet",
+		"equip_metal_sheet",
+		"equip_metal_sheet",
+		"equip_metal_sheet",
+		"equip_metal_sheet",
+		"equip_metal_sheet",
+		"ItemScrews",
+		"ItemScrews",
+		"ItemTinBar",
+		"ItemTinBar",
+		"equip_scrapelectronics",
+		"equip_scrapelectronics",
+		"equip_scrapelectronics",
+		"equip_scrapelectronics",
+		"equip_floppywire",
+		"equip_floppywire",
+		"equip_floppywire",
+		"equip_floppywire"
+	];
+	_hidden_box_random_tools = [
+		"ItemToolbox",
+		"ItemSolder_DZE"
+	];
+
+	{
+		_thebox addMagazineCargoGlobal [_x,1];
+	} forEach _hidden_box_random_items;
+	{
+		_thebox addWeaponCargoGlobal [_x,1];
+	} forEach _hidden_box_random_tools;
+*/
+	// END Spawn a temporary box with upgrades
+
 	_respawn_patrol_starting_point = [16408.867, 18325.08, 3.7562463];
 	_target_point = [16745.498, 19048.521, 0.01];
 	_gunner_list_pos = 0;

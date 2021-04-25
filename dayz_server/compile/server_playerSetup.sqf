@@ -167,13 +167,52 @@ if (_randomSpot) then {
 	_mkr = [];
 	_position = [0,0,0];
 	_j = 0;
+	local _nofSpawns = 0;
+	local _tmpSpawn = [];
+	local _bodyPos = [];
+	local _bodyDist = 99999;
 	while {_findSpot && _j <= 100} do {
-		if (_spawnSelection == 9) then {
-			// random spawn location selected, lets get the marker and spawn in somewhere
-			if (dayz_spawnselection == 1) then {_mkr = getMarkerPos ("spawn" + str(floor(random 6)));} else {_mkr = getMarkerPos ("spawn" + str(floor(random actualSpawnMarkerCount)));};
+
+		if ("napf" == toLower worldName) then {
+			_nofSpawns = 11;
+		};
+		if ("chernarus" == toLower worldName) then {
+			_nofSpawns = 9;
+		};
+
+		// Scaffery: Favor a spawn near corpse
+		if (_nofSpawns > 0) then {
+			{
+				if ((_x getVariable["bodyUID", ""]) == (getPlayerUID _playerObj)) then {
+					diag_log format["This corpse belongs to player %1. OK.", getPlayerUID _playerObj];
+					_bodyPos = getPos _x;
+				};
+			} forEach allDead;
+		};
+
+		if (0 > count _bodyPos) then {
+			// Get closest spawn position to corpse
+			for "_i" from 0 to _nofSpawns - 1 do {
+				_tmpSpawn = getMarkerPos ("spawn" + str(_i));
+				if (_bodyDist > (_tmpSpawn distance _bodyPos)) then {
+					_bodyDist = _tmpSpawn distance _bodyPos;
+					_mkr = _tmpSpawn;
+					local _bikePos = ([_mkr,0,50,10,0,1,0] call BIS_fnc_findSafePos);
+					local _veh = createVehicle [["Old_bike_TK_CIV_EP1_DZE","MMT_Civ_DZE"] call BIS_fnc_selectRandom,_bikePos, [], 0, "CAN_COLLIDE"];
+					_veh setDir round(random 360);
+					_veh setVariable ["ObjectID","1",true];
+					dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_veh];
+					diag_log format["Spawned bike for player at %1", getPos _veh];
+				};
+			};
 		} else {
-			// spawn is not random, lets spawn in our location that was selected
-			_mkr = getMarkerPos ("spawn" + str(_spawnSelection));
+			if (_spawnSelection == 9) then {
+				// random spawn location selected, lets get the marker and spawn in somewhere
+				if (dayz_spawnselection == 1) then {_mkr = getMarkerPos ("spawn" + str(floor(random 6)));} else {_mkr = getMarkerPos ("spawn" + str(floor(random actualSpawnMarkerCount)));};
+			} else {
+				// spawn is not random, lets spawn in our location that was selected
+				_mkr = getMarkerPos ("spawn" + str(_spawnSelection));
+			};
 		};
 		_position = ([_mkr,0,spawnArea,10,0,2,spawnShoremode] call BIS_fnc_findSafePos);
 		if ((count _position >= 2) // !bad returned position
