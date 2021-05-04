@@ -4,6 +4,7 @@ class Category_46 {
 	class GNT_C185_DZ {type = "trade_any_vehicle";buy[] = {4,"ItemGoldBar10oz"};sell[] = {2,"ItemGoldBar10oz"};};
 	class GNT_C185R_DZ {type = "trade_any_vehicle";buy[] = {4,"ItemGoldBar10oz"};sell[] = {2,"ItemGoldBar10oz"};};
 	class GNT_C185C_DZ {type = "trade_any_vehicle";buy[] = {4,"ItemGoldBar10oz"};sell[] = {2,"ItemGoldBar10oz"};};
+	class GNT_C185T_DZE {type = "trade_any_vehicle";buy[] = {8,"ItemGoldBar10oz"};sell[] = {4,"ItemGoldBar10oz"};};
 	//Green
 	class AN2_DZ {type = "trade_any_vehicle";buy[] = {4,"ItemGoldBar10oz"};sell[] = {2,"ItemGoldBar10oz"};};
 	//Red and white

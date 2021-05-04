@@ -32,8 +32,10 @@ if (count (crew _vehicle) == 0) then {
 
 		if (isNil "_upgradeTmp" || {(count _upgradeTmp) == 0}) then {
 			_upgrade = getArray (missionConfigFile >> "CfgVehicles" >> _classname >> "Upgrades" >> _upgrade);
+		} else {
+			_upgrade = _upgradeTmp;
 		};
-		if (!isNil "_upgrade" && {(count _upgrade) > 0}) then {
+		if (!isNil "_upgrade" && {(typeName _upgrade) == "ARRAY"} && {(count _upgrade) > 0}) then {
 			closeDialog 0;
 			_newclassname = _upgrade select 0;
 			_requirementsTools = _upgrade select 1;
@@ -174,6 +176,7 @@ if (count (crew _vehicle) == 0) then {
 				};
 			};
 		} else {
+			diag_log format["Got unexpected data in _upgrade: %1", _upgrade];
 			format [localize "STR_EPOCH_VEHUP_NO_UPGRADE_FOR_VEHICLE",_upgradeName,_displayname] call dayz_rollingMessages;
 		};
 	} else {

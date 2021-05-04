@@ -1,6 +1,7 @@
 if (isServer) then {
 	call compile preprocessFileLineNumbers "\z\addons\dayz_server\init\server_functions.sqf";
-	server_updateGroup = compile preprocessFileLineNumbers "groups\server_updateGroup.sqf";
+	//server_updateGroup = compile preprocessFileLineNumbers "groups\server_updateGroup.sqf";
+	server_updateGroup = compile preprocessFileLineNumbers "\z\addons\dayz_code\groups\server_updateGroup.sqf";
 };
 
 if (!isDedicated) then {

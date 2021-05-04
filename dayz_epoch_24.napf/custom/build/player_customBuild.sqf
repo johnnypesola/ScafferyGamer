@@ -5,7 +5,7 @@
 	Adaptation for custom buildables by
 	Pastorn - 04/16/2017
 */
-private ["_location","_pos","_dir","_classname","_item","_cancel","_reason","_started","_finished","_animState","_isMedic","_dis","_sfx","_tmpbuilt","_onLadder","_require","_text","_offset","_isOk","_location1","_location2","_counter","_limit","_proceed","_num_removed","_position","_object","_canBuildOnPlot","_distance","_classnametmp","_ghost","_lockable","_zheightchanged","_rotate","_combination_1","_combination_2","_combination_3","_combination_4","_combination","_combination_1_Display","_combinationDisplay","_zheightdirection","_abort","_isNear","_needNear","_vehicle","_inVehicle","_objHDiff","_isAllowedUnderGround","_canBuild","_hasItems","_num_provided","_item_count"];
+private ["_location","_pos","_dir","_classname","_item","_cancel","_reason","_started","_finished","_animState","_isMedic","_dis","_sfx","_tmpbuilt","_onLadder","_require","_text","_offset","_isOk","_location1","_location2","_counter","_limit","_proceed","_num_removed","_position","_object","_canBuildOnPlot","_distance","_classnametmp","_ghost","_lockable","_zheightchanged","_rotate","_combination_1","_combination_2","_combination_3","_combination_4","_combination","_combination_1_Display","_combinationDisplay","_zheightdirection","_abort","_isNear","_needNear","_vehicle","_inVehicle","_objHDiff","_isAllowedUnderGround","_canBuild","_hasItems","_num_provided","_item_count","_playerUID"];
 
 if (dayz_actionInProgress) exitWith {localize "str_epoch_player_40" call dayz_rollingMessages;};
 dayz_actionInProgress = true;
@@ -16,6 +16,7 @@ _canBuildOnPlot = false;
 
 _vehicle = vehicle player;
 _inVehicle = (_vehicle != player);
+_playerUID = getPlayerUID player;
 
 DZE_Q = false;
 DZE_Z = false;
