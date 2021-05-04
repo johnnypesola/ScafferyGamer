@@ -11,6 +11,7 @@ BIS_MPF_remoteExecutionServer = {
 call compile preprocessFileLineNumbers "\z\addons\dayz_code\util\compile.sqf";
 call compile preprocessFileLineNumbers "\z\addons\dayz_code\loot\init.sqf";
 
+Scaffery_enableTestMode = true;
 BIS_Effects_Burn = {};
 dayz_disconnectPlayers = [];
 dayz_serverKey = [59]; //makes sure client is kicked by publicvariableval.txt if they try to send it
@@ -311,3 +312,4 @@ if (DZE_Extras_WorldName == "chernarus") then {
 call compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\kk_functions.sqf";
 call compile preprocessFileLineNumbers "\z\addons\dayz_server\eventHandlers\server_eventHandler.sqf";
 #include "mission_check.sqf"
+#include "spawn_config.sqf"

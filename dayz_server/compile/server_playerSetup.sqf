@@ -190,19 +190,13 @@ if (_randomSpot) then {
 			} forEach allDead;
 		};
 
-		if (0 > count _bodyPos) then {
+		if (0 < count _bodyPos) then {
 			// Get closest spawn position to corpse
 			for "_i" from 0 to _nofSpawns - 1 do {
 				_tmpSpawn = getMarkerPos ("spawn" + str(_i));
 				if (_bodyDist > (_tmpSpawn distance _bodyPos)) then {
 					_bodyDist = _tmpSpawn distance _bodyPos;
 					_mkr = _tmpSpawn;
-					local _bikePos = ([_mkr,0,50,10,0,1,0] call BIS_fnc_findSafePos);
-					local _veh = createVehicle [["Old_bike_TK_CIV_EP1_DZE","MMT_Civ_DZE"] call BIS_fnc_selectRandom,_bikePos, [], 0, "CAN_COLLIDE"];
-					_veh setDir round(random 360);
-					_veh setVariable ["ObjectID","1",true];
-					dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_veh];
-					diag_log format["Spawned bike for player at %1", getPos _veh];
 				};
 			};
 		} else {
@@ -250,6 +244,7 @@ _playerObj setVariable ["characterID",_characterID,true];
 _playerObj setVariable ["humanity",_humanity,true];
 _playerObj setVariable ["lastPos",_position];
 
+
 _clientID = owner _playerObj;
 _randomKey = [];
 for "_i" from 0 to 12 do {
@@ -267,7 +262,9 @@ if (_findIndex > -1) then {
 // Sync weather settings for JIP player
 _clientID publicVariableClient "PVDZE_SetWeather";
 
-PVCDZ_plr_Login2 = [_worldspace,_state,_randomKey];
+// ESS v3
+PVCDZ_plr_Login2 = [[0,respawn_west_original],_state,_randomKey,_worldspace,_randomSpot,([_randomSpot,_playerID] call spawn_config)];
+//PVCDZ_plr_Login2 = [_worldspace,_state,_randomKey];
 _clientID publicVariableClient "PVCDZ_plr_Login2";
 if (dayz_townGenerator) then {
 	_clientID publicVariableClient "PVCDZ_plr_plantSpawner";

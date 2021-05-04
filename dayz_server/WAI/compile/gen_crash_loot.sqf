@@ -60,7 +60,7 @@ _spawnCrashSite =
 		_mag = (random 15)+6;
 		_lootPos = [(_mag * sin _dir)+(_position select 0), (_mag * cos _dir)+(_position select 1), 0];
 		
-		_lootVeh = Loot_Spawn(_x, _lootPos);
+		_lootVeh = Loot_Spawn(_x, _lootPos, "");
 		_lootVeh setVariable ["permaLoot", true];
 		
 		switch (dayz_spawnCrashSite_clutterCutter) do
