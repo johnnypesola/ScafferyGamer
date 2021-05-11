@@ -11,6 +11,7 @@ class CfgTraderCategory {
 	#include "Category\AirVehicles.hpp"
 	#include "Category\Boats.hpp"
 	#include "Category\Wholesale.hpp"
+	#include "Category\ConstructionItems.hpp"
 	#include "Category\SuperBanditAmmo.hpp"
 	#include "Category\SuperBanditAntiAirAmmo.hpp"
 	#include "Category\SuperBanditAntiAirWeapons.hpp"
