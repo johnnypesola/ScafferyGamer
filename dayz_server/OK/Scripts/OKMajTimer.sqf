@@ -19,10 +19,14 @@ while {_run} do
 	//Let's check that there are missions in the array.
 	//If there are none, lets end the timer.
 	_cntMis = count OKMajorArray;
-	if (_cntMis == 0) then { _run = false; };
+	if (_cntMis == 0) exitWith { _run = false; };
 	
 	//Lets pick a mission
-	_ranMis = floor (random _cntMis);
+	if (isNil "_ranMis") then {
+		_ranMis = _cntMis - 1;
+	} else {
+		_ranMis = floor (random _cntMis);
+	};
 	_varName = OKMajorArray select _ranMis;
 	
 	//Let's Run the Mission

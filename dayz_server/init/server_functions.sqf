@@ -57,6 +57,18 @@ spawn_vehicles = compile preprocessFileLineNumbers "\z\addons\dayz_server\compil
 
 fnc_veh_setFixServer = compile preprocessFileLineNumbers "\z\addons\dayz_code\compile\veh_setFixServer.sqf";	//process the hit as a NORMAL damage (useful for persistent vehicles)
 
+// TODO: Uncomment when ready
+//
+// --- Ferry ---
+//server_ferry_transportVehicle =		compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\server_ferry_transportVehicle.sqf";
+//server_ferry_getVehicleCrewAssignments =compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\server_ferry_getVehicleCrewAssignments.sqf";
+//server_ferry_receiveVehicle =		compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\server_ferry_receiveVehicle.sqf";
+
+// --- Abandoned Bases ---
+server_getAbandonedBase = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\scaffery\server_getAbandonedBase.sqf";
+server_deleteAbandonedBase = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\scaffery\server_deleteAbandonedBase.sqf";
+server_publishAbandonedBaseObject =	compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\scaffery\server_publishAbandonedBaseObject.sqf";
+
 server_medicalSync = {
 	local _player = _this select 0;
 	local _array = _this select 1;

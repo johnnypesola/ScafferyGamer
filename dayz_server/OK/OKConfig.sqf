@@ -45,7 +45,7 @@ Do not edit the Arrays unless you know what you are doing.
 */
 //"SM01","SM02","SM03"
 //OKMajorArray = ["SM02", "SM03", "SM04"]; // Commented because cannot be used
-OKMajorArray = ["SM02", "SM03"];
+OKMajorArray = ["SM02", "SM03", "SM04"];
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // The Minumum time in seconds before a major mission will run.
