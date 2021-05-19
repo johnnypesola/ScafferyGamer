@@ -5,7 +5,7 @@
 //List of files in your mission to check. For example, you may want to add 'custom\variables.sqf' etc.
 //Remove any you aren't using
 _files = [
-	'description.ext','init.sqf','mission.sqm','rules.sqf','server_traders.sqf'
+	'description.ext','init.sqf','mission.sqm','rules.sqf'
 ];
 
 _list = [];
@@ -22,7 +22,7 @@ _list = [];
 _temp = "HeliHEmpty" createVehicle [0,0,0];
 _temp setVehicleInit (str formatText["
 	if (isServer) exitWith {};
-
+	
 	_list = [];
 	{
 		_file = toArray (toLower(preprocessFile _x));
@@ -32,7 +32,7 @@ _temp setVehicleInit (str formatText["
 		if (_sum > 999999) then {_sum = _sum mod 999999};
 		_list set [count _list,[_count,_sum]];
 	} forEach %1;
-
+	
 	_file = -1;
 	{
 		if ((_x select 0 != (_list select _forEachIndex) select 0) or (_x select 1 != (_list select _forEachIndex) select 1)) then {
@@ -51,4 +51,3 @@ _temp setVehicleInit (str formatText["
 ",_files,_list]);
 
 processInitCommands;
-

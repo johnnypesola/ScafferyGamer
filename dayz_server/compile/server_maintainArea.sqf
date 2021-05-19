@@ -4,7 +4,7 @@
 2: PVDZE_maintainArea = [player,2,[Object, _objectID, _objectUID]];
 */
 
-private ["_player","_option","_obj","_name","_objectsInfo","_UID","_ID","_key","_query"];
+private ["_player","_option","_obj","_name","_objectsInfo","_UID","_ID","_key"];
 
 _player = _this select 0;
 _option = _this select 1;
@@ -18,19 +18,17 @@ if (_option == 1) then {
 			if (_ID == "0") then {
 				if (_UID != "0") then {
 					_obj setDamage 0;
-					_key = [_UID];
-					_query = ["datestampObjectUpdateByUID", _key] call dayz_prepareDataForDB;
-					_query call server_hiveWrite;
+					_key = format["CHILD:397:%1:", _UID];
+					_key call server_hiveWrite;
 				};
 			} else {
 				_obj setDamage 0;
-				_key = [_ID];
-				_query = ["datestampObjectUpdateByID", _key] call dayz_prepareDataForDB;
-				_query call server_hiveWrite;
+				_key = format["CHILD:396:%1:", _ID];
+				_key call server_hiveWrite;
 			};
 	} count _objectsInfo;
 	_name = if (alive _player) then { name _player; } else { "Dead Player"; };
-	diag_log format ["MAINTAIN AREA BY %1 - %2 Objects at %3", _name, (count _objectsInfo), (getPosATL _player)];
+	diag_log format ["MAINTAIN AREA BY %1 - %2 Objects at %3, Grid: %4", _name, (count _objectsInfo), (getPosATL _player), mapGridPosition(getPosATL _player)];
 } else {
 	_obj = _objectsInfo select 0;
 	_ID = _objectsInfo select 1;
@@ -38,14 +36,12 @@ if (_option == 1) then {
 		if (_ID == "0") then {
 			if (_UID != "0") then {
 				_obj setDamage 0;
-				_key = [_UID];
-				_query = ["datestampObjectUpdateByUID", _key] call dayz_prepareDataForDB;
-				_query call server_hiveWrite;
+				_key = format["CHILD:397:%1:", _UID];
+				_key call server_hiveWrite;
 			};
 		} else {
 			_obj setDamage 0;
-			_key = [_ID];
-			_query = ["datestampObjectUpdateByID", _key] call dayz_prepareDataForDB;
-			_query call server_hiveWrite;
+			_key = format["CHILD:396:%1:", _ID];
+			_key call server_hiveWrite;
 		};
 };

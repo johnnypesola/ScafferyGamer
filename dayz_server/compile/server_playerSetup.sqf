@@ -1,4 +1,4 @@
-private ["_characterID","_playerObj","_spawnSelection","_inventory","_playerID","_dummy","_worldspace","_state","_doLoop","_key","_primary","_medical","_stats","_humanity","_randomSpot","_position","_distance","_fractures","_score","_findSpot","_mkr","_j","_isIsland","_w","_clientID","_lastInstance","_debug","_v","_d","_modifiedPos"];
+private ["_dir","_IslandMap","_pos","_randomKey","_findIndex","_characterID","_playerObj","_spawnSelection","_inventory","_playerID","_dummy","_worldspace","_state","_doLoop","_key","_primary","_medical","_stats","_humanity","_randomSpot","_position","_distance","_fractures","_score","_findSpot","_mkr","_j","_isIsland","_w","_clientID","_lastInstance"];
 
 _characterID = _this select 0;
 _playerObj = _this select 1;
@@ -20,10 +20,9 @@ if (_playerID == "") exitWith {
 	diag_log ("SETUP INIT FAILED: Exiting, no player ID: " + str(_playerObj));
 };
 
-private "_dummy";
 _dummy = getPlayerUID _playerObj;
-if (_playerID != _dummy) then { 
-	diag_log format["DEBUG: _playerID miscompare with UID! _playerID:%1",_playerID]; 
+if (_playerID != _dummy) then {
+	diag_log format["DEBUG: _playerID miscompare with UID! _playerID:%1",_playerID];
 	_playerID = _dummy;
 };
 
@@ -31,99 +30,51 @@ _worldspace = [];
 _state = [];
 
 //Do Connection Attempt
-_key = [_characterID];
-_query = ["loadCharacterDetails", _key] call dayz_prepareDataForDB;
-_primary = (_query call server_hiveReadWrite) select 0;
+_doLoop = 0;
+while {_doLoop < 5} do {
+	_key = format["CHILD:102:%1:",_characterID];
+	_primary = _key call server_hiveReadWrite;
+	if (count _primary > 0) then {
+		if ((_primary select 0) != "ERROR") then {
+			_doLoop = 9;
+		};
+	};
+	_doLoop = _doLoop + 1;
+};
 
-if (isNull _playerObj or !isPlayer _playerObj) exitWith {
+if (isNull _playerObj || !isPlayer _playerObj) exitWith {
 	diag_log ("SETUP RESULT: Exiting, player object null: " + str(_playerObj));
 };
 
 //Wait for HIVE to be free
 //diag_log ("SETUP: RESULT: Successful with " + str(_primary));
 
-_medical = [
-	_primary select 4,	// is dead 		0
-	_primary select 5,	// is inconscious 	1
-	_primary select 6,	// is infected		2
-	_primary select 7,	// is injured		3
-	_primary select 8,	// is in pain		4
-	_primary select 9,	// is in cardiac arrest	5
-	_primary select 10,	// has low blood	6
-	_primary select 11,	// blood qty		7
-	_primary select 12,	// wounds array		8
-	[_primary select 13, _primary select 14],	// [hit in legs, hit in arms]	9
-	_primary select 15,	// unconscious time	10
-	_primary select 16,	// blood type		11
-	_primary select 17,	// rh factor		12
-	_primary select 18,	// messing array [hunger, thirst]	13
-	_primary select 19	// blood test done	14
-];
-_stats = [
-	_primary select 21,	// zed kills
-	_primary select 22,	// zed headshots
-	_primary select 23,	// survivor kills
-	_primary select 24	// bandit kills
-];
-
-_worldspace =	[_primary select 3, [_primary select 0, _primary select 1, _primary select 2]];
-_humanity =	_primary select 29;
-_lastInstance =	_primary select 30;
-_randomSpot = false;
-
-_statearray = if (count _primary >= 29) then {[_primary select 25, _primary select 26, _primary select 27, _primary select 28]} else {[""]};
-if (count _statearray == 0) then {_statearray = [""];}; //diag_log ("StateNew: "+str(_statearray));
-if (typeName ((_statearray) select 0) == "STRING") then {_statearray = [_statearray,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]];};
-_state = (_statearray) select 0; //diag_log ("State: "+str(_state));
-
-_Achievements = (_statearray) select 1;
-if (count _Achievements == 0) then {_Achievements = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];};
-//diag_log ("Achievements: "+str(_Achievements));
+_medical = _primary select 1;
+_stats = _primary select 2;
+_worldspace = _primary select 4;
+_humanity = _primary select 5;
+_lastInstance = _primary select 6;
+_randomSpot = false; //Set position
+_state = [["",""],_primary select 3 select 0] select (count _primary >= 4);
+_dir = 0;
 //diag_log ("WORLDSPACE: " + str(_worldspace));
 
 if (count _worldspace > 0) then {
+	_dir = _worldspace select 0;
 	_position = _worldspace select 1;
 	if (count _position < 3) exitWith {_randomSpot = true;}; //prevent debug world!
-	
+
 	_distance = respawn_west_original distance _position;
 	if (_distance < 2000) then {_randomSpot = true;};
-	
+
 	_distance = [0,0,0] distance _position;
 	if (_distance < 500) then {_randomSpot = true;};
 	//_playerObj setPosATL _position;
 
-	// If too close to NMB or SMB loot
-	if (dayZ_instance == 11 && _position distance [1931.6,14410,0.00144861] < 200) then {
-		_worldspace set [1, [1796.6761, 14321.693, 0]];
-	};
-	if (dayZ_instance == 24) then {
-		if (_position distance [16771.174, 19084.066] < 200) then {
-			_worldspace set [1, [16603.613, 19091.287, 0]];
-		};
-		if (_position distance [10562.068, 2953.7969] < 200) then {
-			_worldspace set [1, [10426.536, 2883.0676, 0]];
-		};
-	};
-
 	// Came from another server force random spawn
-	// FERRY
-	//if (_lastInstance != dayZ_instance) then {_randomSpot = true;};
+	if (_lastInstance != dayZ_instance) then {_randomSpot = true;};
 } else {
 	_randomSpot = true;
-};
-
-// FERRY
-if (_lastInstance != dayZ_instance) then {
-
-	// Ferry! Make player spawn at Skalisty Island in Chernarus and at South Airstrip in Napf.
-
-	diag_log format["FERRY: Detected player %1 coming from instance %2, spawning at ferry terminal.", _playerID, _lastInstance];
-
-	_randomSpot = false;
-
-	//if (!isDedicated) then {endLoadingScreen;};
-	_debug = getMarkerpos "respawn_west";
-	_worldspace = [0,[_debug select 0,_debug select 1,0.3]];
 };
 
 //diag_log ("LOGIN: Location: " + str(_worldspace) + " doRnd?: " + str(_randomSpot));
@@ -181,13 +132,13 @@ if (count _stats > 0) then {
 	_playerObj setVariable ["headShots",(_stats select 1),true];
 	_playerObj setVariable ["humanKills",(_stats select 2),true];
 	_playerObj setVariable ["banditKills",(_stats select 3),true];
-	
+
 	//ConfirmedKills
 	_playerObj setVariable ["ConfirmedHumanKills",(_stats select 2),true];
 	_playerObj setVariable ["ConfirmedBanditKills",(_stats select 3),true];
-	
+
 	_playerObj addScore (_stats select 1);
-	
+
 	//Save Score
 	_score = score _playerObj;
 	_playerObj addScore ((_stats select 0) - _score);
@@ -199,7 +150,7 @@ if (count _stats > 0) then {
 	_playerObj setVariable ["humanKills",0,true];
 	_playerObj setVariable ["banditKills",0,true];
 	_playerObj setVariable ["headShots",0,true];
-	
+
 	//ConfirmedKills
 	_playerObj setVariable ["ConfirmedHumanKills",0,true];
 	_playerObj setVariable ["ConfirmedBanditKills",0,true];
@@ -208,15 +159,15 @@ if (count _stats > 0) then {
 };
 
 if (_randomSpot) then {
-	private ["_counter","_position","_isNear","_isZero","_mkr"];
 	if (!isDedicated) then {endLoadingScreen;};
-	_IslandMap = (toLower worldName in ["caribou","cmr_ovaron","dayznogova","dingor","dzhg","fallujah","fapovo","fdf_isle1_a","isladuala","lingor","mbg_celle2","namalsk","napf","oring","panthera2","ruegen","sara","sauerland","smd_sahrani_a2","tasmania2010","tavi","trinity","utes"]);
+	_IslandMap = (toLower worldName in ["caribou","cmr_ovaron","dayznogova","dingor","dzhg","fallujah","fapovo","fdf_isle1_a","isladuala","lingor","mbg_celle2","namalsk","napf","oring","panthera2","ruegen","sara","sauerland","smd_sahrani_a2","tasmania2010","tavi","taviana","trinity","utes"]);
 
 	//spawn into random
 	_findSpot = true;
 	_mkr = [];
 	_position = [0,0,0];
-	for [{_j=0},{_j<=100 && _findSpot},{_j=_j+1}] do {
+	_j = 0;
+	while {_findSpot && _j <= 100} do {
 		if (_spawnSelection == 9) then {
 			// random spawn location selected, lets get the marker and spawn in somewhere
 			if (dayz_spawnselection == 1) then {_mkr = getMarkerPos ("spawn" + str(floor(random 6)));} else {_mkr = getMarkerPos ("spawn" + str(floor(random actualSpawnMarkerCount)));};
@@ -233,21 +184,24 @@ if (_randomSpot) then {
 				_pos = +(_position);
 				_isIsland = false; //Can be set to true during the Check
 				// we check over a 809-meter cross line, with an effective interlaced step of 5 meters
-				for [{_w = 0}, {_w != 809}, {_w = ((_w + 17) % 811)}] do {
+				_w = 0;
+				while {_w != 809} do {
 					//if (_w < 17) then { diag_log format[ "%1 loop starts with _w=%2", __FILE__, _w]; };
 					_pos = [((_pos select 0) - _w),((_pos select 1) + _w),(_pos select 2)];
 					if ((surfaceisWater _pos) && !_IslandMap) exitWith {_isIsland = true;};
+					_w = ((_w + 17) % 811);
 				};
 				if (!_isIsland) then {_findSpot = false};
 			};
 		};
 		//diag_log format["%1: pos:%2 _findSpot:%3", __FILE__, _position, _findSpot];
+		_j = _j + 1;
 	};
 	if (_findSpot && !_IslandMap) exitWith {
 		diag_log format["%1: Error, failed to find a suitable spawn spot for player. area:%2",__FILE__, _mkr];
 	};
-	_worldspace = [0,_position];
-	
+	_worldspace = [_dir,_position];
+
 	//Fresh spawn, clear animationState so anim from last sync does not play on login
 	_state = ["","reset"];
 };
@@ -255,22 +209,12 @@ if (_randomSpot) then {
 //record player pos locally for server checking
 _playerObj setVariable ["characterID",_characterID,true];
 _playerObj setVariable ["humanity",_humanity,true];
-_playerObj setVariable ["lastPos",getPosATL _playerObj];
+_playerObj setVariable ["lastPos",_position];
 
-
-// ESS v3
-//PVCDZ_plr_Login2 = [[0,respawn_west_original],_state,_randomKey,_worldspace,_randomSpot,([_randomSpot,_playerID] call spawn_config)];
-
-// FERRY
-//PVCDZ_plr_Login2 = [_worldspace,_state,_randomKey];
-//PVCDZ_plr_Login2 = [_worldspace,_state,_randomKey,_randomSpot,(_lastInstance!=dayZ_instance)];
-
-// ESS v3 and FERRY
 _clientID = owner _playerObj;
 _randomKey = [];
-_randomInput = toArray "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$^*";
 for "_i" from 0 to 12 do {
-	_randomKey set [count _randomKey, (_randomInput call BIS_fnc_selectRandom)];
+	_randomKey set [_i, (ceil(random 128)) + 256]; //Latin Extended-A characters not filtered in publicvariableval.txt
 };
 _randomKey = toString _randomKey;
 _findIndex = dayz_serverPUIDArray find _playerID;
@@ -281,7 +225,10 @@ if (_findIndex > -1) then {
 	dayz_serverClientKeys set [(count dayz_serverClientKeys), [_clientID,_randomKey]];
 };
 
-PVCDZ_plr_Login2 = [[0,respawn_west_original],_state,_randomKey,_worldspace,_randomSpot,([_randomSpot,_playerID] call spawn_config), _lastInstance!=dayZ_instance];
+// Sync weather settings for JIP player
+_clientID publicVariableClient "PVDZE_SetWeather";
+
+PVCDZ_plr_Login2 = [_worldspace,_state,_randomKey];
 _clientID publicVariableClient "PVCDZ_plr_Login2";
 if (dayz_townGenerator) then {
 	_clientID publicVariableClient "PVCDZ_plr_plantSpawner";
@@ -292,7 +239,7 @@ _playerObj setVariable ["lastTime",diag_ticktime];
 
 //set server-side inventory variable to monitor player gear
 if (count _inventory > 2) then {
-	_playerObj setVariable["ServerMagArray",[_inventory select 1,_inventory select 2], false];
+	_playerObj setVariable["ServerMagArray",[_inventory select 1,_inventory select 2,_inventory select 0], false];
 };
 
 //Record Player Login/LogOut

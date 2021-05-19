@@ -1,4 +1,4 @@
-private ["_playerID","_endMission","_0","_1","_timeleft","_doLoop","_key","_query","_primary","_model","_inventory","_backpack","_survival","_CharacterCoins","_group","_playerCoins","_BankCoins","_hiveVer","_mags","_wpns","_bcpk","_config","_isInfected","_remaining","_playerObj","_playerName","_newPlayer","_isNew","_charID","_isHiveOk"];
+private ["_playerID","_endMission","_0","_1","_timeleft","_doLoop","_key","_primary","_model","_inventory","_backpack","_survival","_CharacterCoins","_group","_playerCoins","_BankCoins","_hiveVer","_mags","_wpns","_bcpk","_config","_isInfected","_remaining","_playerObj","_playerName","_newPlayer","_isNew","_charID","_isHiveOk"];
 
 #include "\z\addons\dayz_server\compile\server_toggle_debug.hpp"
 
@@ -30,9 +30,6 @@ if ((_playerID == "") or (isNil "_playerID")) exitWith {
 	diag_log ("LOGIN FAILED: Player [" + _playerName + "] has no login ID");
 };
 
-//SCAFFERY: Server security A2Guard entry point
-diag_log format["INFO - Player: %1(UID:%3/CID:%4) Status: %2",(_playerObj call fa_plr2str),"ENTERING...",_playerID,0];
-
 _endMission = false;
 _timeleft = 0;
 {
@@ -63,7 +60,17 @@ _timeleft = 0;
 } forEach dayz_activePlayers;
 
 //Do Connection Attempt
-_primary = [_playerID, _playerName] call server_loadPlayer;
+_doLoop = 0;
+while {_doLoop < 5} do {
+	_key = format["CHILD:101:%1:%2:%3:",_playerID,dayZ_instance,_playerName];
+	_primary = _key call server_hiveReadWrite;
+	if (count _primary > 0) then {
+		if ((_primary select 0) != "ERROR") then {
+			_doLoop = 9;
+		};
+	};
+	_doLoop = _doLoop + 1;
+};
 
 if (isNull _playerObj or !isPlayer _playerObj) exitWith {
 	diag_log ("LOGIN RESULT: Exiting, player object null: " + str(_playerObj));
@@ -77,7 +84,7 @@ if ((_primary select 0) == "ERROR") exitWith {
 _newPlayer = _primary select 1;
 _isNew = count _primary < 10; //_result select 1;
 _charID = _primary select 2;
-//diag_log ("LOGIN RESULT: " + str(_primary));	// DEBUG
+//diag_log ("LOGIN RESULT: " + str(_primary));
 
 /* PROCESS */
 _hiveVer = 0;
@@ -118,9 +125,8 @@ if (!_isNew) then {
 		if (!isNil "DefaultBackpack") then {_bcpk = DefaultBackpack;};
 	
 		//Wait for HIVE to be free
-		_key = [_charID,_mags,_wpns,_bcpk,[[],[]],[[],[]]];
-		_query = ["playerInit", _key] call dayz_prepareDataForDB;
-		_query call server_hiveWrite;
+		_key = str formatText["CHILD:203:%1:%2:%3:",_charID,[_wpns,_mags],[_bcpk,[],[]]];
+		_key call server_hiveWrite;
 	};
 };
 
@@ -151,7 +157,7 @@ if (_endMission) exitwith {
 //Sync chopped trees for JIP player
 {_x setDamage 1} count dayz_choppedTrees;
 
-if (toLower worldName == "chernarus") then {
+if (toLower worldName in ["chernarus","chernarus_winter"]) then {
 	//Destroy glitched map objects which can not be deleted or hidden
 	{(_x select 0) nearestObject (_x select 1) setDamage 1} count [
 		//Clipped benches in barracks hallway
@@ -166,6 +172,7 @@ if (toLower worldName == "chernarus") then {
 		[[2581,3456,0],1019127], //lavicka_2.p3d bench
 		//Clip into zero_building Land_HouseV_3I3
 		[[2800,5202,0],187548], //popelnice.p3d trash can
+		[[12876,8031,0],294873], //popelnice.p3d trash can
 		//Clip into zero_building Land_HouseV_1L2
 		[[3656,2429,0],327885], //plot_rust_draty.p3d fence
 		[[3656,2429,0],328107], //plot_rust_draty.p3d fence

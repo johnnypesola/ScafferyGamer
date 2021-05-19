@@ -17,8 +17,7 @@ valuesParam1[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 31};
 defValueParam1 = 10; //auto login time limit in seconds, set value to 31 to disable auto login
 textsParam1[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, "Disabled"};
 
-//loadScreen = "\z\addons\dayz_code\gui\loadingscreen.paa";
-loadScreen = "images\screen.paa";
+loadScreen = "\z\addons\dayz_code\gui\loadingscreen.paa";
 
 class Header
 {
@@ -31,28 +30,7 @@ aiKills = 1;
 diagRadio = 1;
 diagHit = 1;
 
-class CfgSounds
-{
-	sounds[] = {};
-	class tornado_siren
-	{
-		name = "Security Alarm";
-		sound[] = {"sounds\tornado_siren.ogg", 1, 1};
-		titles[] = {0,""};
-	};
-};
-
 #include "\z\addons\dayz_code\gui\description.hpp"
-//#include "\z\addons\dayz_code\Configs\CfgLoot\CfgLoot.hpp"
-#include "configs\CfgLoot\CfgLoot.hpp"
-//#include "\z\addons\dayz_code\Configs\CfgServerTrader\CfgServerTrader.hpp"
-#include "configs\CfgServerTrader\CfgServerTrader.hpp"
-
-// EXTRA RC
-#include "custom\extra_rc\extra_rc.hpp"
-
-// ADMINTOOLS
-#include "admintools\dialog.hpp"
-
-// ESS v3
-#include "spawn\dialogs.hpp"
+#include "\z\addons\dayz_code\Configs\CfgLoot\CfgLoot.hpp"
+#include "\z\addons\dayz_code\Configs\CfgServerTrader\CfgServerTrader.hpp" // Normal traders
+//#include "\z\addons\dayz_code\Configs\CfgServerTraderZSC\CfgServerTrader.hpp" // Single currency traders
