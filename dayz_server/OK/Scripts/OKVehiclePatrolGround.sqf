@@ -23,16 +23,18 @@ _unitGroup = createGroup east;
 _pilot = _unitGroup createUnit ["Bandit1_DZ", [0,0,0], [], 1, "NONE"];
 [_pilot] joinSilent _unitGroup;
 
-_veh = createVehicle [_heli_class, [(_startingpos select 0),(_startingpos select 1), 0.2], [], 0, "CAN_COLLIDE"];
+_veh = createVehicle [_heli_class, [(_startingpos select 0),(_startingpos select 1), 0.05], [], 0, "CAN_COLLIDE"];
 _veh setFuel 1;
 _veh engineOn true;
 _veh setVehicleAmmo 1;
 if (_reward) then {
-	_veh addEventHandler ["GetOut",{(_this select 0) setFuel 0;[(_this select 0)] ExecVM OKAIPinata; (_this select 0) setDamage 1}];
+	_veh addEventHandler ["killed", {[(_this select 0)] execVM OKAIPinata;}];
+//	_veh addEventHandler ["GetOut",{(_this select 0) setFuel 0;[(_this select 0)] ExecVM OKAIPinata; (_this select 0) setDamage 1}];
 };
 if (_reward) then {
 	_veh allowCrewInImmobile true; 
 	_veh lock true;
+	_veh setVehicleLock "LOCKED";
 } else {
 	_veh allowCrewInImmobile false; 
 };

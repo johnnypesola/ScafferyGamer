@@ -27,6 +27,7 @@ _veh setVehicleAmmo 1;
 //_veh addEventHandler ["GetOut",{(_this select 0) setFuel 0;(_this select 0) setDamage 1;}];
 _veh allowCrewInImmobile true; 
 _veh lock true;
+_veh setVehicleLock "LOCKED";
 dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_veh];
 
 _pilot assignAsDriver _veh;

@@ -43,6 +43,7 @@ if (!isDedicated) then {
 	DZE_SelfTransfuse = true; // Allow players to bloodbag themselves
 	DZE_selfTransfuse_Values = [12000,15,120]; // [blood amount given, infection chance %, cooldown in seconds]
 	dayz_maxMaxWeaponHolders = 120; // Maximum number of loot piles that can spawn within 200 meters of a player.
+
 };
 
 // Settings for both server and client

@@ -3,7 +3,7 @@
 //	Based on New Mission Format by Vampire
 //
 
-private ["_missName","_dbData","_baseId","_coords","_coords3d","_coords3dGround","_survivors","_wp","_nearbyStorage","_calculatedLootValue","_expectedTotalGoldValue","_remainingGoldValue","_mags","_magTypes","_magCount","_weaps","_backpacks","_arrayOfTraderCat","_storageTypes","_additionalCurrency","_items","_storageName","_storageNameUnlocked","_selectedStorage","_safePos","_objectUID","_ws","_patrolCoords","_patrolGroups","_patrolClasses","_patrol2Classes","_patrolClass","_nearbyPlayers","_moreSurvivors","_nearestPlayer","_unlocked","_capacity","_unlockedClass","_weapons","_magazines","_holder","_type","_dir","_vector","_pos","_charID","_objectID","_ownerID","_patrolData","_patrolVehicles","_rubyCount","_nearbyGuns","_gunnerGroup","_gunnerGroups","_gunnerGroupsAlive","_baseObjects","_startTime","_lastUpdated","_takenOver","_vehEhSetter","_baseObjectCount","_playerWithinAreaMoment","_timeOutsideArea","_survivorCount","_patrol3Classes","_patrol4Classes","_inventory"];
+private ["_missName","_dbData","_baseId","_coords","_coords3d","_coords3dGround","_survivors","_wp","_nearbyStorage","_calculatedLootValue","_expectedTotalGoldValue","_remainingGoldValue","_mags","_magTypes","_magCount","_weaps","_backpacks","_arrayOfTraderCat","_storageTypes","_additionalCurrency","_items","_storageName","_storageNameUnlocked","_selectedStorage","_safePos","_objectUID","_ws","_patrolCoords","_patrolGroups","_patrolClasses","_patrol2Classes","_patrolClass","_nearbyPlayers","_moreSurvivors","_nearestPlayer","_unlocked","_capacity","_unlockedClass","_weapons","_magazines","_holder","_type","_dir","_vector","_pos","_charID","_objectID","_ownerID","_patrolData","_patrolVehicles","_opGemCount","_nearbyGuns","_gunnerGroup","_gunnerGroups","_gunnerGroupsAlive","_baseObjects","_startTime","_lastUpdated","_takenOver","_vehEhSetter","_baseObjectCount","_playerWithinAreaMoment","_timeOutsideArea","_survivorCount","_patrol3Classes","_patrol4Classes","_inventory","_warningsLeft"];
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,6 +28,7 @@ _timeOutsideArea = 0;
 _survivorCount = 0;
 _patrolGroups = [];
 _patrolVehicles = [];
+_warningsLeft = 3;
 
 // function to get value of a single item
 _get_value = {0};
@@ -66,39 +67,40 @@ _nearbyStorage = _nearbyStorage + (_coords3d nearObjects ["IC_Tent", 50]);
 _nearbyStorage = _nearbyStorage + (_coords3d nearObjects ["IC_DomeTent", 50]);
 
 {
-	_rubyCount = 0;
-	diag_log format["OK: Found %1 storage at %2. Clearing rubies from the inventory...", (typeOf _x), (getPosATL _x)];
+	_opGemCount = 0;
+	diag_log format["OK: Found %1 storage at %2. Clearing extremely valuable gems from the inventory...", (typeOf _x), (getPosATL _x)];
 	if ((typeOf _x) in ["VaultStorageLocked", "LockboxStorageLocked"]) then {
 		_mags =_x getVariable ["MagazineCargo",[]];
 		_magTypes = _mags select 0;
 		_magCount = [];
 		for "_i" from 0 to (count(_mags select 0) - 1) do {
-			if ((_magTypes select _i) != "ItemRuby") then {
+			if (!((_magTypes select _i) in ["ItemRuby","ItemCitrine","ItemEmerald","ItemAmethyst"])) then {
 				_magTypes = _magTypes + [(_mags select 0) select _i];
 				_magCount = _magCount + [(_mags select 1) select _i];
 			} else {
-				_rubyCount = _rubyCount + 1;
+				_opGemCount = _opGemCount + 1;
 			};
 		};
 		_mags = [_magTypes, _magCount];
 		_x setVariable ["MagazineCargo", _mags, false];
 	} else {
-		_mags = getMagazineCargo _x;
+		local _tmpObj = _x;
+		_mags = getMagazineCargo _tmpObj;
 		_magTypes = _mags select 0;
 		_magCount = [];
+		clearMagazineCargoGlobal _tmpObj;
 		for "_i" from 0 to (count(_mags select 0) - 1) do {
-			if ((_magTypes select _i) != "ItemRuby") then {
+			if (!((_magTypes select _i) in ["ItemRuby","ItemCitrine","ItemEmerald","ItemAmethyst"])) then {
 				_magTypes = _magTypes + [(_mags select 0) select _i];
 				_magCount = _magCount + [(_mags select 1) select _i];
 			} else {
-				_rubyCount = _rubyCount + 1;
+				_opGemCount = _opGemCount + 1;
 			};
 		};
 		_mags = [_magTypes, _magCount];
-		clearMagazineCargoGlobal _x;
-		_x addMagazineCargoGlobal _mags;
+		{_tmpObj addMagazineCargoGlobal [_x, _magCount select _foreachindex];} forEach _magTypes;
 	};
-	diag_log format["OK: Cleared %1 rubies from the inventory of %2 at %3!", _rubyCount, (typeOf _x), (getPosATL _x)];
+	diag_log format["OK: Cleared %1 overpowered gems from the inventory of %2 at %3!", _opGemCount, (typeOf _x), (getPosATL _x)];
 } forEach _nearbyStorage;
 
 _nearbyGuns = _coords3d nearObjects ["M2StaticMG", 75];
@@ -118,6 +120,7 @@ diag_log "OK: Waiting for a player to come within 75m of the abandoned base.";
 //Wait until the player is within 75 meters of the area
 waitUntil {sleep 3; {isPlayer _x && _x distance _coords3d <= 75 } count playableunits > 0 };
 diag_log "OK: A player has come within 75m of the abandoned base!";
+[nil,nil,rTitleText,"The abandoned base has been discovered! Watch out, there's an ambush!", "PLAIN",10] call RE;
 
 _nearbyPlayers = [];
 {
@@ -130,10 +133,10 @@ if ((count _patrolGroups) == 0) then {
 	_survivorCount = floor (_baseObjectCount / 7.5); // Up to 300 base objects => up to 45 bots!
 
 	_patrolCoords = [_coords3dGround, 300, 400, 1, 0, 0.9, 0, [], _coords3dGround] call BIS_fnc_findSafePos;
-	_patrolCoords = [_patrolCoords select 0, _patrolCoords select 1, 0];
+	_patrolCoords = [_patrolCoords select 0, _patrolCoords select 1, 0.05];
 	_moreSurvivors = [_patrolCoords,(round(random 3))+_survivorCount,(round(random 3)),(round(random 3))] call OKAISpawn2;
 	_patrolCoords = [_coords3dGround, 300, 400, 1, 0, 0.9, 0, [], _coords3dGround] call BIS_fnc_findSafePos;
-	_patrolCoords = [_patrolCoords select 0, _patrolCoords select 1, 0];
+	_patrolCoords = [_patrolCoords select 0, _patrolCoords select 1, 0.05];
 	_patrolClass = _patrolClasses call BIS_fnc_selectRandom;
 	_patrolData = [_coords3dGround, _patrolCoords, 200, 6, _patrolClass, 1, false] call OKVehiclePatrolGround;
 	_patrolVehicles set [0, _patrolData select 0];
@@ -152,7 +155,7 @@ if ((count _patrolGroups) == 0) then {
 	};
 	if (_baseObjectCount >=75) then {
 		_patrolCoords = [_coords3dGround, 300, 400, 1, 0, 0.9, 0, [], _coords3dGround] call BIS_fnc_findSafePos;
-		_patrolCoords = [_patrolCoords select 0, _patrolCoords select 1, 0];
+		_patrolCoords = [_patrolCoords select 0, _patrolCoords select 1, 0.05];
 		_patrolClass = _patrol2Classes call BIS_fnc_selectRandom;
 		_patrolData = [_coords3dGround, _patrolCoords, 200, 10, _patrolClass, 1, true] call OKVehiclePatrolGround;
 		_patrolVehicles set [1, _patrolData select 0];
@@ -179,19 +182,42 @@ if ((count _patrolGroups) == 0) then {
 };
 
 _collectedUnits = [];
+local _lockableParts = [
+	"VaultStorageLocked",
+	"LockboxStorageLocked",
+	"VaultStorage2Locked",
+	"TallSafeLocked",
+	"LockboxStorageLocked",
+	"LockboxStorage2Locked",
+	"LockboxStorageWinterLocked",
+	"LockboxStorageWinter2Locked",
+	"Land_DZE_WoodDoorLocked",
+	"Land_DZE_LargeWoodDoorLocked",
+	"Land_DZE_GarageWoodDoorLocked",
+	"Land_DZE_WoodGateLocked",
+	"Land_DZE_WoodOpenTopGarageLocked",
+	"CinderGateLocked_DZ",
+	"CinderWallDoorLocked_DZ",
+	"CinderWallDoorSmallLocked_DZ",
+	"CinderGarageOpenTopLocked_DZ",
+	"CinderDoorHatchLocked_DZ",
+	"DoorLocked_DZ",
+	"Metal_DrawbridgeLocked_DZ"
+];
 
 // Main monitor loop; If after 10 mins no players have entered area to reset timer, exit the main loop.
 _lastTimePlayersPresent = diag_ticktime;
-while {_timeOutsideArea < 600} do {
+while {(_timeOutsideArea < 600) && (!_takenOver)} do {
 
 	_nearbyPlayers = [];
 	{
-		if (isPlayer _x && (_x distance _coords) <= 500) then {
+		if ((isPlayer _x) && (_x distance _coords) <= 500) then {
 			_nearbyPlayers = _nearbyPlayers + [_x];
 		};
 	} forEach playableUnits;
 
-	while {(count _nearbyPlayers) > 0} do {
+	while {(count _nearbyPlayers) > 0 && {!_takenOver}} do {
+		if (_warningsLeft == 0) then { _warningsLeft = 1; };
 		_gunnerGroupsAlive = 0;
 		{
 			_gunnerGroupsAlive = _gunnerGroupsAlive + ({alive _x} count units _x);
@@ -202,12 +228,17 @@ while {_timeOutsideArea < 600} do {
 		} forEach _patrolGroups;
 		if (!_unlocked && (({(alive _x) && (_x distance _coords3dGround) < 800} count _collectedUnits) + _gunnerGroupsAlive == 0)) then {
 			{
-				// Unlock each safe
-				_x setVariable ["CharacterID", "0000", true];
-
-			} forEach nearestObjects [_coords3d, ["VaultStorageLocked", "LockboxStorageLocked"], 75];
+				// Fix for leading zero issues on safe codes after restart
+				local _ownerID = _x getVariable ["CharacterID", "000"];
+				local _lockable = getNumber (configFile >> "CfgVehicles" >> (typeOf _x) >> "lockable");
+				switch (_lockable) do {
+					case 4: {_ownerID = "0000";};
+					case 3: {_ownerID = "000";};
+				};
+				_x setVariable ["CharacterID", _ownerID, true];
+			} forEach nearestObjects [_coords3d, _lockableParts, 75];
 			_unlocked = true;
-			[nil,nil,rTitleText,"Abandoned Base forces have been defeated! Its safe combinations have temporarily reset to 0000.", "PLAIN",6] call RE;
+			[nil,nil,rTitleText,"Abandoned Base forces have been defeated! Its safe and door combinations have temporarily reset to 0000 and 000.", "PLAIN",6] call RE;
 		};
 
 		_nearbyPlayers = [];
@@ -217,33 +248,51 @@ while {_timeOutsideArea < 600} do {
 			};
 		} forEach playableUnits;
 
+		if ((count _nearbyPlayers) == 0 && {_warningsLeft == 3}) then {
+			[nil,nil,rTitleText,"Warning: Leaving the abandoned base area will end the mission in 10 min.", "PLAIN",5] call RE;
+			_warningsLeft = 2;
+		};
+
 		sleep 5;
 		_lastTimePlayersPresent = diag_ticktime;
 	};
 
 	_timeOutsideArea = diag_ticktime - _lastTimePlayersPresent;
+	if (_timeOutsideArea >= 300 && _warningsLeft == 2) then {
+		[nil,nil,rTitleText,"Abandoned Base: 5 minutes left.", "PLAIN",5] call RE;
+		_warningsLeft = 0;
+	} else {
+		if (_timeOutsideArea >= 480 && _warningsLeft == 1) then {
+			[nil,nil,rTitleText,"Abandoned Base: 2 minutes left.", "PLAIN",5] call RE;
+			_warningsLeft = 1;
+		};
+	};
 	sleep 5;
 };
+_takenOver  = false; // Just in case plot pole is removed!
 
 diag_log "OK: Players have left the abandoned base!";
 
 // Check if base was taken over
 {
-	_lastUpdated = _x getVariable ["lastUpdate", 0];
+	_lastUpdated = _x getVariable ["lastUpdate", diag_ticktime];
 	if (_lastUpdated > _startTime && {alive _x}) then {
 		_takenOver = true;
 		_pos = getPosATL _x;
+		diag_log "OK: New plot pole found, the abandoned base was taken over!";
 	};
 } forEach nearestObjects [_coords3d, ["Plastic_Pole_EP1_DZ"], 75];
 
 // Delete base if not taken over
 _baseObjects = nearestObjects[_coords3d, DayZ_SafeObjects, 75];
 if (!_takenOver) then {
+	diag_log "OK: No new plot pole found, the abandoned base will be deleted.";
 	{
 		deleteVehicle _x;
 	} forEach _baseObjects;
 } else {
 	{
+		_object = _x;
 		_worldspace = [getDir _object, getPosATL _object, "0", [vectorDir _object, vectorUp _object]];
 		_inventory = call {
 			if (DZE_permanentPlot && {(typeOf _object) == "Plastic_Pole_EP1_DZ"}) exitwith {
@@ -257,6 +306,7 @@ if (!_takenOver) then {
 			};
 			[getWeaponCargo _object, getMagazineCargo _object, getBackpackCargo _object]
 		};
+		diag_log format["OK: Publishing %1 @ %2 with UID %3, CharacterID %4", typeOf _object, _worldspace, _object getVariable["ObjectUID", "0"], _object getVariable["CharacterID", "0"]];
 		[_object getVariable ["CharacterID", "0"], _object, _worldspace, _inventory] call server_publishAbandonedBaseObject;
 	} forEach _baseObjects;
 };
@@ -280,7 +330,7 @@ sleep OKDespawnTime;
 	};
 	if (alive _x) then { deleteVehicle _x; };
 	sleep 0.05;
-} forEach units _collectedUnits;
+} forEach _collectedUnits;
 {
 	_gunnerGroup = _x;
 	{

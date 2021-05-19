@@ -166,25 +166,24 @@ _objId = 0;
 
 	_pos = [_ws_x, _ws_y, _ws_z];
 
-	//Vector building
-	_vector = _ws_vect;
+	_inventory = [_inventory_weapons, _inventory_magazines, _inventory_backpacks];
 
-	if ("Maintenance" in _hitPoints) then {
-		_maintenanceModeVars = [_type,_pos];
-		_type = _type + "_Damaged";
+	//Vector building
+	_vector = [[0,0,0],[0,0,0]];
+	if (!isNil "_ws_vect" && {(count _ws_vect) > 0}) then {
+		_vector = _ws_vect;
 	};
-	_nonCollide = _type in DayZ_nonCollide;
 
 	//Create it
-	if (_nonCollide) then {
-		_object = createVehicle [_type, [0,0,0], [], 0, "NONE"];
-	} else {
-		_object = _type createVehicle [0,0,0]; //more than 2x faster than createvehicle array
-	};
+	_object = _type createVehicle [0,0,0]; //more than 2x faster than createvehicle array
 	_object setDir _dir;
 	_object setPosATL _pos;
 	_object setDamage _damage;
-	_object setVectorDirAndUp _vector;
+	if ((count _vector) > 0) then {
+		if (!([_vector, [[0,0,0],[0,0,0]]] call BIS_fnc_areEqual)) then {
+			_object setVectorDirAndUp _vector;
+		};
+	};
 	_object enableSimulation false;
 
 	_doorLocked = _type in DZE_DoorsLocked;
@@ -196,6 +195,7 @@ _objId = 0;
 	_object setVariable ["lastUpdate",diag_ticktime];
 	_object setVariable ["ObjectID", _idKey, true];
 	_object setVariable ["OwnerPUID", _ownerPUID, true];
+	_object setVariable ["ObjectUID", ([_dir, _pos] call dayz_objectUID2), true]; 
 
 	if (Z_SingleCurrency && {_type in DZE_MoneyStorageClasses}) then {
 		_object setVariable [Z_MoneyVariable, _storageMoney, true];
@@ -232,10 +232,10 @@ _objId = 0;
 			if (DZE_permanentPlot && _isPlot) then {
 				// DEBUG
 				diag_log format["PLOT DEBUG: Setting plot friends for plot owner: %1: %2", _ownerPUID, _inventory];
-				_object setVariable ["plotfriends", _inventory, true];
+				_object setVariable ["plotfriends", _inventory_magazines, true];	// Assume the friends are stored here.
 			};
 			if (DZE_doorManagement && _doorLocked) then {
-				_object setVariable ["doorfriends", _inventory, true];
+				_object setVariable ["doorfriends", _inventory_magazines, true];	// Assume the friends are stored here.
 			};
 		};
 	};
@@ -274,32 +274,24 @@ _objId = 0;
 			};
 		};
 		_object setVariable ["CharacterID", _ownerID, true];
-		if (_isDZ_Buildable || {(_isSafeObject && !_isTrapItem)}) then {
+		if (_isSafeObject && !_isTrapItem) then {
 			_object setVariable["memDir",_dir,true];
 			_object addMPEventHandler ["MPKilled",{_this call vehicle_handleServerKilled;}];
 			_object setVariable ["OEMPos",_pos,true]; // used for inplace upgrades and lock/unlock of safe
 		} else {
 			_object enableSimulation true;
 		};
-		if (_isDZ_Buildable || {_isTrapItem}) then {
-			//Use inventory for owner/clan info and traps armed state
+		if (_isTrapItem) then {
+			//Use inventory traps armed state
 			{
 				_xTypeName = typeName _x;
-				switch (_xTypeName) do {
-					case "ARRAY": {
-						_x1 = _x select 1;
-						switch (_x select 0) do {
-							case "ownerArray" : { _object setVariable ["ownerArray", _x1, true]; };
-							case "clanArray" : { _object setVariable ["clanArray", _x1, true]; };
-							case "armed" : { _object setVariable ["armed", _x1, true]; };
-							case "padlockCombination" : { _object setVariable ["dayz_padlockCombination", _x1, false]; };
-							case "BuildLock" : { _object setVariable ["BuildLock", _x1, true]; };
-						};
-					};
-					case "STRING": {_object setVariable ["ownerArray", [_x], true]; };
-					case "BOOLEAN": {_object setVariable ["armed", _x, true]};
+				if (_xTypeName == "ARRAY") then {
+					_x1 = _x select 1;
+ 					_object setVariable ["armed", _x1, true];
+				} else {
+					_object setVariable ["armed", _x, true];
 				};
-			} foreach _inventory;
+			} count _inventory;
 
 			if (_maintenanceMode) then { _object setVariable ["Maintenance", true, true]; _object setVariable ["MaintenanceVars", _maintenanceModeVars]; };
 		};
