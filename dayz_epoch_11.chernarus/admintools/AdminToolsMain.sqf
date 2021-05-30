@@ -333,6 +333,7 @@ EpochMenu=[
 	["",true],
 	["Admin Build Menu >> ",[],"#USER:BuildMenu", -5,[["expression",""]],"1","1"],
 	["Base Manager Menu >>", [], "", -5, [["expression",format[_EXECgenTools,"base_manager.sqf"]]], "1", "1"],
+	["Point to display object info",[],"", -5,[["expression",format[_EXECgenTools,"displayObjInfo.sqf"]]],"1","1"],
 	["Point to Delete Item",[],"", -5,[["expression",format[_EXECgenTools,"DatabaseRemove.sqf"]]],"1","1"],
 	["Point to display code",[],"",-5,[["expression",format[_EXECgenTools,"gimmecode.sqf"]]],"1","1"],
 	["Point to make new key",[],"",-5,[["expression",format[_EXECgenTools,"givekey.sqf"]]],"1","1"],
@@ -356,6 +357,7 @@ BuildMenu =
 	["Point To Upgrade",[],"", -5,[["expression",format[_EXECbuildings,"pointToUpgrade.sqf"]]],"1","1"],
 	["Point To Downgrade",[],"", -5,[["expression",format[_EXECbuildings,"pointToDowngrade.sqf"]]],"1","1"],
 	["Maintain Base",[],"", -5,[["expression",format[_EXECbuildings,"maintainArea.sqf"]]],"1","1"],
+	["Modify Object",[],"", -5,[["expression",format[_EXECbuildings,"modifyObj.sqf"]]],"1","1"],
 	["", [], "", -5,[["expression", ""]], "1", "0"],
 		["Main Menu", [20], "#USER:epochmenustart", -5, [["expression", ""]], "1", "1"]
 ];
