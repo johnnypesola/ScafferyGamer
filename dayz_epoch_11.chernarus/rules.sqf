@@ -3,12 +3,13 @@ private ["_messages","_timeout"];
 _messages = [
 	["DayZ Epoch", "Welcome "+(name player)],
 	["World", worldName],
-	["Teamspeak", "some TS info"],
-	["Website/Forums", "some website info"],
+	["Teamspeak", "No TS"],
+	["Website/Forums", "http://scaffery.saltysalmon.com"],
 	["Server Rules", "Duping, glitching or using any<br />exploit will result in a<br />permanent ban."],
 	["Server Rules", "No talking in side."],
 	["Server Rules", "Hackers will be banned permanently<br />Respect others"],
-	["News", "Some random new info!<br />Random news<br />"]
+	["News", "This is a server running DZE 1.0.7 on Napf!<br />Enjoy!<br />"],
+	["Tips", "Press F5 to create/join group.<br />Press F6 to adjust view distance.<br />Press F7 to toggle status HUD.<br />"]
 ];
  
 _timeout = 5;

@@ -379,7 +379,7 @@ class Mission
 	};
 	class Sensors
 	{
-		items=10;
+		items=20;
 		#define TRGDEF a=100;b=100;activationBy="WEST";repeating=1;interruptable=1;age="UNKNOWN";class Effects{};
 		class Item0
 		{
@@ -470,6 +470,166 @@ class Mission
 			expCond="(player distance awol) < 100;";
 			expActiv="[""Aircraft Trader"",true,""enter""] call player_traderCity;";
 			expDesactiv="[""Aircraft Trader"",true,""leave""] call player_traderCity;";
+		};
+		class Item10
+		{
+			position[]={8246.3184,15.544708,15485.867};
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zonelenz_safezone";
+			expCond="(player distance zonelenz_safezone) < 55;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			 
+			};
+		};
+		class Item11
+		{
+			position[]={15506.952,6.2226005,13229.368};
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zoneemmen_safezone";
+			expCond="(player distance zoneemmen_safezone) < 105;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			 
+			};
+		};
+		class Item12
+		{
+			position[]={12399.751,216.42809,5074.5273};
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zoneschratten_safezone";
+			expCond="(player distance zoneschratten_safezone) < 80;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			 
+			};
+		};
+		class Item13
+		{
+			position[]={10398.626,105.61282,8279.4619};
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zonebandit_safezone";
+			expCond="(player distance zonebandit_safezone) < 55;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			 
+			};
+		};
+		class Item14
+		{
+			position[]={5149.9814,71.601753,4864.1191};
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zonehero_safezone";
+			expCond="(player distance zonehero_safezone) < 55;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			 
+			};
+		};
+		class Item15
+		{
+			position[]={2122.7954,13.000834,7807.9878};
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zonewholesale1_safezone";
+			expCond="(player distance zonewholesale1_safezone) < 55;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			 
+			};
+		};
+		class Item16
+		{
+			position[]={5379.0342,4.9903588,16103.187};
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zonewholesaler_safezone";
+			expCond="(player distance zonewholesaler_safezone) < 55;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			 
+			};
+		};
+		class Item17
+		{
+			position[]={6772.8877,0.45900518,16983.27};
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zoneboat1_safezone";
+			expCond="(player distance zoneboat1_safezone) < 55;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			 
+			};
+		};
+		class Item18
+		{
+			position[]={16839.973,0.43266046,5264.0566};
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zoneboat2_safezone";
+			expCond="(player distance zoneboat2_safezone) < 55;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			 
+			};
+		};
+		class Item19
+		{
+			position[]={15128.379,19.974716,16421.879};
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zoneawol_safezone";
+			expCond="(player distance zoneawol_safezone) < 80;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			 
+			};
 		};
 	};
 };

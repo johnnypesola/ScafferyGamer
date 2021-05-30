@@ -56,7 +56,14 @@
 	//Wholesaler
 	["Profiteer2",[13531,6356,0],102],
 	//Wholesaler
-	["Profiteer3",[4360,2261,0],196]
+	["Profiteer3",[4360,2261,0],196],
+	/***********************************************/
+	// Scaffery construction trader
+	["Soldier_M4A3_PMC",[1908.012,14435.136,0],-64.091377],
+	// Scaffery Super Bandit trader
+	["Soldier_AA_PMC",[1613.0393,7808.0752,0],-83.499443],
+	// Scaffery Super Hero trader
+	["Soldier_PMC",[1040.3647,2869.8811,0],71.888855]
 ] call server_spawnTraders;
 
 // Bankers

@@ -332,7 +332,7 @@ class Mission
 	};
 	class Sensors
 	{
-		items=10;
+		items=20;
 		#define TRGDEF a=100;b=100;activationBy="WEST";repeating=1;interruptable=1;age="UNKNOWN";class Effects{};
 		class Item0
 		{
@@ -424,6 +424,176 @@ class Mission
 			expActiv="[""Boat Trader"",true,""enter""] call player_traderCity;";
 			expDesactiv="[""Boat Trader"",true,""leave""] call player_traderCity;";
 		};			
+		class Item10
+		{
+			position[]={6325.6772,304.99033,7807.7412};
+			a=100;
+			b=100;
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zonestary_safezone";
+			expCond="(player distance zonestary_safezone) < 110;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			};
+		};
+		class Item11
+		{
+			position[]={4063.4226,365.00577,11664.19};
+			a=100;
+			b=100;
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zonebash_safezone";
+			expCond="(player distance zonebash_safezone) < 110;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			};
+		};
+		class Item12
+		{
+			position[]={11447.472,317.26886,11364.504};
+			a=100;
+			b=100;
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zoneklen_safezone";
+			expCond="(player distance zoneklen_safezone) < 110;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			};
+		};
+		class Item13
+		{
+			position[]={1606.6443,289.70795,7803.5156};
+			a=100;
+			b=100;
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zonebandit_safezone";
+			expCond="(player distance zonebandit_safezone) < 110;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			};
+		};
+		class Item14
+		{
+			position[]={12944.227,210.19823,12766.889};
+			a=100;
+			b=100;
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zonehero_safezone";
+			expCond="(player distance zonehero_safezone) < 110;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			};
+		};
+		class Item15
+		{
+			position[]={4361.4937,3,2259.9526};
+			a=100;
+			b=100;
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zonewholesale_south_safezone";
+			expCond="(player distance zonewholesale_south_safezone) < 50;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			};
+		};
+		class Item16
+		{
+			position[]={13532.614,3.0083523,6355.9497};
+			a=100;
+			b=100;
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zoneboattrader_east_safezone";
+			expCond="(player distance zoneboattrader_east_safezone) < 50;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			};
+		};
+		class Item17
+		{
+			position[]={7989.3354,0.30462033,2900.9946};
+			a=100;
+			b=100;
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zoneboatdealer_south_safezone";
+			expCond="(player distance zoneboatdealer_south_safezone) < 50;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			};
+		};
+		class Item18
+		{
+			position[]={12060.471,158.85699,12638.533};
+			a=100;
+			b=100;
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zoneaircraft_dealer_safezone";
+			expCond="(player distance zoneaircraft_dealer_safezone) < 75;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			};
+		};
+		class Item19
+		{
+			position[]={13441.16,1.1406164,5429.3013};
+			a=100;
+			b=100;
+			activationBy="ANY";
+			repeating=1;
+			interruptable=1;
+			age="UNKNOWN";
+			name="zoneboatdealer_east_safezone";
+			expCond="(player distance zoneboatdealer_east_safezone) < 75;";
+			expActiv="inSafeZone = true;";
+			expDesactiv="inSafeZone = false;";
+			class Effects
+			{
+			};
+		};
 	};
 };
 class Intro

@@ -57,6 +57,7 @@ DZE_PlayerZed = false; // Enable spawning as a player zombie when players die wi
 DZE_GodModeBase = false; // Make player built base objects indestructible
 DZE_SafeZonePosArray = [[[8246,15485,0],100],[[15506,13229,0],100],[[12399,5074,0],100],[[10398,8279,0],100],[[5149,4864,0],100],[[15128,16421,0],100]]; // Format is [[[3D POS],RADIUS],[[3D POS],RADIUS]]; Stops loot and zed spawn, salvage and players being killed if their vehicle is destroyed in these zones.
 DZE_Weather = 1; // Options: 1 - Summer Static, 2 - Summer Dynamic, 3 - Winter Static, 4 - Winter Dynamic. If static is selected, the weather settings will be set at server startup and not change. Weather settings can be adjusted with array DZE_WeatherVariables in configVariables.sqf.
+DZE_SafeZoneZombieLoot = true;  // Enable spawning of Zombies and loot in positions listed in DZE_SafeZonePosArray?
 
 dayz_groupSystem = true; // Enable group system
 dayz_markGroup = 2; // Players can see their group members on the map 0=never, 1=always, 2=With GPS only
