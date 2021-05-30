@@ -3,15 +3,22 @@ private ["_key","_query","_baseList","_base","_baseId","_baseParts","_ws_x","_ws
 // Pass the event handler setter function from topside.
 _vehEhSetter = _this select 0;
 
+local _tableName = "napf";
+if (DZE_Extras_WorldName == "chernarus") then {
+	_tableName = "cherno";
+};
+
 // Enable access to abandoned bases from DB
-_key = format["CHILD:500:%1:[""Object.object_data_bases_napf"",""Object.object_data_base_parts_napf""]::",(profileNamespace getVariable "SUPERKEY")];
+
+
+_key = format["CHILD:500:%1:[""Object.object_data_bases_%2"",""Object.object_data_base_parts_%2""]::",(profileNamespace getVariable "SUPERKEY"), _tableName];
 _accessResult = _key call server_hiveReadWrite;
 diag_log format ["changeTableAccess result: %1", _accessResult];
 
 diag_log "Fetching abandoned bases list...";
 
 // Get an abandoned base from DB
-_key = "CHILD:501:Object.object_data_bases_napf:[""base_id"",""ws_x"",""ws_y"",""ws_z""]:[[""base_id"",""IS NOT NULL""]]:[0,500]:";
+_key = format["CHILD:501:Object.object_data_bases_%1:[""base_id"",""ws_x"",""ws_y"",""ws_z""]:[[""base_id"",""IS NOT NULL""]]:[0,500]:", _tableName];
 _uniqId = _key call server_hiveReadWrite;
 if ((_uniqId select 0) == "PASS") then {
 	_uniqId = _uniqId select 1;
@@ -85,7 +92,7 @@ if (_tries >= 100) exitWith {
 // Publishing baseparts with old datestamp won't work with HiveExt.dll
 // We will read them and create the parts in-game but we won't publish them yet.
 
-_key = "CHILD:501:Object.object_data_base_parts_napf:[""object_id"",""classname"",";
+_key = format["CHILD:501:Object.object_data_base_parts_%1:[""object_id"",""classname"",", _tableName];
 _key = _key + """character_id"",""ws_x"",""ws_y"",""ws_z"",""ws_dir"",""ws_ownerpuid"",""ws_vect"",";
 _key = _key + """inventory_magazines"",""inventory_weapons"",""inventory_backpacks"",""hitpoints"",""fuel"",""damage"",""storage_coins""]:";
 _key = _key + format["[[""base_id"",""="",""%1""]]:[0,500]:", _baseId];
@@ -218,14 +225,29 @@ _objId = 0;
 				_object setVariable ["MagazineCargo",(_inventory select 1),false];
 				_object setVariable ["BackpackCargo",(_inventory select 2),false];
 			} else {
-				_weaponcargo = _inventory select 0 select 0;
-				_magcargo = _inventory select 1 select 0;
-				_backpackcargo = _inventory select 2 select 0;
-				_weaponqty = _inventory select 0 select 1;
+				if (count (_inventory select 0) == 2) then {
+					_weaponcargo = _inventory select 0 select 0;
+					_weaponqty = _inventory select 0 select 1;
+				} else {
+					_weaponcargo = [];
+					_weaponqty = []; 
+				};
+				if (count (_inventory select 1) == 2) then {
+					_magcargo = _inventory select 1 select 0;
+					_magqty = _inventory select 1 select 1;
+				} else {
+					_magcargo = [];
+					_magqty = [];
+				};
+				if (count (_inventory select 2) == 2) then {
+					_backpackcargo = _inventory select 2 select 0;
+					_backpackqty = _inventory select 2 select 1;
+				} else {
+					_backpackcargo = [];
+					_backpackqty = [];
+				};
 				{_object addWeaponCargoGlobal [_x, _weaponqty select _foreachindex];} foreach _weaponcargo;
-				_magqty = _inventory select 1 select 1;
 				{if (_x != "CSGAS") then {_object addMagazineCargoGlobal [_x, _magqty select _foreachindex];};} foreach _magcargo;
-				_backpackqty = _inventory select 2 select 1;
 				{_object addBackpackCargoGlobal [_x, _backpackqty select _foreachindex];} foreach _backpackcargo;
 			};
 		} else {
@@ -250,7 +272,7 @@ _objId = 0;
 		if (!_isSafeObject) then {
 			_DZE_VehObjects set [count _DZE_VehObjects,_object];
 			_object call _vehEhSetter;
-			if (_ownerID != "0" && {!(_object isKindOf "Bicycle")}) then {_object setVehicleLock "locked";};
+			if (_ownerID != "0" && {!(_object isKindOf "Bicycle")} && {!((typeOf _object) in ["M2StaticMG","DSHKM_CDF"])}) then {_object setVehicleLock "locked";};
 		} else {
 			_object enableSimulation true;
 		};

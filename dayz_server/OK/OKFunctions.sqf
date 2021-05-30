@@ -194,7 +194,7 @@ OKSetupVehicleArmed = {
 	_object setFuel 1;
 	_object setvelocity [0,0,1];
 	_object setDir (round(random 360));
-    _object setvehicleammo 1;
+	_object setvehicleammo 1;
 
 	
 	//If saving vehicles to the database is disabled, lets warn players it will disappear

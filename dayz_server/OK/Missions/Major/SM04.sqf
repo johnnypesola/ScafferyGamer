@@ -3,7 +3,7 @@
 //	Based on New Mission Format by Vampire
 //
 
-private ["_missName","_dbData","_baseId","_coords","_coords3d","_coords3dGround","_survivors","_wp","_nearbyStorage","_calculatedLootValue","_expectedTotalGoldValue","_remainingGoldValue","_mags","_magTypes","_magCount","_weaps","_backpacks","_arrayOfTraderCat","_storageTypes","_additionalCurrency","_items","_storageName","_storageNameUnlocked","_selectedStorage","_safePos","_objectUID","_ws","_patrolCoords","_patrolGroups","_patrolClasses","_patrol2Classes","_patrolClass","_nearbyPlayers","_moreSurvivors","_nearestPlayer","_unlocked","_capacity","_unlockedClass","_weapons","_magazines","_holder","_type","_dir","_vector","_pos","_charID","_objectID","_ownerID","_patrolData","_patrolVehicles","_opGemCount","_nearbyGuns","_gunnerGroup","_gunnerGroups","_gunnerGroupsAlive","_baseObjects","_startTime","_lastUpdated","_takenOver","_vehEhSetter","_baseObjectCount","_playerWithinAreaMoment","_timeOutsideArea","_survivorCount","_patrol3Classes","_patrol4Classes","_inventory","_warningsLeft"];
+private ["_missName","_dbData","_baseId","_coords","_coords3d","_coords3dGround","_survivors","_wp","_nearbyStorage","_calculatedLootValue","_expectedTotalGoldValue","_remainingGoldValue","_mags","_magTypes","_filteredMagTypes","_filteredMagCount","_weaps","_backpacks","_arrayOfTraderCat","_storageTypes","_additionalCurrency","_items","_storageName","_storageNameUnlocked","_selectedStorage","_safePos","_objectUID","_ws","_patrolCoords","_patrolGroups","_patrolClasses","_patrol2Classes","_patrolClass","_nearbyPlayers","_moreSurvivors","_nearestPlayer","_unlocked","_capacity","_unlockedClass","_weapons","_magazines","_holder","_type","_dir","_vector","_pos","_charID","_objectID","_ownerID","_patrolData","_patrolVehicles","_opGemCount","_nearbyGuns","_gunnerGroup","_gunnerGroups","_gunnerGroupsAlive","_baseObjects","_startTime","_lastUpdated","_takenOver","_vehEhSetter","_baseObjectCount","_playerWithinAreaMoment","_timeOutsideArea","_survivorCount","_patrol3Classes","_patrol4Classes","_inventory","_warningsLeft"];
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,39 +66,61 @@ _nearbyStorage = _nearbyStorage + (_coords3d nearObjects ["GunRack_DZ", 50]);
 _nearbyStorage = _nearbyStorage + (_coords3d nearObjects ["IC_Tent", 50]);
 _nearbyStorage = _nearbyStorage + (_coords3d nearObjects ["IC_DomeTent", 50]);
 
+local _dropMultiplier = 1;
+local _dropChance = 0;
+local _dropped = false;
+local _numStorage = count _nearbyStorage;
 {
 	_opGemCount = 0;
 	diag_log format["OK: Found %1 storage at %2. Clearing extremely valuable gems from the inventory...", (typeOf _x), (getPosATL _x)];
 	if ((typeOf _x) in ["VaultStorageLocked", "LockboxStorageLocked"]) then {
 		_mags =_x getVariable ["MagazineCargo",[]];
 		_magTypes = _mags select 0;
-		_magCount = [];
+		_filteredMagTypes = [];
+		_filteredMagCount = [];
 		for "_i" from 0 to (count(_mags select 0) - 1) do {
-			if (!((_magTypes select _i) in ["ItemRuby","ItemCitrine","ItemEmerald","ItemAmethyst"])) then {
-				_magTypes = _magTypes + [(_mags select 0) select _i];
-				_magCount = _magCount + [(_mags select 1) select _i];
+			_dropChance = (random 100) / 100;
+			_dropped = _dropChance <= (_numStorage * _numStorage) / (100 * _dropMultiplier);
+			if (!((_magTypes select _i) in ["ItemRuby","ItemCitrine","ItemEmerald","ItemAmethyst"]) || {_dropped}) then {
+				_filteredMagTypes = _filteredMagTypes + [(_mags select 0) select _i];
+				_filteredMagCount = _filteredMagCount + [(_mags select 1) select _i];
+				_dropMultiplier = _dropMultiplier + 1;
 			} else {
+				_dropChance = random 100;
+				if (_dropChance >= 50) then {
+					_filteredMagTypes = _filteredMagTypes + ["ItemObsidian"];
+					_filteredMagCount = _filteredMagCount + [(_mags select 1) select _i];
+				};
 				_opGemCount = _opGemCount + 1;
 			};
 		};
-		_mags = [_magTypes, _magCount];
+		_mags = [_filteredMagTypes, _filteredMagCount];
 		_x setVariable ["MagazineCargo", _mags, false];
 	} else {
 		local _tmpObj = _x;
 		_mags = getMagazineCargo _tmpObj;
 		_magTypes = _mags select 0;
-		_magCount = [];
+		_filteredMagTypes = [];
+		_filteredMagCount = [];
 		clearMagazineCargoGlobal _tmpObj;
 		for "_i" from 0 to (count(_mags select 0) - 1) do {
+			_dropChance = (random 100) / 100;
+			_dropped = _dropChance <= (_numStorage * _numStorage) / (100 * _dropMultiplier);
 			if (!((_magTypes select _i) in ["ItemRuby","ItemCitrine","ItemEmerald","ItemAmethyst"])) then {
-				_magTypes = _magTypes + [(_mags select 0) select _i];
-				_magCount = _magCount + [(_mags select 1) select _i];
+				_filteredMagTypes = _filteredMagTypes + [(_mags select 0) select _i];
+				_filteredMagCount = _filteredMagCount + [(_mags select 1) select _i];
+				_dropMultiplier = _dropMultiplier + 1;
 			} else {
+				_dropChance = random 100;
+				if (_dropChance >= 50) then {
+					_filteredMagTypes = _filteredMagTypes + ["ItemObsidian"];
+					_filteredMagCount = _filteredMagCount + [(_mags select 1) select _i];
+				};
 				_opGemCount = _opGemCount + 1;
 			};
 		};
-		_mags = [_magTypes, _magCount];
-		{_tmpObj addMagazineCargoGlobal [_x, _magCount select _foreachindex];} forEach _magTypes;
+		_mags = [_filteredMagTypes, _filteredMagCount];
+		{_tmpObj addMagazineCargoGlobal [_x, _filteredMagCount select _foreachindex];} forEach _filteredMagTypes;
 	};
 	diag_log format["OK: Cleared %1 overpowered gems from the inventory of %2 at %3!", _opGemCount, (typeOf _x), (getPosATL _x)];
 } forEach _nearbyStorage;
