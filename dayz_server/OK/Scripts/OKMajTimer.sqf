@@ -22,11 +22,11 @@ while {_run} do
 	if (_cntMis == 0) exitWith { _run = false; };
 	
 	//Lets pick a mission
-	if (isNil "_ranMis") then {
-		_ranMis = _cntMis - 1;
-	} else {
-		_ranMis = floor (random _cntMis);
-	};
+	//if (isNil "_ranMis") then {
+	//	_ranMis = _cntMis - 1;
+	//} else {
+	_ranMis = floor (random _cntMis);
+	//};
 	_varName = OKMajorArray select _ranMis;
 	
 	//Let's Run the Mission

@@ -70,6 +70,7 @@ _foundSafePos = false;
 _tries = 0;
 while {!_foundSafePos && _tries < 100} do {
 	_base = _baseList call BIS_fnc_selectRandom;
+	//_base = _baseList select 2;
 	diag_log format["Base: %1", _base];
 	_baseId = parseNumber (_base select 0);
 	_ws_x = parseNumber (_base select 1);
