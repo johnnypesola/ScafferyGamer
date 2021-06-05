@@ -282,11 +282,11 @@ while {(_timeOutsideArea < 600) && (!_takenOver)} do {
 	_timeOutsideArea = diag_ticktime - _lastTimePlayersPresent;
 	if (_timeOutsideArea >= 300 && _warningsLeft == 2) then {
 		[nil,nil,rTitleText,"Abandoned Base: 5 minutes left.", "PLAIN",5] call RE;
-		_warningsLeft = 0;
+		_warningsLeft = 1;
 	} else {
 		if (_timeOutsideArea >= 480 && _warningsLeft == 1) then {
 			[nil,nil,rTitleText,"Abandoned Base: 2 minutes left.", "PLAIN",5] call RE;
-			_warningsLeft = 1;
+			_warningsLeft = 0;
 		};
 	};
 	sleep 5;
