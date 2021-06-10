@@ -8,7 +8,7 @@ _messages = [
 	["Server Rules", "Duping, glitching or using any<br />exploit will result in a<br />permanent ban."],
 	["Server Rules", "No talking in side."],
 	["Server Rules", "Hackers will be banned permanently<br />Respect others"],
-	["News", "This is a server running DZE 1.0.7 on Napf!<br />Enjoy!<br />"],
+	["News", "This is a server running DZE 1.0.7 on Chernarus!<br />Enjoy!<br />"],
 	["Tips", "Press F5 to create/join group.<br />Press F6 to adjust view distance.<br />Press F7 to toggle status HUD.<br />"]
 ];
  
