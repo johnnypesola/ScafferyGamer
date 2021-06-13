@@ -108,7 +108,7 @@
 		antiSpamLimit = 15; // default 15 contacts
 		blindTime = 30; // default 30 seconds
 
-		
+	broadcastToolUse = false;
 		
 
 		

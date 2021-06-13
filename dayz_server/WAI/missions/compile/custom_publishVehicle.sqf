@@ -1,4 +1,4 @@
-private ["_object","_worldspace","_location","_dir","_class","_uid","_dam","_hitpoints","_selection","_array","_damage","_fuel","_key","_totaldam","_spawnDMG","_characterID","_result","_outcome","_oid"];
+private ["_object","_worldspace","_location","_dir","_class","_uid","_dam","_hitpoints","_selection","_array","_damage","_fuel","_key","_totaldam","_spawnDMG","_characterID","_result","_outcome","_oid","_inventory","_coins"];
 //[_veh,[_dir,_location],"V3S_Civ",true]
 #include "\z\addons\dayz_server\compile\server_toggle_debug.hpp"
 
@@ -7,6 +7,16 @@ _worldspace = 	_this select 1;
 _class = 		_this select 2;
 _spawnDMG =		_this select 3;
 _characterID =  _this select 4;
+if (5 < count _this) then {
+	_inventory = _this select 5;
+} else {
+	_inventory = [];
+};
+if (6 < count _this) then {
+	_coins = _this select 6;
+} else {
+	_coins = 0;
+};
 
 _fuel = 1;
 _damage = 0;
@@ -38,7 +48,7 @@ if (_spawnDMG) then {
 	};
 };
 
-_key = str formatText["CHILD:308:%1:%2:%3:%4:%5:%6:%7:%8:%9:",dayZ_instance,_class,_damage,_characterID,_worldspace,[],_array,_fuel,_uid];
+_key = str formatText["CHILD:308:%1:%2:%3:%4:%5:%6:%7:%8:%9:",dayZ_instance,_class,_damage,_characterID,_worldspace,_inventory,_array,_fuel,_uid];
 
 #ifdef OBJECT_DEBUG
 diag_log ("HIVE: WRITE: "+ str(_key)); 

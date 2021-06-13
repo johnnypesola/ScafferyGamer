@@ -63,6 +63,26 @@ class ExtraRc {
 //   script = "[""MAP_p_Helianthus"",[""ItemEtool""],[[""FoodSunFlowerSeed"", 1]],[0,1.5,0.05], ""sunflower seed""] execVM ""custom\plant\player_plantStuff.sqf"";";
 //  };
 // };
+
+ // Plantable pumpkin seeds become a pumpkin plant without pumpkins at first, next day they will have grown to pumpkins.
+ class ItemPumpkinSeed {
+  class plant {
+   text = "Plant Pumpkin Seed";
+   script = "[""MAP_pumpkin2"",[""ItemEtool""],[[""ItemPumpkinSeed"", 1]],[0,1.5,0.05]] execVM ""custom\build\player_customBuild.sqf"";";
+  };
+ };
+ class FoodSunFlowerSeed {
+  class plant {
+   text = "Plant Sunflower Seed";
+   script = "[""MAP_p_Helianthus"",[""ItemEtool""],[[""FoodSunFlowerSeed"", 1]],[0,1.5,0.05]] execVM ""custom\build\player_customBuild.sqf"";";
+  };
+ };
+ class ItemHempSeed {
+  class plant {
+   text = "Plant Hemp Seed";
+   script = "[""fiberplant"",[""ItemEtool""],[[""ItemHempSeed"", 1]],[0,1.5,0.05]] execVM ""custom\build\player_customBuild.sqf"";";
+  };
+ };
  class 20Rnd_762x51_DMR {
   class convertToM240 {
    text = "Make M240 belt";
@@ -219,6 +239,12 @@ class ExtraRc {
   class worth {
    text = "5 BC";
    script = "";
+  };
+ };
+ class ItemKey {
+  class claimInsurance {
+   text = "Claim Insurance";
+   script = "[""%1"", [[""ItemBriefcase100oz"",1]]] execVM ""custom\insurance\player_claimInsurance.sqf"";";
   };
  };
 };

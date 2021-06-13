@@ -2,6 +2,9 @@ custom_publish  = compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\m
 spawn_ammo_box  = compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\missions\compile\ammobox.sqf";
 spawn_treasure_box  = compile preprocessFileLineNumbers "\z\addons\dayz_server\WAI\missions\compile\treasurebox.sqf";
 
+clean_running_insurance_mission = False;
+clean_running_hero_mission = False;
+clean_running_bandit_mission = False;
 clean_running_mission = False;
 
 //load mission config

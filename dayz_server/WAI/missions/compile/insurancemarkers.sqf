@@ -5,15 +5,15 @@ _name = _this select 1;
 
 _Marker = "";
 _dot = "";
-heromarkerready = false;
-while {heromissionrunning} do {
-	_Marker = createMarker ["HeroMission", _position];
-	_Marker setMarkerColor "ColorRed";
+insurancemarkerready = false;
+while {insurancemissionrunning} do {
+	_Marker = createMarker ["InsuranceMission", _position];
+	_Marker setMarkerColor "ColorBlue";
 	_Marker setMarkerShape "ELLIPSE";
 	_Marker setMarkerBrush "Grid";
 	_Marker setMarkerSize [200,200];
 	_Marker setMarkerText _name;
-	_dot = createMarker ["dot", _position];
+	_dot = createMarker ["dot3", _position];
 	_dot setMarkerColor "ColorBlack";
 	_dot setMarkerType "mil_dot";
 	_dot setMarkerText _name;
@@ -21,8 +21,8 @@ while {heromissionrunning} do {
 	deleteMarker _Marker;
 	deleteMarker _dot;
 };
-if (_Marker == "HeroMission") then {
+if (_Marker == "InsuranceMission") then {
 	deleteMarker _Marker;
 	deleteMarker _dot;
 };
-heromarkerready = true;
+insurancemarkerready = true;

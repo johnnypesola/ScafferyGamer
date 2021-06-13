@@ -5,7 +5,7 @@ _name = _this select 1;
 
 _Marker = "";
 _dot = "";
-markerbanditready = false;
+banditmarkerready = false;
 while {banditmissionrunning} do {
 	_Marker = createMarker ["BanditMission", _position];
 	_Marker setMarkerColor "ColorGreen";
@@ -25,4 +25,4 @@ if (_Marker == "BanditMission") then {
 	deleteMarker _Marker;
 	deleteMarker _dot;
 };
-markerbanditready = true;
+banditmarkerready = true;

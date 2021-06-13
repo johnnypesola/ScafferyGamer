@@ -31,11 +31,18 @@ if (_button == 1) then {
 	_pos set [0,((_this select 2) + 0.46)];
 	_pos set [1,((_this select 3) + 0.07)];
 
+
 	_conf = configFile >> "cfgMagazines" >> _item;
 	if (!isClass _conf) then {
 		_conf = configFile >> "cfgWeapons" >> _item;
 	};
 	_name = getText(_conf >> "displayName");
+
+	local _parentItem = _item;
+	if ("ItemKey" in ([_conf, true] call BIS_fnc_returnParents)) then {
+		_parentItem = "ItemKey";
+		_itemAmmo = _item;
+	};
 
 	_cfgActions = _conf >> "ItemActions";
 	_numActions = (count _cfgActions);
@@ -73,7 +80,7 @@ if (_button == 1) then {
 	_pos set [3,_height];
 
 	// SCAFFERY: Add extra context menus
-	_erc_cfgActions = (missionConfigFile >> "ExtraRc" >> _item);
+	_erc_cfgActions = (missionConfigFile >> "ExtraRc" >> _parentItem);
 	_erc_numActions = (count _erc_cfgActions);
 	if (isClass _erc_cfgActions) then {
 		for "_j" from 0 to (_erc_numActions - 1) do 
@@ -93,7 +100,7 @@ if (_button == 1) then {
 	};
 
 	_pos set [3,_height];
-	//hint format["Obj: %1 \nHeight: %2\nPos: %3",_item,_height,_grpPos];		
+	//hint format["Obj: %1 \nHeight: %2\nPos: %3",_parentItem,_height,_grpPos];
 
 	_group ctrlShow true;
 	ctrlSetFocus _group;

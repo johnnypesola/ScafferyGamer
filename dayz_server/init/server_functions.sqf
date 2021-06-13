@@ -68,6 +68,8 @@ fnc_veh_setFixServer = compile preprocessFileLineNumbers "\z\addons\dayz_code\co
 server_getAbandonedBase = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\scaffery\server_getAbandonedBase.sqf";
 server_deleteAbandonedBase = 		compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\scaffery\server_deleteAbandonedBase.sqf";
 server_publishAbandonedBaseObject =	compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\scaffery\server_publishAbandonedBaseObject.sqf";
+server_getInsuredVehicle =		compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\scaffery\server_getInsuredVehicle.sqf";
+server_claimInsuredVehicle =		compile preprocessFileLineNumbers "\z\addons\dayz_server\compile\scaffery\server_claimInsuredVehicle.sqf";
 
 server_medicalSync = {
 	local _player = _this select 0;

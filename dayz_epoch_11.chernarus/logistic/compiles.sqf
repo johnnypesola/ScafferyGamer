@@ -15,8 +15,8 @@ if (!isDedicated) then {
 			_object setVelocity [0,0,0];
 			detach _object;
 			if (!isNil "dayz_zombieSpeak" && !isNil "dayz_HungerThirst" && !isNil "player_alertZombies" ) then {			
-				PVDZE_veh_Update = [_object,"all"];
-				publicVariableServer "PVDZE_veh_Update";
+				PVDZE_veh_Update = [_object,"position"];
+				publicVariableServer "PVDZ_veh_Save";
 				[10,10] call dayz_HungerThirst;
 				player playActionNow "Medic";
 				[player,"repair",0,false,20] call dayz_zombieSpeak;

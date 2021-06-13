@@ -23,6 +23,11 @@
 "PVDZE_handleSafeGear" 	addPublicVariableEventHandler {(_this select 1) call server_handleSafeGear};
 "SK_changeCode" 		addPublicVariableEventHandler {(_this select 1) call server_changeCode};
 
+
+// SCAFFERY ADDITIONS
+"PVDZE_veh_insurance"	addPublicVariableEventHandler {(_this select 1) call server_claimInsuredVehicle};
+
+
 if (dayz_groupSystem) then {
 	"PVDZ_Server_UpdateGroup" addPublicVariableEventHandler {(_this select 1) spawn server_updateGroup};
 };
