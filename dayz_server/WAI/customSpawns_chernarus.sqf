@@ -4,7 +4,7 @@
 	Private ["_proceed", "_themags","_theweap","_thetool","_item","_thebox","_hidden_box_number_of_gold","_hidden_box_number_of_guns","_hidden_box_number_of_tools","_hidden_box_number_of_buildmats","_numberofguns","_numberoftools","_numberofitems","_numberofbuildmats","_hidden_box_random_items","_hidden_box_random_guns","_hidden_box_random_tools","_hidden_box_random_buildmats","_objects", "_rare_loot_items", "_result", "_positions","_pos", "_total_groups","_location","_prize_veh","_prize_veh_chute","_class","_units","_i"];
 	while {true} do {
 
-		[nil,nil,rTitleText,"Separatist forces have set up a base somewhere to the north. Stay away from them... they are dangerous.", "PLAIN",5] call RE;
+		[nil,nil,rTitleText,"Separatist military forces have set up a base to the far north west. Stay away from them... they are dangerous.", "PLAIN",5] call RE;
 		_total_groups = [];
 
 		// Spawn first wave
@@ -177,7 +177,7 @@
 		_proceed = false;
 		_units = [];
 		{ _units = _units + (units _x); } forEach _total_groups;
-		waitUntil {sleep 10; ({alive _x} count _units) == 0};
+		waitUntil {sleep 10; ({(alive _x) && (([1940.605, 14420.955, 0.011580579] distance _x) < 800)} count _units) == 0};
 
 		_location = [1931.6,14410,0.00144861];
 
@@ -191,19 +191,65 @@
 
 		sleep 1.0;
 
-		_hidden_box_number_of_gold = 1;
+		_hidden_box_number_of_gold = 10;
 		_hidden_box_random_items = [
-			"ItemObsidian"
+			"ItemObsidian",
+			"ItemObsidian",
+			"ItemObsidian",
+			"ItemObsidian",
+			"ItemObsidian",
+			"ItemObsidian",
+			"ItemTopaz",
+			"ItemTopaz",
+			"ItemTopaz",
+			"ItemSapphire",
+			"ItemARM",
+			"ItemORP",
+			"ItemAVE",
+			"ItemLRK",
+			"ItemTNK",
+			"ItemTruckORP",
+			"ItemTruckAVE",
+			"ItemTruckLRK",
+			"ItemTruckTNK",
+			"ItemTruckARM",
+			"ItemTankORP",
+			"ItemTankAVE",
+			"ItemTankLRK",
+			"ItemTankTNK",
+			"ItemHeliAVE",
+			"ItemHeliLRK",
+			"ItemHeliTNK",
+			"equip_metal_sheet",
+			"equip_metal_sheet",
+			"equip_metal_sheet",
+			"equip_metal_sheet",
+			"equip_metal_sheet",
+			"ItemScrews",
+			"ItemScrews",
+			"ItemScrews",
+			"ItemScrews",
+			"ItemTinBar",
+			"ItemTinBar",
+			"equip_scrapelectronics",
+			"equip_scrapelectronics",
+			"equip_scrapelectronics",
+			"equip_scrapelectronics",
+			"equip_floppywire",
+			"equip_floppywire",
+			"equip_floppywire",
+			"equip_floppywire"
 		];
 
 		_rare_loot_items = [
 			["ItemBriefcase100oz", 17],
-			["ItemObsidian", 2],
+			["ItemObsidian", 4],
+			["ItemSapphire", 2],
 			["ItemAmethyst", 1]
 		];
 
 		// Add the normal valuables...
-		_numberofitems = (round (random 1)) + _hidden_box_number_of_gold;
+		_numberofitems = (round (random 20)) + _hidden_box_number_of_gold;
 		for "_i" from 1 to _numberofitems do {
 			_item = _hidden_box_random_items call BIS_fnc_selectRandom;
 			_prize_veh addMagazineCargoGlobal [_item,1];

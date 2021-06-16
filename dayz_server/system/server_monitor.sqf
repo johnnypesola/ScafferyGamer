@@ -342,6 +342,34 @@ if ((playersNumber west + playersNumber civilian) == 0) exitWith {
 	if (Z_SingleCurrency && ZSC_VehicleMoneyStorage) then {
 		_object setVariable ["cashMoney", _storageMoney, true];
 	};
+	switch (_type) do {
+		case "M113_TK_EP1": {
+			//_object removeMagazinesTurret ["100Rnd_127x99_M2", [0]];
+		};
+		case "AH6J_EP1": {
+			//_object removeMagazinesTurret ["4000Rnd_762x51_M134", [-1]];
+			_object removeMagazinesTurret ["14Rnd_FFAR", [-1]];
+		};
+		case "UH1Y": {
+			_object removeMagazinesTurret ["14Rnd_FFAR", [-1]];
+		};
+		case "Ka60_PMC": {
+			_object setVehicleAmmo 0;
+		};
+		case "pook_H13_gunship": {
+			//_object removeMagazinesTurret ["pook_1300Rnd_762x51_M60", [-1]];
+		};
+		case "pook_H13_transport_GUE": {
+			//_object removeMagazinesTurret ["pook_250Rnd_762x51", [0]];
+		};
+		case "M1126_ICV_M2_EP1": {
+			//_object removeMagazinesTurret ["100Rnd_127x99_M2", [0]];
+		};
+		case "M1126_ICV_mk19_EP1": {
+			//_object removeMagazinesTurret ["48Rnd_40mm_MK19", [0]];
+		};
+	};
+
 
 	dayz_serverIDMonitor set [count dayz_serverIDMonitor,_idKey];
 

@@ -185,7 +185,7 @@ class Mission
 	};
 	class Markers
 	{
-		items=20;
+		items=22;
 		class Item0
 		{
 			position[]={7839,0,8414};
@@ -329,6 +329,27 @@ class Mission
 			type="mil_dot";
 			colorName="ColorBlue";
 		};
+		class Item20
+		{
+			position[]={1912.8773,-438.077,14481.457};
+			name="MilArea1a";
+			text="Military Area";
+			type="mil_circle";
+			markerType="ELLIPSE";
+			fillName="Grid";
+			colorName="ColorRed";
+			a=1000;
+			b=1000;
+		};
+		class Item21
+		{
+			position[]={1912.8773,-438.077,14481.457};
+			name="MilArea1b";
+			text="Military Area";
+			type="mil_dot";
+			colorName="ColorBlack";
+		};
+
 	};
 	class Sensors
 	{
