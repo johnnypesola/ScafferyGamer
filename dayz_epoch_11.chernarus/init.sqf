@@ -75,7 +75,7 @@ DZE_WeatherVariables = [
 	15, // Minimum time in minutes for the weather to change. (default value: 15).
 	30, // Maximum time in minutes for the weather to change. (default value: 30).
 	0, // Minimum fog intensity (0 = no fog, 1 = maximum fog). (default value: 0).
-	.8, // Maximum fog intensity (0 = no fog, 1 = maximum fog). (default value: 0.8).
+	.3, // Maximum fog intensity (0 = no fog, 1 = maximum fog). (default value: 0.8).
 	0, // Minimum overcast intensity (0 = clear sky, 1 = completely overcast). (default value: 0). Note: Rain and snow will not occur when overcast is less than 0.70.
 	1, // Maximum overcast intensity (0 = clear sky, 1 = completely overcast). (default value: 1).
 	0, // Minimum rain intensity (0 = no rain, 1 = maximum rain). Overcast needs to be at least 70% for it to rain.
@@ -87,7 +87,7 @@ DZE_WeatherVariables = [
 	1, // Maximum snow intensity (0 = no snow, 1 = maximum snow). Overcast needs to be at least 75% for it to snow.
 	.2,// Probability for a blizzard to occur when it is snowing. (0 = no blizzards, 1 = blizzard all the time). (default value: .2).
 	10, // Blizzard interval in minutes. Set to zero to have the blizzard run for the whole interval, otherwise you can set a custom time interval for the blizzard.
-	1, // Ground Fog Effects. Options: 0 - no ground fog, 1 - only at evening, night, and early morning, 2 - anytime, 3 - near cities and towns, at late evening, night, and early morning, 4 - near cities and towns, anytime.
+	3, // Ground Fog Effects. Options: 0 - no ground fog, 1 - only at evening, night, and early morning, 2 - anytime, 3 - near cities and towns, at late evening, night, and early morning, 4 - near cities and towns, anytime.
 	400, // Distance in meters from player to scan for buildings to spawn ground fog. By default, only the 15 nearest buildings will spawn ground fog.
 	false, // Allow ground fog when it's snowing or raining?
 	2 // Winter Breath Fog Effects. Options: 0 - no breath fog, 1 - anytime, 2 - only when snowing or blizzard. Note: breath fog is only available with winter weather enabled.
