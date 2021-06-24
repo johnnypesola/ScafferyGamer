@@ -59,7 +59,8 @@
 	["Profiteer3",[4360,2261,0],196],
 	/***********************************************/
 	// Scaffery construction trader
-	["Soldier_M4A3_PMC",[1908.012,14435.136,0],-64.091377],
+	//["Soldier_M4A3_PMC",[1908.012,14435.136,0],-64.091377],
+	["Soldier_M4A3_PMC",[11994,3824.27,0.299],281],
 	// Scaffery Super Bandit trader
 	["Soldier_AA_PMC",[1613.0393,7808.0752,0],-83.499443],
 	// Scaffery Super Hero trader
