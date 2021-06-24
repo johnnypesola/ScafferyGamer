@@ -60,10 +60,10 @@ if (!isServer) then {
 			publicVariableServer "PVDZE_veh_insurance";
 
 			waitUntil {!isNil "dze_waiting"};
-			if (dze_waiting == "fail") then {
+			if (dze_waiting != "Success") then {
 				{player addMagazine _x;} count _temp_removed_array_mag;
 				{player addWeapon _x;} count _temp_removed_array_wep;
-				format["Insurance claim for key %1 denied! (Already claimed?)"] call dayz_rollingMessages;
+				format["Insurance claim for key %1 rejected! Reason: %2.", _keyItem, dze_waiting] call dayz_rollingMessages;
 			} else {
 				format["Insurance claim for key %1 approved!", _keyItem] call dayz_rollingMessages;
 				["Working",0,[3,2,4,0]] call dayz_NutritionSystem;

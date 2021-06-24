@@ -38,6 +38,9 @@ server_obj_inv = {
 	};
 
 
+	// Make sure destroyed object inventory is not updated.
+	if ((damage _object) == 1) exitWith {};
+
 	local _previous = str(_object getVariable["lastInventory",[]]);
 	if (str _inventory != _previous) then {
 		local _key = "";
