@@ -101,7 +101,7 @@ if (_type == "weapons") then {
 if (_type == "supply") then {
 	// load tools
 	_scount = count OKConTools;
-	for "_x" from 0 to 2 do {
+	for "_x" from 0 to 4 do {
 		_sSelect = floor(random _sCount);
 		_item = OKConTools select _sSelect;
 		_crate addWeaponCargoGlobal [_item, 1];
@@ -154,6 +154,19 @@ if (_type == "cloth") then {
 	for "_x" from 0 to 6 do {
 		_sSelect = floor(random _sCount);
 		_item = OKCloth select _sSelect;
+		_crate addMagazineCargoGlobal [_item,(round(random 3))];
+	};
+};
+
+///////////////////////////////////////////////////////////////////
+// Some gardening stuff
+if (_type == "gardening") then {
+
+	// load clothing
+	_scount = count OKGardening;
+	for "_x" from 0 to 9 do {
+		_sSelect = floor(random _sCount);
+		_item = OKGardening select _sSelect;
 		_crate addMagazineCargoGlobal [_item,(round(random 3))];
 	};
 };

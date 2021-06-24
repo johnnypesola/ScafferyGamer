@@ -73,9 +73,10 @@ OKprimaryList = [
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // "supply" box
-OKConTools = ["ItemToolbox","ItemCrowbar","ItemKnife","ItemEtool","ItemHatchet","ItemMatchbox","NVGoggles","ItemGPS","Binocular_Vector"];
+OKConTools = ["ItemToolbox","ItemCrowbar","ItemKnife","ItemEtool","ItemHatchet","ItemMatchbox","NVGoggles","ItemGPS","Binocular_Vector","ItemSolderDZE","Wrench_DZE","ItemAPSI_DZE","Cuffs_DZE","Hammer_DZE","ItemPickaxe","Handsaw_DZE","Scissors_DZE","Screwdriver_DZE","ItemShovel"];
+//OKConTools = ["ItemToolbox","ItemCrowbar","ItemKnife","ItemEtool","ItemHatchet","ItemMatchbox","NVGoggles","ItemGPS","Binocular_Vector","ItemSolderDZE","Wrench_DZE","ItemAPSI_DZE","Cuffs_DZE","Hammer_DZE","ItemPilotmask_DZE","ItemGasmask1_DZE","ItemGasmask2_DZE","ItemPickaxe","Handsaw_DZE","Scissors_DZE","Screwdriver_DZE","ItemShovel","Smartphone_DZE"];
 
-OKConSupply = ["CinderBlocks","CinderBlocks","CinderBlocks","CinderBlocks","CinderBlocks","CinderBlocks","MortarBucket","ItemTankTrap","ItemPole","PartGeneric","PartPlywoodPack","PartPlankPack","ItemSandbag","ItemWire","ItemJerrycan","PartEngine","PartFueltank","PartGlass","PartVRotor","PartWheel","ItemBriefcase100oz"];
+OKConSupply = ["CinderBlocks","CinderBlocks","CinderBlocks","CinderBlocks","CinderBlocks","CinderBlocks","MortarBucket","ItemTankTrap","ItemPole","PartGeneric","PartPlywoodPack","PartPlankPack","ItemSandbag","ItemWire","ItemJerrycan","PartEngine","PartFueltank","PartGlass","PartVRotor","PartWheel","ItemBriefcase100oz","ItemStone","ItemConcreteBlock","ItemConcreteBlock","ItemConcreteBlock","equip_brick","CementBag","CementBag","equip_aa_battery","equip_d_battery","equip_floppywire","equip_floppywire","equip_scrapelectronics","equip_scrapelectronics","ItemLightBulb","ItemTopaz","ItemObsidian","ItemComboLock","ItemMetalSheet","ItemMetalSheet","ItemRSJ","equip_metal_sheet","equip_metal_sheet","PartOre","PartOre","PartOre","PartOre","PartOreSilver","PartOreGold"];
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // "secret" box
@@ -304,6 +305,15 @@ OKCloth=[
 "Skin_SurvivorWurban_DZ",
 "Skin_TK_INS_Soldier_EP1_DZ",
 "Skin_TK_INS_Warlord_EP1_DZ"
+];
+
+OKGardening=[
+	"ItemHempSeed",
+	"ItemPumpkinSeed",
+	"FoodSunFlowerSeed",
+	"FoodCarrot",
+	"equip_garlic_bulb",
+	"ItemWaterBottle"
 ];
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
