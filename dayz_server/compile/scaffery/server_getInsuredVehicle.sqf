@@ -75,7 +75,7 @@ _ws = call compile (_item select 2);
 _inv = call compile (_item select 3);
 _coins = parseNumber (_item select 4);
 
-diag_log format["INFO: Loaded %1 via insurance with ID %2!", _classname, _charID];
+diag_log format["INFO: Loaded %1 via insurance with ID %2! Inv: %3", _classname, _charID, _inv];
 
 // Return abandoned base ID, location and plot poles from DB
 [_classname, _charID, _ws, _inv, _coins]

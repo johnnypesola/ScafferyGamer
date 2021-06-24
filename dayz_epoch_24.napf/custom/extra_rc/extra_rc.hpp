@@ -214,11 +214,21 @@ class ExtraRc {
    text = "Build Spawn Bed";
    script = "[""MAP_F_postel_manz_kov"",[""ItemToolbox"",""ItemCrowbar"",""ItemHatchet""],[[""ItemObsidian"", 1],[""PartGeneric"", 1],[""PartWoodLumber"", 5]],[-1.0,1.5,0.05]] execVM ""custom\build\player_customBuild.sqf"";";
   };
+  class buildHangar {
+   text = "Build Hangar";
+   script = "[""Land_Barn_Metal"",[""ItemToolbox"",""ItemCrowbar"",""ItemHatchet""],[[""ItemObsidian"", 1],[""ItemMetalSheet"", 11]],[-1.0,26,0.05]] execVM ""custom\build\player_customBuild.sqf"";";
+  };
  };
  class ItemTopaz {
   class worth {
    text = "5 BC";
    script = "";
+  };
+ };
+ class ItemKey {
+  class claimInsurance {
+   text = "Claim Insurance";
+   script = "[""%1"", [[""ItemBriefcase100oz"",1]]] execVM ""custom\insurance\player_claimInsurance.sqf"";";
   };
  };
 };

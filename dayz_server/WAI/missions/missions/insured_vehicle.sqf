@@ -1,5 +1,7 @@
 private ["_claimingPlayerUID","_claimingPlayer","_playerPresent","_cleanmission","_currenttime","_starttime","_missiontimeout","_vehname","_veh","_position","_vehclass","_vehdir","_objPosition","_insuranceClaim","_inventory","_coins","_charID","_keyItem","_noKey","_isOK","_ws","_getPos","_timeelapsed","_timecount","_remainingWeapons","_remainingMags","_remainingBackpacks","_splitWeapons","_splitMags","_splitBackpacks","_stolenWeaponCount","_stolenMagsCount","_stolenBackpackCount","_stolenWeapons","_stolenMags","_stolenBackpacks","_expandItemsList","_compressItemsList","_splitListByCount","_expandedWeaponsList","_expandedMagsList","_expandedBackpackList","_cleanunits","_weaponcargo","_weaponqty","_magcargo","_magqty","_backpackcargo","_backpackqty","_numMagslots","_numWeapSlots","_numBackpackSlots","_estimatedNumUnits","_numUnitsPerGroup","_waves","_wavePos","_waveGrp"];
 
+insurancemissionstartstate = "Initializing";
+
 _expandItemsList = {
 	local _itemTypes = _this select 0;
 	local _itemTypeCounts = _this select 1;
@@ -124,7 +126,10 @@ _spawnAI = {
 	_unitGroup = createGroup east;
 	_onlySurplusMagsLeft = false;
 
-	if (!isServer) exitWith { insurancemissionrunning = false; };
+	if (!isServer) exitWith {
+		insurancemissionrunning = false;
+		insurancemissionstartstate = "Client called server script";
+	};
 
 	for "_i" from 0 to (_iterationsNeeded - 1) do {
 		if (_skin == "") then {
@@ -222,12 +227,14 @@ _spawnAI = {
 _keyItem = _this select 0;
 _claimingPlayerUID = _this select 1;
 _claimingPlayer = objNull;
+insurancemissionstartstate = "Loading";
 
 // Check player who tries to claim lost vehicle by insurance
 { if (isPlayer _x && {_claimingPlayerUID == getPlayerUID _x}) exitWith {_claimingPlayer = _x;}; } forEach playableUnits;
 if (isNull _claimingPlayer) exitWith {
 	diag_log format["WAI: Unknown player called claim on key %1", _keyItem];
 	insurancemissionrunning = false;
+	insurancemissionstartstate = "Unknown player";
 };
 diag_log format["WAI: Player %1 wants to claim insurance on key %1", _keyItem];
 
@@ -236,6 +243,7 @@ _isOK = isClass(configFile >> "CfgWeapons" >> _keyItem);
 if(!_isOK) exitWith {
 	diag_log ("WAI: Vehicle Insurance error: VEHICLE KEY does not exist: " + str(_keyItem));
 	insurancemissionrunning = false;
+	insurancemissionstartstate = "Invalid key";
 };
 _charID = str(getNumber(configFile >> "CfgWeapons" >> _keyItem >> "keyid"));
 diag_log format["WAI: Character ID (Lock ID) is %1", _charID];
@@ -246,6 +254,7 @@ _insuranceClaim = [_charID] call server_getInsuredVehicle;
 if (count _insuranceClaim == 0) exitWith {
 	diag_log ("WAI: Vehicle Insurance error: VEHICLE does not exist: " + str(_charID));
 	insurancemissionrunning = false;
+	insurancemissionstartstate = "Vehicle not found";
 };
 
 _vehclass = _insuranceClaim select 0;
@@ -325,9 +334,11 @@ _waves = _waves - 1;
 [_position,_vehname] execVM "\z\addons\dayz_server\WAI\missions\compile\insurancemarkers.sqf";
 [nil,_claimingPlayer,"loc",rTitleText,"The insured vehicle has been restored but it was found by bandits!! Check your map for the location!", "PLAIN",10] call RE;
 
+insurancemissionstartstate = "Success";
+
 while {_missiontimeout} do {
 	sleep 5;
-	_currenttime = floor(time);
+	_currenttime = floor(diag_tickTime);
 	_timeelapsed = _currenttime - _starttime;
 	_timecount = _timecount + 5;
 	{if((isPlayer _x) AND (_x distance _position <= 150)) then {_playerPresent = true};}forEach playableUnits;
@@ -398,7 +409,7 @@ while {_missiontimeout} do {
 		_waves = _waves - 1;
 	};
 
-	if ((_playerPresent) OR (_cleanmission)) then {_missiontimeout = false;};
+	if ((_playerPresent) || (_cleanmission)) then {_missiontimeout = false;};
 };
 if (_playerPresent) then {
 
@@ -428,6 +439,7 @@ if (_playerPresent) then {
 		_backpackcargo = [];
 	};
 
+	diag_log format["Adding back remaining cargo: [%1,%2,%3]...", _weaponcargo, _magcargo, _backpackcargo];
 	{_veh addWeaponCargoGlobal [_x, _weaponqty select _forEachIndex];} forEach _weaponcargo;
 	{if (_x != "CSGAS") then { _veh addMagazineCargoGlobal [_x, _magqty select _forEachIndex];} ;} forEach _magcargo;
 	{_veh addBackpackCargoGlobal [_x, _backpackqty select _foreachindex];} foreach _backpackcargo;

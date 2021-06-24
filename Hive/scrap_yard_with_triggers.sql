@@ -44,7 +44,7 @@ INSERT INTO `object_data_scrap_yard` (
         REPLACE(old.`Inventory`,'"',"'"),
         '[]',
         1.0,
-        0.0,
+        old.`Damage`,
         old.`StorageCoins`
 );
 
@@ -55,4 +55,11 @@ FOR EACH ROW
 DELETE FROM `object_data_scrap_yard` WHERE `CharacterID`=new.`CharacterID`
 AND `Classname`=new.`Classname` AND `Instance`=new.`Instance` AND `CharacterID`<>0
 ORDER BY `Datestamp` ASC LIMIT 1;
+
+-- Modify destroyed vehicle cleanup to run every minute
+DROP EVENT IF EXISTS `removeDamagedVehicles`;
+CREATE EVENT `removeDamagedVehicles`
+ON SCHEDULE EVERY 1 MINUTE STARTS '2021-06-14 15:58:34'
+ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Removes damaged vehicles'
+DO DELETE FROM `Object_DATA` WHERE Damage >= 1;
 
