@@ -96,7 +96,13 @@ DELIMITER ;
 -- ----------------------------
 DROP EVENT IF EXISTS `removeObjectOld`;
 DELIMITER ;;
-CREATE EVENT `removeObjectOld` ON SCHEDULE EVERY 1 DAY COMMENT 'Removes old objects and vehicles' DO DELETE FROM `Object_DATA` WHERE (`LastUpdated` < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 90 DAY) AND `Datestamp` < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 120 DAY))
+CREATE EVENT `removeObjectOld` ON SCHEDULE EVERY 1 DAY STARTS '2017-04-22 00:00:00' COMMENT 'Removes old objects and vehicles' DO
+BEGIN
+        DELETE FROM `object_data` WHERE `LastUpdated` < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 90 DAY)
+        AND `Datestamp` < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 120 DAY)
+        AND `Datestamp` <> `LastUpdated`;
+        UPDATE `object_data` SET `Classname`='MAP_pumpkin' WHERE `Classname`='MAP_pumpkin2';
+END
 ;;
 DELIMITER ;
 
