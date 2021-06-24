@@ -455,7 +455,7 @@ local _lockableParts = [
 
 // Main monitor loop; If after 10 mins no players have entered area to reset timer, exit the main loop.
 _lastTimePlayersPresent = diag_ticktime;
-while {(_timeOutsideArea < 120) && (!_takenOver)} do {
+while {(_timeOutsideArea < 600) && (!_takenOver)} do {
 
 	_nearbyPlayers = [];
 	{
