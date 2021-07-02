@@ -175,7 +175,7 @@ if (_type == "secret") then {
     } forEach OKSecretRare;
     local _secretItem = _sSelect call BIS_fnc_selectRandom;
     _crate addMagazineCargoGlobal [_secretItem,1];
-    _content set [count _content, _secretTtem];
+    _content set [count _content, _secretItem];
     diag_log format["Adding items to secret box: %1", _content];
 };
 
