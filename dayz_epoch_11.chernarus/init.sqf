@@ -75,11 +75,11 @@ DZE_WeatherVariables = [
 	15, // Minimum time in minutes for the weather to change. (default value: 15).
 	30, // Maximum time in minutes for the weather to change. (default value: 30).
 	0, // Minimum fog intensity (0 = no fog, 1 = maximum fog). (default value: 0).
-	.3, // Maximum fog intensity (0 = no fog, 1 = maximum fog). (default value: 0.8).
+	(random 1) * (random 1), // Maximum fog intensity (0 = no fog, 1 = maximum fog). (default value: 0.8).
 	0, // Minimum overcast intensity (0 = clear sky, 1 = completely overcast). (default value: 0). Note: Rain and snow will not occur when overcast is less than 0.70.
-	1, // Maximum overcast intensity (0 = clear sky, 1 = completely overcast). (default value: 1).
+	(random 1), // Maximum overcast intensity (0 = clear sky, 1 = completely overcast). (default value: 1).
 	0, // Minimum rain intensity (0 = no rain, 1 = maximum rain). Overcast needs to be at least 70% for it to rain.
-	.6, // Maximum rain intensity (0 = no rain, 1 = maximum rain). Overcast needs to be at least 70% for it to rain.
+	(random 1) * (random 1), // Maximum rain intensity (0 = no rain, 1 = maximum rain). Overcast needs to be at least 70% for it to rain.
 	0, // Minimum wind strength (default value: 0).
 	5, // Maximum wind strength (default value: 5).
 	.25, // Probability for wind to change when weather changes. (default value: .25).
