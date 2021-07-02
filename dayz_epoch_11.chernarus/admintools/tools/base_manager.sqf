@@ -218,7 +218,7 @@ fn_BCExport = {
 	_export = "";
 	_position = BC_center;
 	_distance = BC_radius;
-	_nearest_objects = nearestObjects [[_position select 0, _position select 1], dayz_allowedObjects, _distance];
+	_nearest_objects = nearestObjects [[_position select 0, _position select 1], dayz_safeObjects, _distance];
 	_objectCount = count _nearest_objects;
 	_i = 1;
 	{
@@ -266,7 +266,7 @@ fn_BCCopy = {
 	_objects = [];
 	_position = BC_center;
 	_distance = BC_radius;
-	_nearest_objects = nearestObjects [[_position select 0, _position select 1], dayz_allowedObjects, _distance];
+	_nearest_objects = nearestObjects [[_position select 0, _position select 1], dayz_safeObjects, _distance];
 	{
 		private ["_obj_type", "_direction", "_obj_position", "_relative_position", "_row"];
 		_obj_type = typeOf _x;
@@ -283,6 +283,7 @@ fn_BCCopy = {
 		true
 	} count _nearest_objects;
 	systemChat format["Copied %1 items", count _nearest_objects];
+	diag_log format["Items: %1", _nearest_objects];
 	BCCopiedBase = _objects;
 	showCommandingMenu "#USER:BCMainMenu";
 	_objects
@@ -336,7 +337,7 @@ fn_BCConfirmDelete = {
 	_objectClasses = [];
 
 	if (BD_Buildables) then {
-		_objectClasses = dayz_allowedObjects;
+		_objectClasses = dayz_safeObjects;
 	};
 	if (BD_vehicles) then {
 		_objectClasses = _objectClasses + ["LandVehicle","Helicopter","Plane","Ship"];
