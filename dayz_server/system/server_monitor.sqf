@@ -2,7 +2,7 @@ private ["_legacyStreamingMethod","_hiveLoaded","_timeStart","_i","_key","_resul
 		"_VehicleQueue","_vQty","_idKey","_type","_ownerID","_worldspace","_inventory","_damage","_storageMoney","_vector","_vecExists","_ownerPUID",
 		"_wsCount","_ws2TN","_ws3TN","_dir","_posATL","_wsDone","_object","_doorLocked","_isPlot","_isTrapItem","_isSafeObject",
 		"_weaponcargo","_magcargo","_backpackcargo","_weaponqty","_magqty","_backpackqty","_lockable","_codeCount","_codeCount","_isTrapItem","_xTypeName","_x1",
-		"_isAir","_selection","_dam","_hitpoints","_fuel","_pos"];
+		"_isAir","_selection","_dam","_hitpoints","_fuel","_pos","_isStatic"];
 
 #include "\z\addons\dayz_server\compile\server_toggle_debug.hpp"
 
@@ -101,8 +101,9 @@ if ((playersNumber west + playersNumber civilian) == 0) exitWith {
 	_inventory = _x select 5;
 	_damage = _x select 8;
 	_storageMoney = _x select 9;
+	_isStatic = _type in ["M2StaticMG", "DSHKM_CDF"];
 
-	if ((_type isKindOf "AllVehicles")) then {
+	if ((_type isKindOf "AllVehicles") && (!_isStatic)) then {
 		_VehicleQueue set [_vQty,_x];
 		_vQty = _vQty + 1;
 	} else {
@@ -183,6 +184,10 @@ if ((playersNumber west + playersNumber civilian) == 0) exitWith {
 			};
 		};
 
+		if (_isStatic) then {
+			diag_log format["Spawning static MG %1 at %2, owner %3, damage %4", _type, _worldspace, _ownerID, _damage];
+		};
+
 		_object = _type createVehicle [0,0,0]; //more than 2x faster than createvehicle array
 		_object setDir _dir;
 		_object setPosATL _pos;
@@ -212,7 +217,7 @@ if ((playersNumber west + playersNumber civilian) == 0) exitWith {
 		_isSafeObject = _type in DayZ_SafeObjects;
 
 		//Dont add inventory for traps.
-		if (!_isTrapItem) then {
+		if (!_isTrapItem && !_isStatic) then {
 			clearWeaponCargoGlobal _object;
 			clearMagazineCargoGlobal _object;
 			clearBackpackCargoGlobal _object;
@@ -262,7 +267,7 @@ if ((playersNumber west + playersNumber civilian) == 0) exitWith {
 			};
 		};
 		_object setVariable ["CharacterID", _ownerID, true];
-		if (_isSafeObject && !_isTrapItem) then {
+		if (_isSafeObject && !_isTrapItem && !_isStatic) then {
 			_object setVariable["memDir",_dir,true];
 			if (DZE_GodModeBase && {!(_type in DZE_GodModeBaseExclude)}) then {
 				_object addEventHandler ["HandleDamage",{false}];
