@@ -91,27 +91,27 @@ rare_food_crate = {
 	_pos = [getMarkerPos "center",0,5000,10,0,1,0] call BIS_fnc_findSafePos;
 
 	_opts = [
-		["FoodCanGriff", 10, "An emergency supply crate of Griff Black Beans has been dropped. It was a while since I had one of these! I should check my map for the location."],
-		["FoodCanBadguy", 10, "A box of those Bad Guy's peaches was dropped! They're rather disgusting but I'd better check them out in my map, since they're worth their weight in gold, they say..."],
+		["FoodCanGriff", 10, "An emergency supply crate of Griff Black Beans has been dropped! I should check my map for the location."],
+		["FoodCanBadguy", 10, "A box of those Bad Guy's peaches was dropped! I'd better check them out on my map..."],
 		["FoodCanBoneboy", 10, "A cache of Bone Boy's ravioli was recently reported to have dropped in a nearby area. Better check my map!"],
 		["FoodCanCorn", 10, "A box full of uncontaminated corn preserves has been seen nearby. Check your map!"],
-		["FoodCanCurgon", 10, "A load of conserved chicken soup was seen being dropped on the island... Beats eating contaminated wildlife while risking the infection any day!. I should check my map!"],
+		["FoodCanCurgon", 10, "A load of conserved chicken soup was seen being dropped on the island... I should check my map!"],
 		["FoodCanDemon", 10, "10 fantastic cans of fantastic Demon Groves Green Beans was dropped at a location on the island. I should look for them in my map."],
-		["FoodCanFraggleos", 10, "A small cache of FraggleOs was seen dropped nearby. It's even better than everyday's morphine! Check your map for the location!"],
-		["FoodCanHerpy", 10, "A supply plane crashed and dropped a crate of canned muffins! These are really rare nowadays... I've marked the location in my map."],
+		["FoodCanFraggleos", 10, "A small cache of FraggleOs was seen dropped nearby. Check your map for the location!"],
+		["FoodCanHerpy", 10, "A supply plane crashed and dropped a crate of canned muffins! I've marked the location in my map."],
 		["FoodCanOrlok", 10, "A set of crates filled with mixed fruit preserves was dropped! I've marked the approximate location of the drop site in my map."],
-		["FoodCanPowell", 10, "A crate of Clam Chowder cans was spotted on the island! Hurry and recover them before someone else does! I've marked the approximate location of them in my map."],
+		["FoodCanPowell", 10, "A crate of Clam Chowder cans was spotted on the island! I've marked the approximate location of them in my map."],
 		["FoodCanTylers", 10, "A box of kidney beans was dropped from some local crazy farmer nearby! I've marked the approximate location of the box in my map."],
-		["FoodPumpkin", 10, "A box full of bags of pumpkin... something! I've marked the approximate location of the box in my map."],
-		["ItemSodaMtngreen", 10, "A crate full of Mountain Green soda was dropped nearby! Nothing beats a Mountain Green on a hot day such as this! I've marked the location in my map."],
+		["FoodPumpkin", 10, "A box full of juicy pumpkin was dropped by survivors! I've marked the approximate location of the box in my map."],
+		["ItemSodaMtngreen", 10, "A crate full of Mountain Green soda was dropped nearby! I've marked the location in my map."],
 		["ItemSodaR4z0r", 10, "A box full of R4z0r soda was dropped off a car by bandits! I should check my map and try to recover these!"],
 		["ItemSodaClays", 10, "A set of crates with Clay's soda have been found hidden! Check the map, I've marked the location!"],
 		["ItemSodaSmasht", 10, "A box of Smasht soda was left behind by a gang of looters! I've marked the location in my map."],
 		["ItemSodaDrwaste", 10, "A crate of Dr.Waste soda was seen being dropped from a plane! I've circled in the area in my map."],
-		["ItemSodaLemonade", 10, "A crate full of Mikhail made Lemonade has been found! I should recover it for myself! I marked the location in my map."],
-		["ItemSodaLvg", 10, "A box of Root Beer was reported seen recently. It's a sought after drink in these days of apocalypse. I've marked the location in my map."],
-		["ItemSodaMzly", 10, "A crate of the amazing Mzly soda was seen abandoned recently! I should check it as soon as I can... I've marked the location in my map."],
-		["ItemSodaRabbit", 10, "A crate full of beer was dropped from an air plane! Who would ever get the idea of abandoning such a treasure? I should get there and pick it up asap!"]
+		["ItemSodaLemonade", 10, "A crate full of Mikhail made Lemonade has been found! I marked the location in my map."],
+		["ItemSodaLvg", 10, "A box of Root Beer was reported seen recently. I've marked the location in my map."],
+		["ItemSodaMzly", 10, "A crate of the amazing Mzly soda was seen abandoned recently! I've marked the location in my map."],
+		["ItemSodaRabbit", 10, "A crate full of beer was dropped from an air plane! The position has been circled in my map, I should get there ASAP!"]
 	];
 
 	_food = _opts call BIS_fnc_selectRandom;
