@@ -2,7 +2,7 @@ private ["_legacyStreamingMethod","_hiveLoaded","_timeStart","_i","_key","_resul
 		"_VehicleQueue","_vQty","_idKey","_type","_ownerID","_worldspace","_inventory","_damage","_storageMoney","_vector","_vecExists","_ownerPUID",
 		"_wsCount","_ws2TN","_ws3TN","_dir","_posATL","_wsDone","_object","_doorLocked","_isPlot","_isTrapItem","_isSafeObject",
 		"_weaponcargo","_magcargo","_backpackcargo","_weaponqty","_magqty","_backpackqty","_lockable","_codeCount","_codeCount","_isTrapItem","_xTypeName","_x1",
-		"_isAir","_selection","_dam","_hitpoints","_fuel","_pos","_isStatic"];
+		"_isAir","_selection","_dam","_hitpoints","_fuel","_pos","_isStatic","_classPairs","_upgClass","_hasClassPair","_classScript","_upgradedClasses"];
 
 #include "\z\addons\dayz_server\compile\server_toggle_debug.hpp"
 
@@ -17,6 +17,15 @@ dayz_versionNo = getText (configFile >> "CfgMods" >> "DayZ" >> "version");
 dayz_hiveVersionNo = getNumber (configFile >> "CfgMods" >> "DayZ" >> "hiveVersion");
 _hiveLoaded = false;
 _serverVehicleCounter = [];
+
+_upgradedClasses = ["AH1Z_DZE1"];
+_classPairs = [
+	[
+		"AH1Z_DZE1",
+		"AH1Z_DZE"
+	]
+];
+
 diag_log "HIVE: Starting";
 
 //Stream in objects
@@ -101,7 +110,18 @@ if ((playersNumber west + playersNumber civilian) == 0) exitWith {
 	_inventory = _x select 5;
 	_damage = _x select 8;
 	_storageMoney = _x select 9;
+	// Scaffery: Static MGs
 	_isStatic = _type in ["M2StaticMG", "DSHKM_CDF"];
+
+	// Scaffery: Special upgraded classes
+	_hasClassPair = _type in _upgradedClasses;
+	if (_hasClassPair) then {
+		{
+			_upgClass = _x select 0;
+			// In case of special upgraded vehicles set their base class so the correct vehicle type is checked.
+			if (_upgClass == _type) exitWith {_type = _x select 1;};
+		} forEach _classPairs;
+	};
 
 	if ((_type isKindOf "AllVehicles") && (!_isStatic)) then {
 		_VehicleQueue set [_vQty,_x];
@@ -335,6 +355,18 @@ if ((playersNumber west + playersNumber civilian) == 0) exitWith {
 		};
 	};
 
+	// Scaffery: Special upgraded classes
+	_hasClassPair = _type in _upgradedClasses;
+	if (_hasClassPair) then {
+		{
+			_upgClass = _x select 0;
+			// Set correct vehicle base class
+			if (_upgClass == _type) exitWith {
+				_type = _x select 1;
+			};
+		} forEach _classPairs;
+	};
+
 	_object = _type createVehicle [0,0,0]; //more than 2x faster than createvehicle array
 	_object setDir _dir;
 	_object setPosATL _pos;
@@ -374,7 +406,11 @@ if ((playersNumber west + playersNumber civilian) == 0) exitWith {
 			//_object removeMagazinesTurret ["48Rnd_40mm_MK19", [0]];
 		};
 	};
-
+	if (_hasClassPair) then {
+		_object setVariable ["upgradeClass", _upgClass, false];
+		_classScript = getText(missionConfigFile >> "CfgVehicles" >> _upgClass >> "script");
+		_object call compile _classScript;
+	};
 
 	dayz_serverIDMonitor set [count dayz_serverIDMonitor,_idKey];
 

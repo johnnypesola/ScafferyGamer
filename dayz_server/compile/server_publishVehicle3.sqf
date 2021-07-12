@@ -1,7 +1,7 @@
 private ["_coins","_activatingPlayer","_object","_worldspace","_location","_dir","_class","_uid","_key","_keySelected"
 ,"_characterID","_result","_outcome","_oid","_objectID","_objectUID","_newobject","_weapons","_magazines","_backpacks"
 ,"_clientKey","_exitReason","_playerUID","_isAir","_fuel","_selection","_dam","_hitpoints","_newHitpoints","_damage"
-,"_hit","_inv"];
+,"_hit","_inv","_classPairs","_upgClass","_hasClassPair","_classScript","_upgradedClasses"];
 #include "\z\addons\dayz_server\compile\server_toggle_debug.hpp"
 
 if (count _this < 6) exitWith {
@@ -9,6 +9,14 @@ if (count _this < 6) exitWith {
 	dze_waiting = "fail";
 	(owner (_this select 4)) publicVariableClient "dze_waiting";
 };
+
+_upgradedClasses = ["AH1Z_DZE1"];
+_classPairs = [
+	[
+		"AH1Z_DZE1",
+		"AH1Z_DZE"
+	]
+];
 
 _object = _this select 0;
 _worldspace = _this select 1;
@@ -26,7 +34,8 @@ if (_exitReason != "") exitWith {
 	(owner _activatingPlayer) publicVariableClient "dze_waiting";
 };
 
-if (!(isClass(configFile >> "CfgVehicles" >> _class)) || isNull _object) exitWith {
+// This now also checks mission cfg for AH1Z (and others)
+if (!(isClass(configFile >> "CfgVehicles" >> _class) || isClass(missionConfigFile >> "CfgVehicles" >> _class)) || isNull _object) exitWith {
 	diag_log ("HIVE-PublishVehicle3 Error: Vehicle does not exist: "+ str(_class));
 	dze_waiting = "fail";
 	(owner _activatingPlayer) publicVariableClient "dze_waiting";
@@ -93,6 +102,18 @@ if (_outcome != "PASS") then {
 	diag_log("CUSTOM: Selected " + str(_oid));
 	#endif
 
+	// Scaffery: Special upgraded classes
+	_hasClassPair = _class in _upgradedClasses;
+	if (_hasClassPair) then {
+		{
+			_upgClass = _x select 0;
+			// Set correct vehicle base class
+			if (_upgClass == _class) exitWith {
+				_class = _x select 1;
+			};
+		} forEach _classPairs;
+	};
+
 	deleteVehicle _object;
 	[_objectID,_objectUID,_object] call server_deleteObjDirect;
 
@@ -109,6 +130,12 @@ if (_outcome != "PASS") then {
 
 	if (Z_SingleCurrency && ZSC_VehicleMoneyStorage && {_coins > 0}) then {
 		_object setVariable ["cashMoney",_coins,true];
+	};
+
+	if (_hasClassPair) then {
+		_classScript = getText(missionConfigFile >> "CfgVehicles" >> _upgClass >> "script");
+		_object setVariable ["upgradeClass", _upgClass, false];
+		_object call compile _classScript;
 	};
 
 	dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_object];
