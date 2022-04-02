@@ -312,6 +312,8 @@ if (DZE_Extras_WorldName == "napf") then {
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\trader_extras_napf.sqf";
 };
 if (DZE_Extras_WorldName == "chernarus") then {
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\calling_military_base_chernarus.sqf";
+	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\small_town_cherno_base_north.sqf";
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\elektro.sqf";
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\epochbalota.sqf";
 	call compile preProcessFileLineNumbers "\z\addons\dayz_server\extrabuildings\epochcherno.sqf";

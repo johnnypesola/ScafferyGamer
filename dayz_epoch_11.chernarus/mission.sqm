@@ -185,7 +185,7 @@ class Mission
 	};
 	class Markers
 	{
-		items=22;
+		items=23;
 		class Item0
 		{
 			position[]={7839,0,8414};
@@ -348,6 +348,15 @@ class Mission
 			text="Military Area";
 			type="mil_dot";
 			colorName="ColorBlack";
+		};
+		class Item22
+		{
+			position[]={13233.708,0,10711.566};
+			name="MilArea2";
+			text="Military Base North East";
+			type="mil_circle";
+			colorName="ColorOrange";
+
 		};
 
 	};
