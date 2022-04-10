@@ -26,7 +26,7 @@ if (!insurancemissionrunning) then {
 
 	};
 } else {
-	diag_log format["WAI: Player %1 cannot claim insurance on key %2 since another claim is in progress", _claimingPlayerUID];
+	diag_log format["WAI: Player %1 cannot claim insurance on key %2 since another claim is in progress", _claimingPlayerUID, _keyItem];
 	dze_waiting = "busy";
 };
 

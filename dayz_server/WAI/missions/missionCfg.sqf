@@ -358,6 +358,9 @@ if (DZE_Extras_WorldName == "chernarus") then {
 		//"treasure_hunt_bandit"
 	];
 
+	wai_missions_insurance = [
+		"insured_vehicle"
+	];
 
 	// fuel the mission vehicles spawn with 0-100.
 	wai_mission_fuel = 5;
