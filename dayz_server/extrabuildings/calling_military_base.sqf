@@ -1392,4 +1392,69 @@ if (true) then
   _this setPos [10297.829, 7134.9277, -0.33766255];
 };
 
+_vehicle_90 = objNull;
+if (true) then
+{
+  _this = createVehicle ["WoodLadder_DZ", [16443.238,18330.797,3.36], [], 0, "CAN_COLLIDE"];
+  _vehicle_90 = _this;
+  _this setDir 35.912;
+  _this setPos [16443.238,18330.797,3.36];
+};
+_vehicle_91 = objNull;
+if (true) then
+{
+  _this = createVehicle ["WoodFloorQuarter_DZ", [16442.639,18330.109,5.801], [], 0, "CAN_COLLIDE"];
+  _vehicle_91 = _this;
+  _this setDir 305.96;
+  _this setPos [16442.639,18330.109,5.801];
+};
+_vehicle_92 = objNull;
+if (true) then
+{
+  _this = createVehicle ["WoodFloorQuarter_DZ", [16442.846,18330.047,2.301], [], 0, "CAN_COLLIDE"];
+  _vehicle_92 = _this;
+  _this setDir 307.17;
+  _this setPos [16442.846,18330.047,2.301];
+};
+_vehicle_93 = objNull;
+if (true) then
+{
+  _this = createVehicle ["WoodLadder_DZ", [16442.771,18330.119,0.001], [], 0, "CAN_COLLIDE"];
+  _vehicle_93 = _this;
+  _this setDir 34.559;
+  _this setPos [16442.771,18330.119,0.001];
+};
+_vehicle_94 = objNull;
+if (true) then
+{
+  _this = createVehicle ["WoodLadder_DZ", [16419.48,18296.426,3.56], [], 0, "CAN_COLLIDE"];
+  _vehicle_94 = _this;
+  _this setDir 36.349;
+  _this setPos [16419.48,18296.426,3.56];
+};
+_vehicle_95 = objNull;
+if (true) then
+{
+  _this = createVehicle ["WoodFloorQuarter_DZ", [16419.025,18295.912,6.101], [], 0, "CAN_COLLIDE"];
+  _vehicle_95 = _this;
+  _this setDir 305.668;
+  _this setPos [16419.025,18295.912,6.101];
+};
+_vehicle_96 = objNull;
+if (true) then
+{
+  _this = createVehicle ["WoodLadder_DZ", [16418.592,18295.264,0.201], [], 0, "CAN_COLLIDE"];
+  _vehicle_96 = _this;
+  _this setDir 36.16;
+  _this setPos [16418.592,18295.264,0.201];
+};
+_vehicle_97 = objNull;
+if (true) then
+{
+  _this = createVehicle ["WoodFloorQuarter_DZ", [16418.873,18295.781,3.001], [], 0, "CAN_COLLIDE"];
+  _vehicle_97 = _this;
+  _this setDir 305.781;
+  _this setPos [16418.873,18295.781,3.001];
+};
+
 };
