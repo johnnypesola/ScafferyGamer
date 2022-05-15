@@ -9,26 +9,10 @@ insurancemissionstartstate = "none";
 // Check player who tries to claim lost vehicle by insurance
 { if (isPlayer _x && {_claimingPlayerUID == getPlayerUID _x}) exitWith {_claimingPlayer = _x;}; } forEach playableUnits;
 if (isNull _claimingPlayer) exitWith {
-	diag_log format["WAI: Unknown player called claim on key %1", _keyItem];
+	diag_log format["Insurance: Unknown player called claim on key %1", _keyItem];
 };
 
-diag_log format["WAI: Player %1 wants to claim insurance on key %2", _claimingPlayerUID, _keyItem];
-
-if (!insurancemissionrunning) then {
-	if (insurancemarkerready) then
-	{
-		clean_running_insurance_mission = False;
-		_missionParams = [_keyItem, _claimingPlayerUID];
-		_missionInsurance = wai_missions_insurance call BIS_fnc_selectRandom;
-		_missionParams execVM format ["\z\addons\dayz_server\WAI\missions\missions\%1.sqf",_missionInsurance];
-		insurancemissionrunning = true;
-		diag_log format["WAI: Starting Insurance mission %1", _missionInsurance];
-
-	};
-} else {
-	diag_log format["WAI: Player %1 cannot claim insurance on key %2 since another claim is in progress", _claimingPlayerUID, _keyItem];
-	dze_waiting = "busy";
-};
+diag_log format["Insurance: Player %1 wants to claim insurance on key %2", _claimingPlayerUID, _keyItem];
 
 [_claimingPlayer] spawn {
 	private ["_claimingPlayer","_checkStartTime","_checkTime","_timeout"];
@@ -47,4 +31,20 @@ if (!insurancemissionrunning) then {
 
 	dze_waiting = insurancemissionstartstate;
 	(owner (_claimingPlayer)) publicVariableClient "dze_waiting";
+};
+
+if (!insurancemissionrunning) then {
+	if (insurancemarkerready) then
+	{
+		clean_running_insurance_mission = False;
+		_missionParams = [_keyItem, _claimingPlayerUID];
+		_missionInsurance = wai_missions_insurance call BIS_fnc_selectRandom;
+		_missionParams execVM format ["\z\addons\dayz_server\WAI\missions\missions\%1.sqf",_missionInsurance];
+		insurancemissionrunning = true;
+		diag_log format["Insurance: Starting Insurance mission %1", _missionInsurance];
+
+	};
+} else {
+	diag_log format["Insurance: Player %1 cannot claim insurance on key %2 since another claim is in progress", _claimingPlayerUID, _keyItem];
+	dze_waiting = "busy";
 };

@@ -236,7 +236,7 @@ if (isNull _claimingPlayer) exitWith {
 	insurancemissionrunning = false;
 	insurancemissionstartstate = "Unknown player";
 };
-diag_log format["WAI: Player %1 wants to claim insurance on key %1", _keyItem];
+diag_log format["WAI: Player %1 wants to claim insurance on key %2", _claimingPlayerUID, _keyItem];
 
 // Generate Character ID from key item
 _isOK = isClass(configFile >> "CfgWeapons" >> _keyItem);

@@ -12,7 +12,7 @@ diag_log format ["Fetching vehicle by insurance... using code %1", _charID];
 
 // Get an abandoned base from DB
 _key = "CHILD:501:Object.object_data_scrap_yard:[""Classname"",""CharacterID"",""Worldspace"",""Inventory"",""StorageCoins""]:";
-_key = _key + format["[[""CharacterID"",""="",""%1""],""AND"",[""Instance"",""="",""%2""],""AND"",[""Damage"",""="",""1.0""]]:[0,1]:", _charID, dayZ_instance];
+_key = _key + format["[[""CharacterID"",""="",""%1""],""AND"",[""Instance"",""="",""%2""]]:[0,1]:", _charID, dayZ_instance];
 _uniqId = _key call server_hiveReadWrite;
 if ((_uniqId select 0) == "PASS") then {
 	_uniqId = _uniqId select 1;

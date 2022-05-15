@@ -62,7 +62,6 @@ if (!isServer) then {
 			waitUntil {!isNil "dze_waiting"};
 			if (dze_waiting != "Success") then {
 				{player addMagazine _x;} count _temp_removed_array_mag;
-				{player addWeapon _x;} count _temp_removed_array_wep;
 				format["Insurance claim for key %1 rejected! Reason: %2.", _keyItem, dze_waiting] call dayz_rollingMessages;
 			} else {
 				format["Insurance claim for key %1 approved!", _keyItem] call dayz_rollingMessages;
@@ -70,7 +69,6 @@ if (!isServer) then {
 			};
 		} else {
 			{player addMagazine _x;} count _temp_removed_array_mag;
-			{player addWeapon _x;} count _temp_removed_array_wep;
 			format[localize "str_epoch_player_145",_removed_total,_tobe_removed_total] call dayz_rollingMessages;
 		};
 	} else {
